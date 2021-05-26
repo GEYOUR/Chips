@@ -1,0 +1,202 @@
+Interrupt Vectors
+    00000 940C 0034 JMP	__text_start|__start
+
+Program Code (text area)
+__text_start|__start:
+    00034 E5CF      LDI	R28,0x5F
+    00035 E0D4      LDI	R29,4
+    00036 BFCD      OUT	0x3D,R28
+    00037 BFDE      OUT	0x3E,R29
+    00038 51CE      SUBI	R28,0x1E
+    00039 40D0      SBCI	R29,0
+    0003A EA0A      LDI	R16,0xAA
+    0003B 8308      ST	Y,R16
+    0003C 2400      CLR	R0
+    0003D E7E4      LDI	R30,0x74
+    0003E E0F0      LDI	R31,0
+    0003F E010      LDI	R17,0
+    00040 37E4      CPI	R30,0x74
+    00041 07F1      CPC	R31,R17
+    00042 F011      BEQ	0x0045
+    00043 9201      ST	Z+,R0
+    00044 CFFB      RJMP	0x0040
+    00045 8300      ST	Z,R16
+    00046 E5E4      LDI	R30,0x54
+    00047 E0F0      LDI	R31,0
+    00048 E6A0      LDI	R26,0x60
+    00049 E0B0      LDI	R27,0
+    0004A E010      LDI	R17,0
+    0004B E000      LDI	R16,0
+    0004C BF0B      OUT	0x3B,R16
+    0004D 36E8      CPI	R30,0x68
+    0004E 07F1      CPC	R31,R17
+    0004F F021      BEQ	0x0054
+    00050 95C8      LPM
+    00051 9631      ADIW	R30,1
+    00052 920D      ST	X+,R0
+    00053 CFF9      RJMP	0x004D
+    00054 940E 0074 CALL	_main
+_exit:
+    00056 CFFF      RJMP	_exit
+FILE: D:\教学资料\单片机技术与C语言程序设计\第六讲程序\第三个程序\led1.c
+(0001) //（共阴编码）
+(0002) //显示－－HGFE,DCBA－－编码
+(0003) //0     －－0011,1111－－0x3F;
+(0004) //1     －－0000,0110－－0x06;
+(0005) //2     －－0101,1011－－0x5B;
+(0006) //3     －－0100,1111－－0x4F;
+(0007) //4     －－0110,0110－－0x66;
+(0008) //5     －－0110,1101－－0x6D;
+(0009) //6     －－0111,1101－－0x7D;
+(0010) //7     －－0000,0111－－0x07;
+(0011) //8     －－0111,1111－－0x7F;
+(0012) //9     －－0110,1111－－0x6F;
+(0013) //共阳极是共阴极的取反
+(0014) #include "iom16v.h"
+(0015) unsigned char num[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,
+(0016)                           0x80,0x90};  //共阳极
+(0017) unsigned char num1[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,
+(0018)                           0x6F};  //共阴极
+(0019) void io_init(void)
+(0020) {DDRC=0XFF;
+_io_init:
+    00057 EF8F      LDI	R24,0xFF
+    00058 BB84      OUT	0x14,R24
+(0021)  PORTC=0XFF;
+    00059 BB85      OUT	0x15,R24
+(0022)  DDRD=0XFF;
+    0005A BB81      OUT	0x11,R24
+(0023)  PORTD=0X00;
+    0005B 2422      CLR	R2
+    0005C BA22      OUT	0x12,R2
+(0024)  DDRA=0X00; 
+    0005D BA2A      OUT	0x1A,R2
+(0025)  PORTA=0XFF;
+    0005E BB8B      OUT	0x1B,R24
+    0005F 9508      RET
+_delay:
+  u                    --> Y,+1
+  t                    --> Y,+1
+  s                    --> Y,+1
+  r                    --> Y,+1
+  q                    --> Y,+1
+  p                    --> Y,+1
+  o                    --> Y,+1
+  m                    --> Y,+1
+  l                    --> Y,+1
+  k                    --> Y,+1
+  h                    --> Y,+1
+  g                    --> Y,+1
+  f                    --> Y,+1
+  e                    --> Y,+1
+  d                    --> Y,+1
+  c                    --> Y,+1
+  a                    --> R20
+  b                    --> R22
+  i                    --> R16
+    00060 940E 00A4 CALL	push_xgsetF000
+(0026) }
+(0027) void delay(unsigned int i)
+(0028) {unsigned int a,b,c,d,e,f,g,h,k,l,m,o,p,q,r,s,t,u;
+(0029)   for(a=0;a<i;a++)
+    00062 2744      CLR	R20
+    00063 2755      CLR	R21
+    00064 C00A      RJMP	0x006F
+(0030)     for(b=0;b;b++) ;
+    00065 2766      CLR	R22
+    00066 2777      CLR	R23
+    00067 C002      RJMP	0x006A
+    00068 5F6F      SUBI	R22,0xFF
+    00069 4F7F      SBCI	R23,0xFF
+    0006A 3060      CPI	R22,0
+    0006B 0767      CPC	R22,R23
+    0006C F7D9      BNE	0x0068
+    0006D 5F4F      SUBI	R20,0xFF
+    0006E 4F5F      SBCI	R21,0xFF
+    0006F 1740      CP	R20,R16
+    00070 0751      CPC	R21,R17
+    00071 F398      BCS	0x0065
+    00072 940C 00A9 JMP	pop_xgsetF000
+(0031) 
+(0032) }        
+(0033) void main(void)
+(0034) { signed char i,j=0;
+_main:
+  i                    --> R10
+  j                    --> R20
+    00074 2744      CLR	R20
+(0035) io_init();
+    00075 DFE1      RCALL	_io_init
+    00076 C02B      RJMP	0x00A2
+(0036) while(1)
+(0037)    { if ((PINA & (1 << PA6)) == 0) { 
+    00077 99CE      SBIC	0x19,6
+    00078 C013      RJMP	0x008C
+(0038)                                    for(i=0;i<=9;i++)
+    00079 24AA      CLR	R10
+    0007A C00E      RJMP	0x0089
+(0039) 	                                {PORTC=num[i];
+    0007B E680      LDI	R24,0x60
+    0007C E090      LDI	R25,0
+    0007D 2DEA      MOV	R30,R10
+    0007E 27FF      CLR	R31
+    0007F FDE7      SBRC	R30,7
+    00080 95F0      COM	R31
+    00081 0FE8      ADD	R30,R24
+    00082 1FF9      ADC	R31,R25
+    00083 8020      LD	R2,Z
+    00084 BA25      OUT	0x15,R2
+(0040) 								     delay(60000); 
+    00085 E600      LDI	R16,0x60
+    00086 EE1A      LDI	R17,0xEA
+    00087 DFD8      RCALL	_delay
+    00088 94A3      INC	R10
+    00089 E089      LDI	R24,0x9
+    0008A 158A      CP	R24,R10
+    0008B F77C      BGE	0x007B
+(0041) 	                                 }
+(0042)                                   }
+(0043)      if ((PINA & (1 << PA7)) == 0) {
+    0008C 99CF      SBIC	0x19,7
+    0008D C012      RJMP	0x00A0
+(0044) 	                      for(j=9;j>=0;j--)
+    0008E E049      LDI	R20,0x9
+    0008F C00E      RJMP	0x009E
+(0045) 	                                {PORTC=num[j];
+    00090 E680      LDI	R24,0x60
+    00091 E090      LDI	R25,0
+    00092 2FE4      MOV	R30,R20
+    00093 27FF      CLR	R31
+    00094 FDE7      SBRC	R30,7
+    00095 95F0      COM	R31
+    00096 0FE8      ADD	R30,R24
+    00097 1FF9      ADC	R31,R25
+    00098 8020      LD	R2,Z
+    00099 BA25      OUT	0x15,R2
+(0046) 								     delay(60000); 
+    0009A E600      LDI	R16,0x60
+    0009B EE1A      LDI	R17,0xEA
+    0009C DFC3      RCALL	_delay
+    0009D 954A      DEC	R20
+    0009E 3040      CPI	R20,0
+    0009F F784      BGE	0x0090
+(0047) 	                                 }
+(0048)                                    }
+(0049)    PORTC=0XFF; // 清空数码管
+FILE: <library>
+    000A0 EF8F      LDI	R24,0xFF
+    000A1 BB85      OUT	0x15,R24
+    000A2 CFD4      RJMP	0x0077
+    000A3 9508      RET
+push_xgsetF000:
+    000A4 937A      ST	-Y,R23
+    000A5 936A      ST	-Y,R22
+    000A6 935A      ST	-Y,R21
+    000A7 934A      ST	-Y,R20
+    000A8 9508      RET
+pop_xgsetF000:
+    000A9 9149      LD	R20,Y+
+    000AA 9159      LD	R21,Y+
+    000AB 9169      LD	R22,Y+
+    000AC 9179      LD	R23,Y+
+    000AD 9508      RET

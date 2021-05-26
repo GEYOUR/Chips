@@ -1,0 +1,198 @@
+XL
+H 4 areas 10 global symbols
+M main.c
+S mod16u Ref0000
+S div16u Ref0000
+S _point_pos Ref0000
+S _point Ref0000
+S _Seg7_Led_Buf Ref0000
+S _Seg7_Led_Update Ref0000
+S _HC_595_init Ref0000
+A text size 1C0 flags 0
+dbfile main.c
+dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+dbfunc e timer1_init 0 fV
+dbline FFFFFFFF 0
+dbline C 0
+dbline D 0
+dbline E 4
+dbline F 8
+dbline 10 C
+dbline 11 10
+dbline 12 14
+dbline 13 18
+dbline 14 1C
+dbline 15 22
+dbline 16 28
+dbline 17 2C
+dbline 18 30
+dbline 19 32
+dbline FFFFFFFE 36
+dbline 0 36
+dbfunc e timer1_ovf_isr 38 fV
+dbline FFFFFFFF 48
+dbline 1E 48
+dbline 1F 48
+dbline 20 4C
+dbline 21 50
+dbline 22 62
+dbline 22 72
+dbline 22 72
+dbline 23 7E
+dbline 24 90
+dbline 24 A0
+dbline 25 A8
+dbline FFFFFFFE A8
+dbline 0 A8
+dbfunc e int0 BA fV
+dbline FFFFFFFF C2
+dbline 29 C2
+dbline 2A C2
+dbline FFFFFFFE D4
+dbline 0 D4
+dbfunc e init_devices DE fV
+dbline FFFFFFFF DE
+dbline 2F DE
+dbline 30 DE
+dbline 31 E0
+dbline 32 E2
+dbline 32 F2
+dbline 33 F8
+dbline 34 FC
+dbline FFFFFFFE FE
+dbline 0 FE
+dbfunc e disptime 100 fV
+dbline FFFFFFFF 100
+dbline 37 100
+dbline 37 100
+dbline 38 10C
+dbline 39 114
+dbline 3A 11A
+dbline 3B 120
+dbline 3C 134
+dbline 3D 148
+dbline 3E 15C
+dbline 3F 170
+dbline FFFFFFFE 170
+dbline 0 170
+dbfunc e main 174 fV
+dbline FFFFFFFF 174
+dbline 42 174
+dbline 43 174
+dbline 44 176
+dbline 46 17C
+dbline 47 17C
+dbline 48 17E
+dbline 49 180
+dbline 49 190
+dbline 4A 196
+dbline 4B 19A
+dbline 4D 19C
+dbline 4E 1A0
+dbline 4E 1A0
+dbline 4F 1AC
+dbline 50 1AC
+dbline 51 1B0
+dbline 51 1B0
+dbline 52 1BC
+dbline 53 1BC
+dbline 45 1BC
+dbline FFFFFFFE 1BE
+dbline 0 1BE
+S _main Def0174
+S _timer1_ovf_isr Def0038
+S _init_devices Def00DE
+S _disptime Def0100
+S _timer1_init Def0000
+S _int0 Def00BA
+A data size 6 flags 20
+dbfile main.c
+dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+dbsym e min 0 i
+dbsym e sec 2 i
+dbsym e state 4 I
+S _state Def0004
+S _sec Def0002
+S _min Def0000
+A idata size 6 flags 0
+A vector size 3C flags C
+T 00 00 00 00
+R 00 00 02 00
+T 02 00 00 00
+R 00 00 02 00
+T 04 00 00 00
+R 00 00 02 00
+T 00 00 22 24 2E BC 8F E8 8D BD 81 E8 8C BD 80 E7
+R 00 00 00 00
+T 0E 00 8B BD 8F E7 8A BD 80 E7 89 BD 8F E7 88 BD
+R 00 00 00 00
+T 1C 00 80 E7 80 93 79 00 8F E7 80 93 78 00 80 E7
+R 00 00 00 00
+T 2A 00 87 BD 8F E7 86 BD 2F BC 84 E0 8E BD 08 95
+R 00 00 00 00
+T 38 00 0C 94 1C 00
+R 00 00 03 00 10 04 00 00
+T 38 00 2A 92 3A 92 8A 93 9A 93 AA 93 EA 93 2F B6
+R 00 00 00 00
+T 46 00 2A 92 8F E8 8D BD 81 E8 8C BD 80 91 02 00
+R 00 00 00 00 00 0E 01 00
+T 54 00 90 91 03 00 01 96 90 93 03 00 80 93 02 00
+R 00 00 00 00 00 04 01 00 00 0A 01 00 00 0E 01 00
+T 62 00 80 91 02 00 90 91 03 00 8C 33 E0 E0 9E 07
+R 00 00 00 00 00 04 01 00 00 08 01 00
+T 70 00 D8 F0 22 24 33 24 30 92 03 00 20 92 02 00
+R 00 00 00 00 00 0A 01 00 00 0E 01 00
+T 7E 00 80 91 00 00 90 91 01 00 01 96 90 93 01 00
+R 00 00 00 00 00 04 01 00 00 08 01 00 00 0E 01 00
+T 8C 00 80 93 00 00 80 91 00 00 90 91 01 00 8C 33
+R 00 00 00 00 00 04 01 00 00 08 01 00 00 0C 01 00
+T 9A 00 E0 E0 9E 07 20 F0 30 92 01 00 20 92 00 00
+R 00 00 00 00 00 0A 01 00 00 0E 01 00
+T A8 00 29 90 2F BE E9 91 A9 91 99 91 89 91 39 90
+R 00 00 00 00
+T B6 00 29 90 18 95
+R 00 00 00 00
+T 04 00 0C 94 5D 00
+R 00 00 03 00 10 04 00 00
+T BA 00 8A 93 9A 93 8F B7 8A 93 80 91 02 00 90 91
+R 00 00 00 00 00 0C 01 00
+T C8 00 03 00 01 97 90 93 03 00 80 93 02 00 89 91
+R 00 00 00 00 00 02 01 00 00 08 01 00 00 0C 01 00
+T D6 00 8F BF 99 91 89 91 18 95
+R 00 00 00 00
+T DE 00 F8 94 8F DF 80 91 04 00 90 91 05 00 81 30
+R 00 00 00 00 00 08 01 00 00 0C 01 00
+T EC 00 E0 E0 9E 07 19 F4 22 24 27 BE 02 C0 84 E0
+R 00 00 00 00
+T FA 00 87 BF 78 94 08 95
+R 00 00 00 00
+T 00 01 20 90 02 00 30 90 03 00 20 FC 04 C0 81 E0
+R 00 00 00 00 00 04 01 00 00 08 01 00
+T 0E 01 80 93 00 00 03 C0 22 24 20 92 00 00 82 E0
+R 00 00 00 00 02 04 03 00 02 0C 03 00
+T 1C 01 80 93 00 00 2A E0 30 E0 00 91 00 00 10 91
+R 00 00 00 00 02 04 02 00 00 0C 01 00
+T 2A 01 01 00 0E 94 00 00 00 93 03 00 2A E0 30 E0
+R 00 00 00 00 00 02 01 00 12 06 01 00 02 0A 04 00
+T 38 01 00 91 00 00 10 91 01 00 0E 94 00 00 00 93
+R 00 00 00 00 00 04 01 00 00 08 01 00 12 0C 00 00
+T 46 01 02 00 2A E0 30 E0 00 91 02 00 10 91 03 00
+R 00 00 00 00 02 02 04 00 00 0A 01 00 00 0E 01 00
+T 54 01 0E 94 00 00 00 93 01 00 2A E0 30 E0 00 91
+R 00 00 00 00 12 04 01 00 02 08 04 00
+T 62 01 02 00 10 91 03 00 0E 94 00 00 00 93
+R 00 00 00 00 00 02 01 00 00 06 01 00 12 0A 00 00
+T 6E 01 00 00 0C 94 00 00
+R 00 00 00 00 02 02 04 00 12 06 05 00
+T 74 01 B4 DF 0E 94 00 00 20 C0 C1 DF F8 94 80 91
+R 00 00 00 00 12 06 06 00
+T 82 01 04 00 90 91 05 00 81 30 E0 E0 9E 07 19 F4
+R 00 00 00 00 00 02 01 00 00 06 01 00
+T 90 01 22 24 27 BE 02 C0 84 E0 87 BF 78 94 80 99
+R 00 00 00 00
+T 9E 01 06 C0 81 E0 90 E0 90 93 05 00 80 93 04 00
+R 00 00 00 00 00 0A 01 00 00 0E 01 00
+T AC 01 81 99 06 C0 22 24 33 24 30 92 05 00 20 92
+R 00 00 00 00 00 0C 01 00
+T BA 01 04 00 DF CF 08 95
+R 00 00 00 00 00 02 01 00

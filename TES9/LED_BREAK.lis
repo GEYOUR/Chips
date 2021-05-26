@@ -1,0 +1,431 @@
+                        .module LED_BREAK.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile LED_BREAK.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile LED_BREAK.c
+ 0000           _num::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 3F06              .byte 63,6
+                        .area data(ram, con, rel)
+ 0002                   .dbfile LED_BREAK.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 5B4F              .byte 91,'O
+                        .area data(ram, con, rel)
+ 0004                   .dbfile LED_BREAK.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 666D              .byte 'f,'m
+                        .area data(ram, con, rel)
+ 0006                   .dbfile LED_BREAK.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 7D07              .byte 125,7
+                        .area data(ram, con, rel)
+ 0008                   .dbfile LED_BREAK.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 7F6F              .byte 127,'o
+                        .area data(ram, con, rel)
+ 000A                   .dbfile LED_BREAK.c
+ 000A                   .dbfile E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+ 000A                   .dbsym e num _num A[10:10]c
+ 000A           _state::
+ 000A                   .blkb 1
+                        .area idata
+ 000A 00                .byte 0
+                        .area data(ram, con, rel)
+ 000B                   .dbfile E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+ 000B                   .dbsym e state _state c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+ 0000                   .dbfunc e ioit _ioit fV
+                        .even
+ 0000           _ioit::
+ 0000                   .dbline -1
+ 0000                   .dbline 7
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include<macros.h>
+ 0000           ; unsigned char num[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+ 0000           ; 
+ 0000           ; char state=0;
+ 0000           ; void ioit(void)
+ 0000           ; {DDRA=0xFF;
+ 0000                   .dbline 7
+ 0000 8FEF              ldi R24,255
+ 0002 8ABB              out 0x1a,R24
+ 0004                   .dbline 8
+ 0004           ;  PORTA=0x00;
+ 0004 2224              clr R2
+ 0006 2BBA              out 0x1b,R2
+ 0008                   .dbline 9
+ 0008           ;  DDRB=0xFF;
+ 0008 87BB              out 0x17,R24
+ 000A                   .dbline 10
+ 000A           ;  PORTB=0x00;
+ 000A 28BA              out 0x18,R2
+ 000C                   .dbline 11
+ 000C           ;  DDRD=0x00;
+ 000C 21BA              out 0x11,R2
+ 000E                   .dbline 12
+ 000E           ;  PORTD=0xFF;
+ 000E 82BB              out 0x12,R24
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e int_init _int_init fV
+                        .even
+ 0012           _int_init::
+ 0012                   .dbline -1
+ 0012                   .dbline 15
+ 0012           ; }
+ 0012           ; void int_init(void)
+ 0012           ; {  CLI();
+ 0012                   .dbline 15
+ 0012 F894              cli
+ 0014                   .dbline 16
+ 0014           ;    GICR|=0xC0;
+ 0014 8BB7              in R24,0x3b
+ 0016 806C              ori R24,192
+ 0018 8BBF              out 0x3b,R24
+ 001A                   .dbline 17
+ 001A           ;    MCUCR=0x0A;
+ 001A 8AE0              ldi R24,10
+ 001C 85BF              out 0x35,R24
+ 001E                   .dbline 18
+ 001E           ;    GIFR=0xC0;
+ 001E 80EC              ldi R24,192
+ 0020 8ABF              out 0x3a,R24
+ 0022                   .dbline 19
+ 0022           ;    SEI();
+ 0022 7894              sei
+ 0024                   .dbline -2
+ 0024           L2:
+ 0024                   .dbline 0 ; func end
+ 0024 0895              ret
+ 0026                   .dbend
+ 0026                   .dbfunc e delay _delay fV
+ 0026           ;              j -> R20,R21
+ 0026           ;              i -> R16,R17
+                        .even
+ 0026           _delay::
+ 0026 4A93              st -y,R20
+ 0028 5A93              st -y,R21
+ 002A                   .dbline -1
+ 002A                   .dbline 22
+ 002A           ; }
+ 002A           ; void delay(unsigned int i)
+ 002A           ; { unsigned int j;
+ 002A 0AC0              xjmp L5
+ 002C           L4:
+ 002C                   .dbline 24
+ 002C           ;   while(--i)
+ 002C           ;     { for(j=0;j<=100;j++)
+ 002C                   .dbline 24
+ 002C 4427              clr R20
+ 002E 5527              clr R21
+ 0030 02C0              xjmp L10
+ 0032           L7:
+ 0032                   .dbline 25
+ 0032           ;           ;
+ 0032           L8:
+ 0032                   .dbline 24
+ 0032 4F5F              subi R20,255  ; offset = 1
+ 0034 5F4F              sbci R21,255
+ 0036           L10:
+ 0036                   .dbline 24
+ 0036 84E6              ldi R24,100
+ 0038 90E0              ldi R25,0
+ 003A 8417              cp R24,R20
+ 003C 9507              cpc R25,R21
+ 003E C8F7              brsh L7
+ 0040           X0:
+ 0040                   .dbline 26
+ 0040           ;       }
+ 0040           L5:
+ 0040                   .dbline 23
+ 0040 C801              movw R24,R16
+ 0042 0197              sbiw R24,1
+ 0044 8C01              movw R16,R24
+ 0046 0030              cpi R16,0
+ 0048 0107              cpc R16,R17
+ 004A 81F7              brne L4
+ 004C           X1:
+ 004C                   .dbline -2
+ 004C           L3:
+ 004C                   .dbline 0 ; func end
+ 004C 5991              ld R21,y+
+ 004E 4991              ld R20,y+
+ 0050 0895              ret
+ 0052                   .dbsym r j 20 i
+ 0052                   .dbsym r i 16 i
+ 0052                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C942900          jmp _Int0
+                        .area text(rom, con, rel)
+ 0052                   .dbfile E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+ 0052                   .dbfunc e Int0 _Int0 fV
+ 0052           ;              i -> R16,R17
+                        .even
+ 0052           _Int0::
+ 0052 2A92              st -y,R2
+ 0054 3A92              st -y,R3
+ 0056 0A93              st -y,R16
+ 0058 1A93              st -y,R17
+ 005A 8A93              st -y,R24
+ 005C 2FB6              IN R2,63
+ 005E 2A92              st -y,R2
+ 0060                   .dbline -1
+ 0060                   .dbline 30
+ 0060           ; }
+ 0060           ; #pragma interrupt_handler Int0:2
+ 0060           ; void Int0(void)
+ 0060           ; { unsigned int i;
+ 0060                   .dbline 31
+ 0060           ;   i=1000;
+ 0060 08EE              ldi R16,1000
+ 0062 13E0              ldi R17,3
+ 0064 03C0              xjmp L13
+ 0066           L12:
+ 0066                   .dbline 33
+ 0066           ;   while(i--)
+ 0066           ;   {
+ 0066                   .dbline 34
+ 0066           ;     if((PIND&(1<<PD2))!=0)
+ 0066 829B              sbis 0x10,2
+ 0068 01C0              rjmp L15
+ 006A           X2:
+ 006A                   .dbline 35
+ 006A           ;       { return;
+ 006A                   .dbline 35
+ 006A 0AC0              xjmp L11
+ 006C           L15:
+ 006C                   .dbline 37
+ 006C           ;       }
+ 006C           ;   }
+ 006C           L13:
+ 006C                   .dbline 32
+ 006C 1801              movw R2,R16
+ 006E 0150              subi R16,1
+ 0070 1040              sbci R17,0
+ 0072 2220              tst R2
+ 0074 C1F7              brne L12
+ 0076 3320              tst R3
+ 0078 B1F7              brne L12
+ 007A           X3:
+ 007A                   .dbline 38
+ 007A           ;   state=1;
+ 007A 81E0              ldi R24,1
+ 007C 80930A00          sts _state,R24
+ 0080                   .dbline -2
+ 0080           L11:
+ 0080                   .dbline 0 ; func end
+ 0080 2990              ld R2,y+
+ 0082 2FBE              OUT 63,R2
+ 0084 8991              ld R24,y+
+ 0086 1991              ld R17,y+
+ 0088 0991              ld R16,y+
+ 008A 3990              ld R3,y+
+ 008C 2990              ld R2,y+
+ 008E 1895              reti
+ 0090                   .dbsym r i 16 i
+ 0090                   .dbend
+                        .area vector(rom, abs)
+                        .org 8
+ 0008 0C944800          jmp _Int1
+                        .area text(rom, con, rel)
+ 0090                   .dbfile E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+ 0090                   .dbfunc e Int1 _Int1 fV
+ 0090           ;              i -> R16,R17
+                        .even
+ 0090           _Int1::
+ 0090 2A92              st -y,R2
+ 0092 3A92              st -y,R3
+ 0094 0A93              st -y,R16
+ 0096 1A93              st -y,R17
+ 0098 8A93              st -y,R24
+ 009A 2FB6              IN R2,63
+ 009C 2A92              st -y,R2
+ 009E                   .dbline -1
+ 009E                   .dbline 42
+ 009E           ; }
+ 009E           ; #pragma interrupt_handler Int1:3
+ 009E           ; void Int1(void)
+ 009E           ; { unsigned int i;
+ 009E                   .dbline 43
+ 009E           ;   i=1000;
+ 009E 08EE              ldi R16,1000
+ 00A0 13E0              ldi R17,3
+ 00A2 03C0              xjmp L19
+ 00A4           L18:
+ 00A4                   .dbline 45
+ 00A4           ;   while(i--)
+ 00A4           ;   {if((PIND&(1<<PD3))!=0)
+ 00A4                   .dbline 45
+ 00A4 839B              sbis 0x10,3
+ 00A6 01C0              rjmp L21
+ 00A8           X4:
+ 00A8                   .dbline 46
+ 00A8           ;   {return;
+ 00A8                   .dbline 46
+ 00A8 0AC0              xjmp L17
+ 00AA           L21:
+ 00AA                   .dbline 48
+ 00AA           ;   }
+ 00AA           ;   }
+ 00AA           L19:
+ 00AA                   .dbline 44
+ 00AA 1801              movw R2,R16
+ 00AC 0150              subi R16,1
+ 00AE 1040              sbci R17,0
+ 00B0 2220              tst R2
+ 00B2 C1F7              brne L18
+ 00B4 3320              tst R3
+ 00B6 B1F7              brne L18
+ 00B8           X5:
+ 00B8                   .dbline 49
+ 00B8           ;   state=2;
+ 00B8 82E0              ldi R24,2
+ 00BA 80930A00          sts _state,R24
+ 00BE                   .dbline -2
+ 00BE           L17:
+ 00BE                   .dbline 0 ; func end
+ 00BE 2990              ld R2,y+
+ 00C0 2FBE              OUT 63,R2
+ 00C2 8991              ld R24,y+
+ 00C4 1991              ld R17,y+
+ 00C6 0991              ld R16,y+
+ 00C8 3990              ld R3,y+
+ 00CA 2990              ld R2,y+
+ 00CC 1895              reti
+ 00CE                   .dbsym r i 16 i
+ 00CE                   .dbend
+ 00CE                   .dbfunc e main _main fV
+ 00CE           ;              i -> <dead>
+ 00CE           ;              j -> R20
+                        .even
+ 00CE           _main::
+ 00CE                   .dbline -1
+ 00CE                   .dbline 52
+ 00CE           ; }
+ 00CE           ; void main(void)
+ 00CE           ; {signed char i,j=0;
+ 00CE                   .dbline 52
+ 00CE 4427              clr R20
+ 00D0                   .dbline 53
+ 00D0           ;  ioit();
+ 00D0 97DF              xcall _ioit
+ 00D2                   .dbline 54
+ 00D2           ;  int_init();
+ 00D2 9FDF              xcall _int_init
+ 00D4 34C0              xjmp L25
+ 00D6           L24:
+ 00D6                   .dbline 56
+ 00D6           ;  while(1)
+ 00D6           ;  { PORTB=~(1<<0);
+ 00D6                   .dbline 56
+ 00D6 8EEF              ldi R24,254
+ 00D8 88BB              out 0x18,R24
+ 00DA                   .dbline 57
+ 00DA           ;    switch(state)
+ 00DA 60910A00          lds R22,_state
+ 00DE 7727              clr R23
+ 00E0 6130              cpi R22,1
+ 00E2 E0E0              ldi R30,0
+ 00E4 7E07              cpc R23,R30
+ 00E6 29F0              breq L30
+ 00E8           X6:
+ 00E8 6230              cpi R22,2
+ 00EA E0E0              ldi R30,0
+ 00EC 7E07              cpc R23,R30
+ 00EE A1F0              breq L33
+ 00F0           X7:
+ 00F0 26C0              xjmp L28
+ 00F2           L30:
+ 00F2                   .dbline 58
+ 00F2           ;    {case 1:PORTA=num[j];
+ 00F2 80E0              ldi R24,<_num
+ 00F4 90E0              ldi R25,>_num
+ 00F6 E42F              mov R30,R20
+ 00F8 FF27              clr R31
+ 00FA E7FD              sbrc R30,7
+ 00FC F095              com R31
+ 00FE E80F              add R30,R24
+ 0100 F91F              adc R31,R25
+ 0102 2080              ldd R2,z+0
+ 0104 2BBA              out 0x1b,R2
+ 0106                   .dbline 59
+ 0106           ;            delay(1000);
+ 0106 08EE              ldi R16,1000
+ 0108 13E0              ldi R17,3
+ 010A 8DDF              xcall _delay
+ 010C                   .dbline 60
+ 010C           ;                  if(j<9) j++;
+ 010C 4930              cpi R20,9
+ 010E 14F4              brge L31
+ 0110           X8:
+ 0110                   .dbline 60
+ 0110 4395              inc R20
+ 0112 15C0              xjmp L28
+ 0114           L31:
+ 0114                   .dbline 61
+ 0114           ;                  else j=0;
+ 0114 4427              clr R20
+ 0116                   .dbline 62
+ 0116           ;                  break;
+ 0116 13C0              xjmp L28
+ 0118           L33:
+ 0118                   .dbline 63
+ 0118           ;     case 2:PORTA=num[j];
+ 0118 80E0              ldi R24,<_num
+ 011A 90E0              ldi R25,>_num
+ 011C E42F              mov R30,R20
+ 011E FF27              clr R31
+ 0120 E7FD              sbrc R30,7
+ 0122 F095              com R31
+ 0124 E80F              add R30,R24
+ 0126 F91F              adc R31,R25
+ 0128 2080              ldd R2,z+0
+ 012A 2BBA              out 0x1b,R2
+ 012C                   .dbline 64
+ 012C           ;              delay(1000);
+ 012C 08EE              ldi R16,1000
+ 012E 13E0              ldi R17,3
+ 0130 7ADF              xcall _delay
+ 0132                   .dbline 65
+ 0132           ;                  if(j>0) j--;
+ 0132 2224              clr R2
+ 0134 2416              cp R2,R20
+ 0136 14F4              brge L34
+ 0138           X9:
+ 0138                   .dbline 65
+ 0138 4A95              dec R20
+ 013A 01C0              xjmp L28
+ 013C           L34:
+ 013C                   .dbline 66
+ 013C           ;                  else j=9;
+ 013C 49E0              ldi R20,9
+ 013E                   .dbline 67
+ 013E           ;                  break;
+ 013E                   .dbline 68
+ 013E           ;     default:break;
+ 013E           L28:
+ 013E                   .dbline 70
+ 013E           ;    }
+ 013E           ;  }
+ 013E           L25:
+ 013E                   .dbline 55
+ 013E CBCF              xjmp L24
+ 0140           X10:
+ 0140                   .dbline -2
+ 0140           L23:
+ 0140                   .dbline 0 ; func end
+ 0140 0895              ret
+ 0142                   .dbsym l i 1 C
+ 0142                   .dbsym r j 20 C
+ 0142                   .dbend
+ 0142           ; }

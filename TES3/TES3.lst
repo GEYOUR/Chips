@@ -1,0 +1,394 @@
+Interrupt Vectors
+    00000 940C 0035 JMP	__text_start|__start
+
+Program Code (text area)
+__text_start|__start:
+    00035 E5CF      LDI	R28,0x5F
+    00036 E0D4      LDI	R29,4
+    00037 BFCD      OUT	0x3D,R28
+    00038 BFDE      OUT	0x3E,R29
+    00039 51CE      SUBI	R28,0x1E
+    0003A 40D0      SBCI	R29,0
+    0003B EA0A      LDI	R16,0xAA
+    0003C 8308      ST	Y,R16
+    0003D 2400      CLR	R0
+    0003E E7E5      LDI	R30,0x75
+    0003F E0F0      LDI	R31,0
+    00040 E010      LDI	R17,0
+    00041 37E5      CPI	R30,0x75
+    00042 07F1      CPC	R31,R17
+    00043 F011      BEQ	0x0046
+    00044 9201      ST	Z+,R0
+    00045 CFFB      RJMP	0x0041
+    00046 8300      ST	Z,R16
+    00047 E5E4      LDI	R30,0x54
+    00048 E0F0      LDI	R31,0
+    00049 E6A0      LDI	R26,0x60
+    0004A E0B0      LDI	R27,0
+    0004B E010      LDI	R17,0
+    0004C E000      LDI	R16,0
+    0004D BF0B      OUT	0x3B,R16
+    0004E 36E9      CPI	R30,0x69
+    0004F 07F1      CPC	R31,R17
+    00050 F021      BEQ	0x0055
+    00051 95C8      LPM
+    00052 9631      ADIW	R30,1
+    00053 920D      ST	X+,R0
+    00054 CFF9      RJMP	0x004E
+    00055 940E 0075 CALL	_main
+_exit:
+    00057 CFFF      RJMP	_exit
+FILE: F:\[School]\iccv7\TES3\led1.c
+(0001) //（共阴编码）
+(0002) //显示－－HGFE,DCBA－－编码
+(0003) //0     －－0011,1111－－0x3F;
+(0004) //1     －－0000,0110－－0x06;
+(0005) //2     －－0101,1011－－0x5B;
+(0006) //3     －－0100,1111－－0x4F;
+(0007) //4     －－0110,0110－－0x66;
+(0008) //5     －－0110,1101－－0x6D;
+(0009) //6     －－0111,1101－－0x7D;
+(0010) //7     －－0000,0111－－0x07;
+(0011) //8     －－0111,1111－－0x7F;
+(0012) //9     －－0110,1111－－0x6F;
+(0013) 
+(0014) #include "iom16v.h"
+(0015) unsigned char num[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,
+(0016)                           0x80,0x90};  //共阳极
+(0017) unsigned char num1[11]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,
+(0018)                           0x6F,0x80};  //共阴极
+(0019) void io_init(void)
+(0020) {DDRC=0XFF;
+_io_init:
+    00058 EF8F      LDI	R24,0xFF
+    00059 BB84      OUT	0x14,R24
+(0021)  PORTC=0XFF;
+    0005A BB85      OUT	0x15,R24
+(0022)  DDRD=0XFF;
+    0005B BB81      OUT	0x11,R24
+(0023)  PORTD=0X00;
+    0005C 2422      CLR	R2
+    0005D BA22      OUT	0x12,R2
+(0024)  DDRA=0X00; 
+    0005E BA2A      OUT	0x1A,R2
+(0025)  PORTA=0XFF;
+    0005F BB8B      OUT	0x1B,R24
+    00060 9508      RET
+_delay:
+  u                    --> Y,+1
+  t                    --> Y,+1
+  s                    --> Y,+1
+  r                    --> Y,+1
+  q                    --> Y,+1
+  p                    --> Y,+1
+  o                    --> Y,+1
+  m                    --> Y,+1
+  l                    --> Y,+1
+  k                    --> Y,+1
+  h                    --> Y,+1
+  g                    --> Y,+1
+  f                    --> Y,+1
+  e                    --> Y,+1
+  d                    --> Y,+1
+  c                    --> Y,+1
+  a                    --> R20
+  b                    --> R22
+  i                    --> R16
+    00061 940E 0136 CALL	push_xgsetF000
+(0026) }
+(0027) void delay(unsigned int i)
+(0028) {unsigned int a,b,c,d,e,f,g,h,k,l,m,o,p,q,r,s,t,u;
+(0029)   for(a=0;a<i;a++)
+    00063 2744      CLR	R20
+    00064 2755      CLR	R21
+    00065 C00A      RJMP	0x0070
+(0030)     for(b=0;b;b++) ;
+    00066 2766      CLR	R22
+    00067 2777      CLR	R23
+    00068 C002      RJMP	0x006B
+    00069 5F6F      SUBI	R22,0xFF
+    0006A 4F7F      SBCI	R23,0xFF
+    0006B 3060      CPI	R22,0
+    0006C 0767      CPC	R22,R23
+    0006D F7D9      BNE	0x0069
+    0006E 5F4F      SUBI	R20,0xFF
+    0006F 4F5F      SBCI	R21,0xFF
+    00070 1740      CP	R20,R16
+    00071 0751      CPC	R21,R17
+    00072 F398      BCS	0x0066
+    00073 940C 013B JMP	pop_xgsetF000
+(0031) 
+(0032) }        
+(0033) void main(void)
+(0034) { signed char i,j=0;
+_main:
+  j                    --> R20
+  i                    --> R22
+    00075 2744      CLR	R20
+(0035) io_init();
+    00076 DFE1      RCALL	_io_init
+    00077 C0BC      RJMP	0x0134
+(0036) while(1)
+(0037)    { if ((PINA & (1 << PA6)) == 0) { 
+    00078 99CE      SBIC	0x19,6
+    00079 C022      RJMP	0x009C
+(0038)                                    for(j=9;j>=0;j--)
+    0007A E049      LDI	R20,0x9
+    0007B C01E      RJMP	0x009A
+(0039) 	                                {
+(0040) 									 for(i=9;i>=0;i--)
+    0007C E069      LDI	R22,0x9
+    0007D C016      RJMP	0x0094
+(0041) 									    {PORTC=num1[j];
+    0007E E68A      LDI	R24,0x6A
+    0007F E090      LDI	R25,0
+    00080 2FE4      MOV	R30,R20
+    00081 27FF      CLR	R31
+    00082 FDE7      SBRC	R30,7
+    00083 95F0      COM	R31
+    00084 0FE8      ADD	R30,R24
+    00085 1FF9      ADC	R31,R25
+    00086 8020      LD	R2,Z
+    00087 BA25      OUT	0x15,R2
+(0042) 									     PORTD=num1[i];
+    00088 2FE6      MOV	R30,R22
+    00089 27FF      CLR	R31
+    0008A FDE7      SBRC	R30,7
+    0008B 95F0      COM	R31
+    0008C 0FE8      ADD	R30,R24
+    0008D 1FF9      ADC	R31,R25
+    0008E 8020      LD	R2,Z
+    0008F BA22      OUT	0x12,R2
+(0043) 										 delay(20000);
+    00090 E200      LDI	R16,0x20
+    00091 E41E      LDI	R17,0x4E
+    00092 DFCE      RCALL	_delay
+    00093 956A      DEC	R22
+    00094 3060      CPI	R22,0
+    00095 F744      BGE	0x007E
+(0044) 										 } 								         delay(30000);
+    00096 E300      LDI	R16,0x30
+    00097 E715      LDI	R17,0x75
+    00098 DFC8      RCALL	_delay
+    00099 954A      DEC	R20
+    0009A 3040      CPI	R20,0
+    0009B F704      BGE	0x007C
+(0045) 
+(0046) 	                                   }
+(0047)                                    }
+(0048)      if ((PINA & (1 << PA7)) == 0) {
+    0009C 99CF      SBIC	0x19,7
+    0009D C024      RJMP	0x00C2
+(0049) 	                       for(j=0;j<=9;j++)
+    0009E 2744      CLR	R20
+    0009F C01F      RJMP	0x00BF
+(0050) 	                                {
+(0051) 									 for(i=0;i<=9;i++)
+    000A0 2766      CLR	R22
+    000A1 C016      RJMP	0x00B8
+(0052) 									    {PORTC=num1[j];
+    000A2 E68A      LDI	R24,0x6A
+    000A3 E090      LDI	R25,0
+    000A4 2FE4      MOV	R30,R20
+    000A5 27FF      CLR	R31
+    000A6 FDE7      SBRC	R30,7
+    000A7 95F0      COM	R31
+    000A8 0FE8      ADD	R30,R24
+    000A9 1FF9      ADC	R31,R25
+    000AA 8020      LD	R2,Z
+    000AB BA25      OUT	0x15,R2
+(0053) 									     PORTD=num1[i];
+    000AC 2FE6      MOV	R30,R22
+    000AD 27FF      CLR	R31
+    000AE FDE7      SBRC	R30,7
+    000AF 95F0      COM	R31
+    000B0 0FE8      ADD	R30,R24
+    000B1 1FF9      ADC	R31,R25
+    000B2 8020      LD	R2,Z
+    000B3 BA22      OUT	0x12,R2
+(0054) 										 delay(20000);
+    000B4 E200      LDI	R16,0x20
+    000B5 E41E      LDI	R17,0x4E
+    000B6 DFAA      RCALL	_delay
+    000B7 9563      INC	R22
+    000B8 E089      LDI	R24,0x9
+    000B9 1786      CP	R24,R22
+    000BA F73C      BGE	0x00A2
+(0055) 										 } 								         delay(30000);
+    000BB E300      LDI	R16,0x30
+    000BC E715      LDI	R17,0x75
+    000BD DFA3      RCALL	_delay
+    000BE 9543      INC	R20
+    000BF E089      LDI	R24,0x9
+    000C0 1784      CP	R24,R20
+    000C1 F6F4      BGE	0x00A0
+(0056)                                       }
+(0057) 	                                 }
+(0058) 	 if ((PINA & (1 << PA5)) == 0) {
+    000C2 99CD      SBIC	0x19,5
+    000C3 C024      RJMP	0x00E8
+(0059) 	                      for(j=0;j<=9;j++)
+    000C4 2744      CLR	R20
+    000C5 C01F      RJMP	0x00E5
+(0060) 	                                {
+(0061) 									 for(i=1;i<=9;i+=2)
+    000C6 E061      LDI	R22,1
+    000C7 C016      RJMP	0x00DE
+(0062) 									    {PORTC=num1[j];
+    000C8 E68A      LDI	R24,0x6A
+    000C9 E090      LDI	R25,0
+    000CA 2FE4      MOV	R30,R20
+    000CB 27FF      CLR	R31
+    000CC FDE7      SBRC	R30,7
+    000CD 95F0      COM	R31
+    000CE 0FE8      ADD	R30,R24
+    000CF 1FF9      ADC	R31,R25
+    000D0 8020      LD	R2,Z
+    000D1 BA25      OUT	0x15,R2
+(0063) 									     PORTD=num1[i];
+    000D2 2FE6      MOV	R30,R22
+    000D3 27FF      CLR	R31
+    000D4 FDE7      SBRC	R30,7
+    000D5 95F0      COM	R31
+    000D6 0FE8      ADD	R30,R24
+    000D7 1FF9      ADC	R31,R25
+    000D8 8020      LD	R2,Z
+    000D9 BA22      OUT	0x12,R2
+(0064) 										 delay(20000);
+    000DA E200      LDI	R16,0x20
+    000DB E41E      LDI	R17,0x4E
+    000DC DF84      RCALL	_delay
+    000DD 5F6E      SUBI	R22,0xFE
+    000DE E089      LDI	R24,0x9
+    000DF 1786      CP	R24,R22
+    000E0 F73C      BGE	0x00C8
+(0065) 										 } 								         delay(30000);
+    000E1 E300      LDI	R16,0x30
+    000E2 E715      LDI	R17,0x75
+    000E3 DF7D      RCALL	_delay
+    000E4 9543      INC	R20
+    000E5 E089      LDI	R24,0x9
+    000E6 1784      CP	R24,R20
+    000E7 F6F4      BGE	0x00C6
+(0066) 
+(0067) 	                                 }
+(0068)                                    }						   
+(0069) 		
+(0070) 	if ((PINA & (1 << PA4)) == 0) {
+    000E8 99CC      SBIC	0x19,4
+    000E9 C024      RJMP	0x010E
+(0071) 	                   for(j=0;j<=9;j++)
+    000EA 2744      CLR	R20
+    000EB C01F      RJMP	0x010B
+(0072) 	                                {
+(0073) 									 for(i=0;i<=9;i+=2)
+    000EC 2766      CLR	R22
+    000ED C016      RJMP	0x0104
+(0074) 									    {PORTC=num1[j];
+    000EE E68A      LDI	R24,0x6A
+    000EF E090      LDI	R25,0
+    000F0 2FE4      MOV	R30,R20
+    000F1 27FF      CLR	R31
+    000F2 FDE7      SBRC	R30,7
+    000F3 95F0      COM	R31
+    000F4 0FE8      ADD	R30,R24
+    000F5 1FF9      ADC	R31,R25
+    000F6 8020      LD	R2,Z
+    000F7 BA25      OUT	0x15,R2
+(0075) 									     PORTD=num1[i];
+    000F8 2FE6      MOV	R30,R22
+    000F9 27FF      CLR	R31
+    000FA FDE7      SBRC	R30,7
+    000FB 95F0      COM	R31
+    000FC 0FE8      ADD	R30,R24
+    000FD 1FF9      ADC	R31,R25
+    000FE 8020      LD	R2,Z
+    000FF BA22      OUT	0x12,R2
+(0076) 										 delay(20000);
+    00100 E200      LDI	R16,0x20
+    00101 E41E      LDI	R17,0x4E
+    00102 DF5E      RCALL	_delay
+    00103 5F6E      SUBI	R22,0xFE
+    00104 E089      LDI	R24,0x9
+    00105 1786      CP	R24,R22
+    00106 F73C      BGE	0x00EE
+(0077) 										 } 								         delay(30000);
+    00107 E300      LDI	R16,0x30
+    00108 E715      LDI	R17,0x75
+    00109 DF57      RCALL	_delay
+    0010A 9543      INC	R20
+    0010B E089      LDI	R24,0x9
+    0010C 1784      CP	R24,R20
+    0010D F6F4      BGE	0x00EC
+(0078) 
+(0079) 	                                 }
+(0080)                                    }
+(0081) 	  if ((PINA & (1 << PA3)) == 0) {
+    0010E 99CB      SBIC	0x19,3
+    0010F C021      RJMP	0x0131
+(0082) 	                     
+(0083) 	                                 PORTC=num1[10];
+    00110 9020 0074 LDS	R2,num1+10
+    00112 BA25      OUT	0x15,R2
+(0084) 									 delay(30000); 
+    00113 E300      LDI	R16,0x30
+    00114 E715      LDI	R17,0x75
+    00115 DF4B      RCALL	_delay
+(0085) 									 PORTC=0X00; 
+    00116 2422      CLR	R2
+    00117 BA25      OUT	0x15,R2
+(0086) 									 PORTD=num1[10];
+    00118 9020 0074 LDS	R2,num1+10
+    0011A BA22      OUT	0x12,R2
+(0087) 								     delay(30000); 
+    0011B E300      LDI	R16,0x30
+    0011C E715      LDI	R17,0x75
+    0011D DF43      RCALL	_delay
+(0088) 	                                 // 清空数码管
+(0089)                                      PORTD=0X00;
+    0011E 2422      CLR	R2
+    0011F BA22      OUT	0x12,R2
+(0090) 									 PORTC=num1[10];
+    00120 9020 0074 LDS	R2,num1+10
+    00122 BA25      OUT	0x15,R2
+(0091) 									 delay(30000); 
+    00123 E300      LDI	R16,0x30
+    00124 E715      LDI	R17,0x75
+    00125 DF3B      RCALL	_delay
+(0092) 									  PORTC=0X00; 
+    00126 2422      CLR	R2
+    00127 BA25      OUT	0x15,R2
+(0093) 									   delay(30000); 
+    00128 E300      LDI	R16,0x30
+    00129 E715      LDI	R17,0x75
+    0012A DF36      RCALL	_delay
+(0094) 									 PORTD=num1[10];
+    0012B 9020 0074 LDS	R2,num1+10
+    0012D BA22      OUT	0x12,R2
+(0095) 								     delay(30000); 
+    0012E E300      LDI	R16,0x30
+    0012F E715      LDI	R17,0x75
+    00130 DF30      RCALL	_delay
+(0096) 									 
+(0097)                                    }
+(0098) 					   
+(0099)    PORTC=0X00; // 清空数码管
+    00131 2422      CLR	R2
+    00132 BA25      OUT	0x15,R2
+(0100)    PORTD=0X00;
+FILE: <library>
+    00133 BA22      OUT	0x12,R2
+    00134 CF43      RJMP	0x0078
+    00135 9508      RET
+push_xgsetF000:
+    00136 937A      ST	-Y,R23
+    00137 936A      ST	-Y,R22
+    00138 935A      ST	-Y,R21
+    00139 934A      ST	-Y,R20
+    0013A 9508      RET
+pop_xgsetF000:
+    0013B 9149      LD	R20,Y+
+    0013C 9159      LD	R21,Y+
+    0013D 9169      LD	R22,Y+
+    0013E 9179      LD	R23,Y+
+    0013F 9508      RET

@@ -1,0 +1,135 @@
+                        .module _计时器.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 计时器.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile 计时器.c
+ 0000           _jishu::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 0000              .word 0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile 计时器.c
+ 0002                   .dbfile F:\.[School]\Chip\iccv7\第9讲课堂小测\计时器.c
+ 0002                   .dbsym e jishu _jishu I
+                        .area vector(rom, abs)
+                        .org 76
+ 004C 0C940000          jmp _Int_TCCR0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile F:\.[School]\Chip\iccv7\第9讲课堂小测\计时器.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile F:\.[School]\Chip\iccv7\第9讲课堂小测\计时器.c
+ 0000                   .dbfunc e Int_TCCR0 _Int_TCCR0 fV
+                        .even
+ 0000           _Int_TCCR0::
+ 0000 2A92              st -y,R2
+ 0002 3A92              st -y,R3
+ 0004 8A93              st -y,R24
+ 0006 9A93              st -y,R25
+ 0008 AA93              st -y,R26
+ 000A EA93              st -y,R30
+ 000C 2FB6              IN R2,63
+ 000E 2A92              st -y,R2
+ 0010                   .dbline -1
+ 0010                   .dbline 8
+ 0010           ; #include<iom16v.h>
+ 0010           ; #include <macros.h>
+ 0010           ; 
+ 0010           ; int jishu=0; //全局变量，用于计算
+ 0010           ; 
+ 0010           ; #pragma interrupt_handler Int_TCCR0: 20
+ 0010           ; //定时器中断，注意中断向量号
+ 0010           ; void Int_TCCR0(void){ 
+ 0010                   .dbline 9
+ 0010           ;      jishu++; //计数器jishu加1
+ 0010 80910000          lds R24,_jishu
+ 0014 90910100          lds R25,_jishu+1
+ 0018 0196              adiw R24,1
+ 001A 90930100          sts _jishu+1,R25
+ 001E 80930000          sts _jishu,R24
+ 0022                   .dbline 10
+ 0022           ;      if(jishu==1000)
+ 0022 883E              cpi R24,232
+ 0024 E3E0              ldi R30,3
+ 0026 9E07              cpc R25,R30
+ 0028 51F4              brne L2
+ 002A           X0:
+ 002A                   .dbline 12
+ 002A           ;        //当jishu=1000，表明1s时间到
+ 002A           ;        {
+ 002A                   .dbline 13
+ 002A           ;           PORTA =PORTA^0b00100000; 
+ 002A 80E2              ldi R24,32
+ 002C 2BB2              in R2,0x1b
+ 002E 2826              eor R2,R24
+ 0030 2BBA              out 0x1b,R2
+ 0032                   .dbline 15
+ 0032           ;                    //翻转PA5的电平信号
+ 0032           ;           jishu=0; //jishu清“0”，非常重要
+ 0032 2224              clr R2
+ 0034 3324              clr R3
+ 0036 30920100          sts _jishu+1,R3
+ 003A 20920000          sts _jishu,R2
+ 003E                   .dbline 16
+ 003E           ;        }
+ 003E           L2:
+ 003E                   .dbline -2
+ 003E           L1:
+ 003E                   .dbline 0 ; func end
+ 003E 2990              ld R2,y+
+ 0040 2FBE              OUT 63,R2
+ 0042 E991              ld R30,y+
+ 0044 A991              ld R26,y+
+ 0046 9991              ld R25,y+
+ 0048 8991              ld R24,y+
+ 004A 3990              ld R3,y+
+ 004C 2990              ld R2,y+
+ 004E 1895              reti
+ 0050                   .dbend
+ 0050                   .dbfunc e main _main fV
+                        .even
+ 0050           _main::
+ 0050                   .dbline -1
+ 0050                   .dbline 19
+ 0050           ; }
+ 0050           ; void main(void)
+ 0050           ; { PORTA=0x00; //定义PA口输出
+ 0050                   .dbline 19
+ 0050 2224              clr R2
+ 0052 2BBA              out 0x1b,R2
+ 0054                   .dbline 20
+ 0054           ;   DDRA=0xFF;
+ 0054 8FEF              ldi R24,255
+ 0056 8ABB              out 0x1a,R24
+ 0058                   .dbline 21
+ 0058           ;   TCCR0=0x0B; //CTC模式，系统频率64分频，OC0引脚断开
+ 0058 8BE0              ldi R24,11
+ 005A 83BF              out 0x33,R24
+ 005C                   .dbline 22
+ 005C           ;   TCNT0=0x00; 
+ 005C 22BE              out 0x32,R2
+ 005E                   .dbline 23
+ 005E           ;   OCR0=0x3E; //1ms定时的比较值
+ 005E 8EE3              ldi R24,62
+ 0060 8CBF              out 0x3c,R24
+ 0062                   .dbline 24
+ 0062           ;   TIMSK=0x02; //T/C0比较匹配中断开放
+ 0062 82E0              ldi R24,2
+ 0064 89BF              out 0x39,R24
+ 0066                   .dbline 25
+ 0066           ;   SEI();
+ 0066 7894              sei
+ 0068           L5:
+ 0068                   .dbline 27
+ 0068           ;   while(1)
+ 0068           ;       {   };
+ 0068                   .dbline 27
+ 0068           L6:
+ 0068                   .dbline 26
+ 0068 FFCF              xjmp L5
+ 006A           X1:
+ 006A                   .dbline -2
+ 006A           L4:
+ 006A                   .dbline 0 ; func end
+ 006A 0895              ret
+ 006C                   .dbend
+ 006C           ; }

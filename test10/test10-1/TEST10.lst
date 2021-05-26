@@ -1,0 +1,1243 @@
+Interrupt Vectors
+    00000 940C 004F JMP	__text_start|__start
+    00002 940C 024A JMP	_Int0
+    00004 940C 0269 JMP	_Int1
+    0001C 940C 021B JMP	_timer1_ovf_isr
+
+Program Code (text area)
+__text_start|__start:
+    0004F EFCF      LDI	R28,0xFF
+    00050 E1D0      LDI	R29,0x10
+    00051 BFCD      OUT	0x3D,R28
+    00052 BFDE      OUT	0x3E,R29
+    00053 51CE      SUBI	R28,0x1E
+    00054 40D0      SBCI	R29,0
+    00055 EA0A      LDI	R16,0xAA
+    00056 8308      ST	Y,R16
+    00057 2400      CLR	R0
+    00058 E1E1      LDI	R30,0x11
+    00059 E0F1      LDI	R31,1
+    0005A E011      LDI	R17,1
+    0005B 31E6      CPI	R30,0x16
+    0005C 07F1      CPC	R31,R17
+    0005D F011      BEQ	0x0060
+    0005E 9201      ST	Z+,R0
+    0005F CFFB      RJMP	0x005B
+    00060 8300      ST	Z,R16
+    00061 E8EC      LDI	R30,0x8C
+    00062 E0F0      LDI	R31,0
+    00063 E0A0      LDI	R26,0
+    00064 E0B1      LDI	R27,1
+    00065 E010      LDI	R17,0
+    00066 E000      LDI	R16,0
+    00067 BF0B      OUT	0x3B,R16
+    00068 39ED      CPI	R30,0x9D
+    00069 07F1      CPC	R31,R17
+    0006A F021      BEQ	0x006F
+    0006B 95C8      LPM
+    0006C 9631      ADIW	R30,1
+    0006D 920D      ST	X+,R0
+    0006E CFF9      RJMP	0x0068
+    0006F 940E 0316 CALL	_main
+_exit:
+    00071 CFFF      RJMP	_exit
+FILE: F:\.[School]\Chip\iccv7\test10\test10-1\1602.h
+(0001) #define uchar unsigned char 
+(0002) #define uint unsigned int 
+(0003) 
+(0004) #define RS 0
+(0005) #define RW 1
+(0006) #define EN 2
+(0007) 
+(0008) void s_ms(uint ms)
+(0009) {
+(0010) 	for(;ms>1;ms--);
+_s_ms:
+  ms                   --> R16
+    00072 C002      RJMP	0x0075
+    00073 5001      SUBI	R16,1
+    00074 4010      SBCI	R17,0
+    00075 E081      LDI	R24,1
+    00076 E090      LDI	R25,0
+    00077 1780      CP	R24,R16
+    00078 0791      CPC	R25,R17
+    00079 F3C8      BCS	0x0073
+    0007A 9508      RET
+_busy:
+  temp                 --> R20
+    0007B 934A      ST	-Y,R20
+(0011) }	
+(0012) 
+(0013) //查忙
+(0014) void busy(void)
+(0015) {
+(0016)     uchar temp;
+(0017) 	s_ms(500);
+    0007C EF04      LDI	R16,0xF4
+    0007D E011      LDI	R17,1
+    0007E DFF3      RCALL	_s_ms
+(0018) 	PORTC&=~(1<<RS);    //RS=0
+    0007F 98A8      CBI	0x15,0
+(0019) 	s_ms(500);
+    00080 EF04      LDI	R16,0xF4
+    00081 E011      LDI	R17,1
+    00082 DFEF      RCALL	_s_ms
+(0020) 	PORTC|=(1<<RW);     //RW=1
+    00083 9AA9      SBI	0x15,1
+(0021) 	s_ms(500);
+    00084 EF04      LDI	R16,0xF4
+    00085 E011      LDI	R17,1
+    00086 DFEB      RCALL	_s_ms
+    00087 C01A      RJMP	0x00A2
+(0022) 	while(temp)
+(0023) 	{
+(0024) 		PORTC|=(1<<EN); //EN=1
+    00088 9AAA      SBI	0x15,2
+(0025) 		s_ms(500);
+    00089 EF04      LDI	R16,0xF4
+    0008A E011      LDI	R17,1
+    0008B DFE6      RCALL	_s_ms
+(0026) 		DDRA=0x00;      //A口变输入
+    0008C 2422      CLR	R2
+    0008D BA2A      OUT	0x1A,R2
+(0027) 		PORTA=0xff;     //上拉使能
+    0008E EF8F      LDI	R24,0xFF
+    0008F BB8B      OUT	0x1B,R24
+(0028) 		s_ms(500);
+    00090 EF04      LDI	R16,0xF4
+    00091 E011      LDI	R17,1
+    00092 DFDF      RCALL	_s_ms
+(0029) 		temp = PINA&0x80;    //读取A口
+    00093 B349      IN	R20,0x19
+    00094 7840      ANDI	R20,0x80
+(0030) 		s_ms(500);      
+    00095 EF04      LDI	R16,0xF4
+    00096 E011      LDI	R17,1
+    00097 DFDA      RCALL	_s_ms
+(0031) 		DDRA=0xff;      
+    00098 EF8F      LDI	R24,0xFF
+    00099 BB8A      OUT	0x1A,R24
+(0032) 		PORTA=0xff;        //A口变输出
+    0009A BB8B      OUT	0x1B,R24
+(0033) 		s_ms(500);
+    0009B EF04      LDI	R16,0xF4
+    0009C E011      LDI	R17,1
+    0009D DFD4      RCALL	_s_ms
+(0034) 		PORTC&=~(1<<EN);   //EN=0
+    0009E 98AA      CBI	0x15,2
+(0035) 		s_ms(500);
+    0009F EF04      LDI	R16,0xF4
+    000A0 E011      LDI	R17,1
+    000A1 DFD0      RCALL	_s_ms
+    000A2 2344      TST	R20
+    000A3 F721      BNE	0x0088
+    000A4 9149      LD	R20,Y+
+    000A5 9508      RET
+_writecom:
+  com                  --> R10
+    000A6 92AA      ST	-Y,R10
+    000A7 2EA0      MOV	R10,R16
+(0036) 	}
+(0037) }
+(0038) 
+(0039) //写指令
+(0040) void writecom(uchar	com)
+(0041) {
+(0042) 	busy();
+    000A8 DFD2      RCALL	_busy
+(0043) 	s_ms(500);
+    000A9 EF04      LDI	R16,0xF4
+    000AA E011      LDI	R17,1
+    000AB DFC6      RCALL	_s_ms
+(0044) 	PORTC&=~(1<<RS);   //RS=0
+    000AC 98A8      CBI	0x15,0
+(0045) 	s_ms(500);
+    000AD EF04      LDI	R16,0xF4
+    000AE E011      LDI	R17,1
+    000AF DFC2      RCALL	_s_ms
+(0046) 	PORTC&=~(1<<RW);   //RW=0
+    000B0 98A9      CBI	0x15,1
+(0047) 	s_ms(500);
+    000B1 EF04      LDI	R16,0xF4
+    000B2 E011      LDI	R17,1
+    000B3 DFBE      RCALL	_s_ms
+(0048) 	PORTC|=(1<<EN);    //EN=1
+    000B4 9AAA      SBI	0x15,2
+(0049) 	s_ms(500);
+    000B5 EF04      LDI	R16,0xF4
+    000B6 E011      LDI	R17,1
+    000B7 DFBA      RCALL	_s_ms
+(0050) 	PORTA = com;       //输出指令
+    000B8 BAAB      OUT	0x1B,R10
+(0051) 	s_ms(500);
+    000B9 EF04      LDI	R16,0xF4
+    000BA E011      LDI	R17,1
+    000BB DFB6      RCALL	_s_ms
+(0052) 	PORTC&=~(1<<EN);   //EN=0
+    000BC 98AA      CBI	0x15,2
+(0053) 	s_ms(500);
+    000BD EF04      LDI	R16,0xF4
+    000BE E011      LDI	R17,1
+    000BF DFB2      RCALL	_s_ms
+    000C0 90A9      LD	R10,Y+
+    000C1 9508      RET
+(0054) }
+(0055) 
+(0056) //1602初始化
+(0057) void	LcdInit(void)
+(0058) {
+(0059) 	writecom(0x38);
+_LcdInit:
+    000C2 E308      LDI	R16,0x38
+    000C3 DFE2      RCALL	_writecom
+(0060) 	s_ms(1000);
+    000C4 EE08      LDI	R16,0xE8
+    000C5 E013      LDI	R17,3
+    000C6 DFAB      RCALL	_s_ms
+(0061) 	writecom(0x01);
+    000C7 E001      LDI	R16,1
+    000C8 DFDD      RCALL	_writecom
+(0062) 	s_ms(10000);
+    000C9 E100      LDI	R16,0x10
+    000CA E217      LDI	R17,0x27
+    000CB DFA6      RCALL	_s_ms
+(0063) 	s_ms(1000);
+    000CC EE08      LDI	R16,0xE8
+    000CD E013      LDI	R17,3
+    000CE DFA3      RCALL	_s_ms
+(0064) 	s_ms(1000);
+    000CF EE08      LDI	R16,0xE8
+    000D0 E013      LDI	R17,3
+    000D1 DFA0      RCALL	_s_ms
+(0065) 	s_ms(1000);
+    000D2 EE08      LDI	R16,0xE8
+    000D3 E013      LDI	R17,3
+    000D4 DF9D      RCALL	_s_ms
+(0066) 	s_ms(1000);
+    000D5 EE08      LDI	R16,0xE8
+    000D6 E013      LDI	R17,3
+    000D7 DF9A      RCALL	_s_ms
+(0067) 	s_ms(1000);
+    000D8 EE08      LDI	R16,0xE8
+    000D9 E013      LDI	R17,3
+    000DA DF97      RCALL	_s_ms
+(0068) 	s_ms(1000);
+    000DB EE08      LDI	R16,0xE8
+    000DC E013      LDI	R17,3
+    000DD DF94      RCALL	_s_ms
+(0069) 	writecom(0x02);
+    000DE E002      LDI	R16,2
+    000DF DFC6      RCALL	_writecom
+(0070) 	s_ms(1000);
+    000E0 EE08      LDI	R16,0xE8
+    000E1 E013      LDI	R17,3
+    000E2 DF8F      RCALL	_s_ms
+(0071) 	writecom(0x06);
+    000E3 E006      LDI	R16,6
+    000E4 DFC1      RCALL	_writecom
+(0072) 	s_ms(1000);
+    000E5 EE08      LDI	R16,0xE8
+    000E6 E013      LDI	R17,3
+    000E7 DF8A      RCALL	_s_ms
+(0073) 	writecom(0x0c);
+    000E8 E00C      LDI	R16,0xC
+    000E9 DFBC      RCALL	_writecom
+(0074) 	s_ms(1000);
+    000EA EE08      LDI	R16,0xE8
+    000EB E013      LDI	R17,3
+    000EC DF85      RCALL	_s_ms
+(0075) 	writecom(0x38);	
+    000ED E308      LDI	R16,0x38
+    000EE DFB7      RCALL	_writecom
+(0076) 	s_ms(1000);
+    000EF EE08      LDI	R16,0xE8
+    000F0 E013      LDI	R17,3
+    000F1 CF80      RJMP	_s_ms
+_writedata:
+  data                 --> R10
+    000F2 92AA      ST	-Y,R10
+    000F3 2EA0      MOV	R10,R16
+(0077) }	
+(0078) 
+(0079) //写数据
+(0080) void	writedata(uchar data)
+(0081) {
+(0082) 	busy();
+    000F4 DF86      RCALL	_busy
+(0083) 	s_ms(500);
+    000F5 EF04      LDI	R16,0xF4
+    000F6 E011      LDI	R17,1
+    000F7 DF7A      RCALL	_s_ms
+(0084) 	PORTC|=(1<<RS);   //RS=1
+    000F8 9AA8      SBI	0x15,0
+(0085) 	s_ms(500);
+    000F9 EF04      LDI	R16,0xF4
+    000FA E011      LDI	R17,1
+    000FB DF76      RCALL	_s_ms
+(0086) 	PORTC&=~(1<<RW);   //RW=0
+    000FC 98A9      CBI	0x15,1
+(0087) 	s_ms(500);
+    000FD EF04      LDI	R16,0xF4
+    000FE E011      LDI	R17,1
+    000FF DF72      RCALL	_s_ms
+(0088) 	PORTC|=(1<<EN);    //EN=1
+    00100 9AAA      SBI	0x15,2
+(0089) 	s_ms(500);
+    00101 EF04      LDI	R16,0xF4
+    00102 E011      LDI	R17,1
+    00103 DF6E      RCALL	_s_ms
+(0090) 	PORTA = data;      //输出数据
+    00104 BAAB      OUT	0x1B,R10
+(0091) 	s_ms(500);
+    00105 EF04      LDI	R16,0xF4
+    00106 E011      LDI	R17,1
+    00107 DF6A      RCALL	_s_ms
+(0092) 	PORTC&=~(1<<EN);   //EN=0
+    00108 98AA      CBI	0x15,2
+(0093) 	s_ms(500);
+    00109 EF04      LDI	R16,0xF4
+    0010A E011      LDI	R17,1
+    0010B DF66      RCALL	_s_ms
+    0010C 90A9      LD	R10,Y+
+    0010D 9508      RET
+_readdata:
+  temp                 --> R10
+    0010E 92AA      ST	-Y,R10
+(0094) }
+(0095) 
+(0096) 
+(0097) //读数据
+(0098) uchar	readdata(void)
+(0099) {
+(0100) 	uchar temp;
+(0101) 	busy();
+    0010F DF6B      RCALL	_busy
+(0102) 	s_ms(500);
+    00110 EF04      LDI	R16,0xF4
+    00111 E011      LDI	R17,1
+    00112 DF5F      RCALL	_s_ms
+(0103) 	PORTC|=(1<<RS);  //RS=1
+    00113 9AA8      SBI	0x15,0
+(0104) 	s_ms(500);
+    00114 EF04      LDI	R16,0xF4
+    00115 E011      LDI	R17,1
+    00116 DF5B      RCALL	_s_ms
+(0105) 	PORTC|=(1<<RW);  //RW=1
+    00117 9AA9      SBI	0x15,1
+(0106) 	s_ms(500);
+    00118 EF04      LDI	R16,0xF4
+    00119 E011      LDI	R17,1
+    0011A DF57      RCALL	_s_ms
+(0107) 	PORTC|=(1<<EN);  //EN=1
+    0011B 9AAA      SBI	0x15,2
+(0108) 	s_ms(500);
+    0011C EF04      LDI	R16,0xF4
+    0011D E011      LDI	R17,1
+    0011E DF53      RCALL	_s_ms
+(0109) 	DDRA=0x00;       //A端口变输入
+    0011F 2422      CLR	R2
+    00120 BA2A      OUT	0x1A,R2
+(0110) 	s_ms(500);
+    00121 EF04      LDI	R16,0xF4
+    00122 E011      LDI	R17,1
+    00123 DF4E      RCALL	_s_ms
+(0111) 	temp = PINA;     //读A端口
+    00124 B2A9      IN	R10,0x19
+(0112) 	s_ms(500);
+    00125 EF04      LDI	R16,0xF4
+    00126 E011      LDI	R17,1
+    00127 DF4A      RCALL	_s_ms
+(0113) 	DDRA=0xff;       //A端口变输出
+    00128 EF8F      LDI	R24,0xFF
+    00129 BB8A      OUT	0x1A,R24
+(0114) 	s_ms(500);
+    0012A EF04      LDI	R16,0xF4
+    0012B E011      LDI	R17,1
+    0012C DF45      RCALL	_s_ms
+(0115) 	PORTC&=~(1<<EN); //EN=0
+    0012D 98AA      CBI	0x15,2
+(0116) 	s_ms(500);
+    0012E EF04      LDI	R16,0xF4
+    0012F E011      LDI	R17,1
+    00130 DF41      RCALL	_s_ms
+(0117) 	return temp;	
+    00131 2D0A      MOV	R16,R10
+    00132 90A9      LD	R10,Y+
+    00133 9508      RET
+_WriteCGRAM:
+  t                    --> R10
+  i                    --> R20
+  pBuffer              --> R22
+  num                  --> R10
+    00134 940E 0378 CALL	push_xgsetF00C
+    00136 01B9      MOVW	R22,R18
+    00137 0158      MOVW	R10,R16
+(0118) }
+(0119) 
+(0120) //=================================================
+(0121) // 描述： 写LCD内部CGRAM函数
+(0122) // 入口： ‘num’要写的数据个数
+(0123) //        ‘pbuffer’要写的数据的首地址
+(0124) // 出口： 无
+(0125) //================================================
+(0126) void	WriteCGRAM(uint	num, const uint	*pBuffer)
+(0127) {
+(0128) 	uint	i,t;
+(0129) 	writecom(0x40);
+    00138 E400      LDI	R16,0x40
+    00139 DF6C      RCALL	_writecom
+(0130) 	PORTC|=(1<<RS);
+    0013A 9AA8      SBI	0x15,0
+(0131) 	PORTC&=~(1<<RW);
+    0013B 98A9      CBI	0x15,1
+(0132) 	for(i=num;i!=0;i--)
+    0013C 01A5      MOVW	R20,R10
+    0013D C00A      RJMP	0x0148
+(0133) 	{
+(0134) 		t = *pBuffer;
+    0013E 01FB      MOVW	R30,R22
+    0013F 80A0      LD	R10,Z
+    00140 80B1      LDD	R11,Z+1
+(0135) 		PORTC|=(1<<EN);
+    00141 9AAA      SBI	0x15,2
+(0136) 		PORTA = t;
+    00142 BAAB      OUT	0x1B,R10
+(0137) 		PORTC&=~(1<<EN);				
+    00143 98AA      CBI	0x15,2
+(0138) 		pBuffer++;
+    00144 5F6E      SUBI	R22,0xFE
+    00145 4F7F      SBCI	R23,0xFF
+    00146 5041      SUBI	R20,1
+    00147 4050      SBCI	R21,0
+    00148 3040      CPI	R20,0
+    00149 0745      CPC	R20,R21
+    0014A F799      BNE	0x013E
+    0014B 940C 037F JMP	pop_xgsetF00C
+_WriteMenu:
+  t                    --> R10
+  i                    --> R22
+  pBuffer              --> R20
+    0014D 940E 0378 CALL	push_xgsetF00C
+    0014F 01A8      MOVW	R20,R16
+(0139) 	}
+(0140) 	
+(0141) }
+(0142) 
+(0143) //=================================================
+(0144) //描述：写菜单函数，本程序使用的LCD规格为 16 * 2
+(0145) //入口：菜单数组首地址
+(0146) //出口：无
+(0147) //=================================================
+(0148) void	WriteMenu(const uchar *pBuffer)
+(0149) {
+(0150) 	uchar	i,t;
+(0151) 	writecom(0x80);   //数据地址
+    00150 E800      LDI	R16,0x80
+    00151 DF54      RCALL	_writecom
+(0152) 	
+(0153) 	PORTC|=(1<<RS);
+    00152 9AA8      SBI	0x15,0
+(0154) 	PORTC&=~(1<<RW);
+    00153 98A9      CBI	0x15,1
+(0155) 	s_ms(50);
+    00154 E302      LDI	R16,0x32
+    00155 E010      LDI	R17,0
+    00156 DF1B      RCALL	_s_ms
+(0156) 	for(i=0;i<16;i++)
+    00157 2766      CLR	R22
+    00158 C00B      RJMP	0x0164
+(0157) 	{
+(0158) 		t = *pBuffer;
+    00159 01FA      MOVW	R30,R20
+    0015A 80A0      LD	R10,Z
+(0159) 		PORTA = t;
+    0015B BAAB      OUT	0x1B,R10
+(0160) 		PORTC|=(1<<EN);
+    0015C 9AAA      SBI	0x15,2
+(0161) 		s_ms(50);
+    0015D E302      LDI	R16,0x32
+    0015E E010      LDI	R17,0
+    0015F DF12      RCALL	_s_ms
+(0162) 		PORTC&=~(1<<EN);				
+    00160 98AA      CBI	0x15,2
+(0163) 		pBuffer++;
+    00161 5F4F      SUBI	R20,0xFF
+    00162 4F5F      SBCI	R21,0xFF
+    00163 9563      INC	R22
+    00164 3160      CPI	R22,0x10
+    00165 F398      BCS	0x0159
+(0164) 	}
+(0165) 	writecom(0xC0);
+    00166 EC00      LDI	R16,0xC0
+    00167 DF3E      RCALL	_writecom
+(0166) 
+(0167) 	PORTC|=(1<<RS);
+    00168 9AA8      SBI	0x15,0
+(0168) 	PORTC&=~(1<<RW);
+    00169 98A9      CBI	0x15,1
+(0169) 	s_ms(50);	
+    0016A E302      LDI	R16,0x32
+    0016B E010      LDI	R17,0
+    0016C DF05      RCALL	_s_ms
+(0170) 	for(i=0;i<16;i++)
+    0016D 2766      CLR	R22
+    0016E C00B      RJMP	0x017A
+(0171) 	{
+(0172) 		t = *pBuffer;
+    0016F 01FA      MOVW	R30,R20
+    00170 80A0      LD	R10,Z
+(0173) 		PORTA = t;
+    00171 BAAB      OUT	0x1B,R10
+(0174) 		PORTC|=(1<<EN);
+    00172 9AAA      SBI	0x15,2
+(0175) 		s_ms(50);
+    00173 E302      LDI	R16,0x32
+    00174 E010      LDI	R17,0
+    00175 DEFC      RCALL	_s_ms
+(0176) 		PORTC&=~(1<<EN);				
+    00176 98AA      CBI	0x15,2
+(0177) 		pBuffer++;
+    00177 5F4F      SUBI	R20,0xFF
+    00178 4F5F      SBCI	R21,0xFF
+    00179 9563      INC	R22
+    0017A 3160      CPI	R22,0x10
+    0017B F398      BCS	0x016F
+    0017C 940C 037F JMP	pop_xgsetF00C
+_WriteNum:
+  num                  --> R10
+  col                  --> R22
+  row                  --> R20
+    0017E 940E 0378 CALL	push_xgsetF00C
+    00180 2F62      MOV	R22,R18
+    00181 2F40      MOV	R20,R16
+    00182 80AE      LDD	R10,Y+6
+(0178) 	}
+(0179) }
+(0180) //====================================================
+(0181) // 描述：在任意位置写数字函数
+(0182) // 入口：’row‘表示要写数字所在的行地址，只能为1或2
+(0183) //       ’col‘表示要写数字所在的列地址，只能为0--15
+(0184) //		 ‘num’表示要写的数字，只能为0--9
+(0185) // 出口：无
+(0186) //===================================================
+(0187) void WriteNum(uchar row,uchar col,uchar num)
+(0188) {
+(0189) 	if (row == 1)	row = 0x80 + col;
+    00183 3041      CPI	R20,1
+    00184 F419      BNE	0x0188
+    00185 2F46      MOV	R20,R22
+    00186 5840      SUBI	R20,0x80
+    00187 C002      RJMP	0x018A
+(0190) 	else	row = 0xC0 + col;
+    00188 2F46      MOV	R20,R22
+    00189 5440      SUBI	R20,0x40
+(0191) 	writecom(row);
+    0018A 2F04      MOV	R16,R20
+    0018B DF1A      RCALL	_writecom
+(0192) 
+(0193) 	PORTC|=(1<<RS);
+    0018C 9AA8      SBI	0x15,0
+(0194) 	s_ms(500);
+    0018D EF04      LDI	R16,0xF4
+    0018E E011      LDI	R17,1
+    0018F DEE2      RCALL	_s_ms
+(0195) 	PORTC&=~(1<<RW);
+    00190 98A9      CBI	0x15,1
+(0196) 	s_ms(500);
+    00191 EF04      LDI	R16,0xF4
+    00192 E011      LDI	R17,1
+    00193 DEDE      RCALL	_s_ms
+(0197) 	PORTA = num;
+    00194 BAAB      OUT	0x1B,R10
+(0198) 	s_ms(500);
+    00195 EF04      LDI	R16,0xF4
+    00196 E011      LDI	R17,1
+    00197 DEDA      RCALL	_s_ms
+(0199) 	PORTC|=(1<<EN);
+    00198 9AAA      SBI	0x15,2
+(0200) 	s_ms(500);
+    00199 EF04      LDI	R16,0xF4
+    0019A E011      LDI	R17,1
+    0019B DED6      RCALL	_s_ms
+(0201) 	PORTC&=~(1<<EN);	
+    0019C 98AA      CBI	0x15,2
+(0202) 	s_ms(500);			
+    0019D EF04      LDI	R16,0xF4
+    0019E E011      LDI	R17,1
+    0019F DED2      RCALL	_s_ms
+    001A0 940C 037F JMP	pop_xgsetF00C
+_WriteChar:
+  t                    --> R12
+  i                    --> R10
+  pBuffer              --> R20
+  num                  --> R10
+  col                  --> R12
+  row                  --> R22
+    001A2 940E 0386 CALL	push_xgsetF03C
+    001A4 2EC2      MOV	R12,R18
+    001A5 2F60      MOV	R22,R16
+    001A6 84A8      LDD	R10,Y+8
+    001A7 84B9      LDD	R11,Y+9
+    001A8 854A      LDD	R20,Y+10
+    001A9 855B      LDD	R21,Y+11
+(0203) }
+(0204) //================================================================
+(0205) // 描述：在任意位置写任意多个字符
+(0206) // 入口：’row‘要写的字符所在的行，只能为1或2；
+(0207) //       ‘col’要写的字符所在的列，只能为0---15
+(0208) //       ‘num’要写字符的个数
+(0209) //       ‘pbuffer’要写字符的首地址
+(0210) //================================================================== 
+(0211) void	WriteChar(uchar row,uchar col,uint num,uchar *pBuffer)
+(0212) {
+(0213) 	uchar i,t;
+(0214) 	if (row == 1)	row = 0x80 + col;
+    001AA 3061      CPI	R22,1
+    001AB F419      BNE	0x01AF
+    001AC 2D6C      MOV	R22,R12
+    001AD 5860      SUBI	R22,0x80
+    001AE C002      RJMP	0x01B1
+(0215) 	else	row = 0xC0 + col;
+    001AF 2D6C      MOV	R22,R12
+    001B0 5460      SUBI	R22,0x40
+(0216) 	writecom(row);
+    001B1 2F06      MOV	R16,R22
+    001B2 DEF3      RCALL	_writecom
+(0217) 
+(0218) 
+(0219) 	PORTC|=(1<<RS);
+    001B3 9AA8      SBI	0x15,0
+(0220) 	s_ms(500);
+    001B4 EF04      LDI	R16,0xF4
+    001B5 E011      LDI	R17,1
+    001B6 DEBB      RCALL	_s_ms
+(0221) 	PORTC&=~(1<<RW);
+    001B7 98A9      CBI	0x15,1
+(0222) 	s_ms(500);
+    001B8 EF04      LDI	R16,0xF4
+    001B9 E011      LDI	R17,1
+    001BA DEB7      RCALL	_s_ms
+(0223) 	for(i=num;i!=0;i--)
+    001BB C014      RJMP	0x01D0
+(0224) 	{
+(0225) 		t = *pBuffer;
+    001BC 01FA      MOVW	R30,R20
+    001BD 80C0      LD	R12,Z
+(0226) 		s_ms(500);
+    001BE EF04      LDI	R16,0xF4
+    001BF E011      LDI	R17,1
+    001C0 DEB1      RCALL	_s_ms
+(0227) 		PORTA = t;
+    001C1 BACB      OUT	0x1B,R12
+(0228) 		s_ms(500);
+    001C2 EF04      LDI	R16,0xF4
+    001C3 E011      LDI	R17,1
+    001C4 DEAD      RCALL	_s_ms
+(0229) 		PORTC|=(1<<EN);
+    001C5 9AAA      SBI	0x15,2
+(0230) 		s_ms(500);
+    001C6 EF04      LDI	R16,0xF4
+    001C7 E011      LDI	R17,1
+    001C8 DEA9      RCALL	_s_ms
+(0231) 		PORTC&=~(1<<EN);		
+    001C9 98AA      CBI	0x15,2
+(0232) 		s_ms(500);		
+    001CA EF04      LDI	R16,0xF4
+    001CB E011      LDI	R17,1
+    001CC DEA5      RCALL	_s_ms
+(0233) 		pBuffer++;
+    001CD 5F4F      SUBI	R20,0xFF
+    001CE 4F5F      SBCI	R21,0xFF
+    001CF 94AA      DEC	R10
+    001D0 20AA      TST	R10
+    001D1 F751      BNE	0x01BC
+    001D2 940C 038F JMP	pop_xgsetF03C
+_delay_nms:
+  k                    --> R20
+  j                    --> R22
+  n                    --> R16
+    001D4 940E 036E CALL	push_xgsetF000
+FILE: F:\.[School]\Chip\iccv7\test10\test10-1\test10.c
+(0001) #include<iom128v.h>
+(0002) #include <macros.h>
+(0003) #include"1602.h"
+(0004) #define uchar unsigned char
+(0005) #define uint unsigned int
+(0006) unsigned char countnum;
+(0007) uchar minute[2];
+(0008) uchar second[2];
+(0009) uchar title[]={"Time is: "};
+(0010) uchar min=0,sec=0;
+(0011) char state=0;
+(0012) void delay_nms(unsigned int n)
+(0013) {
+(0014)   unsigned int k=0,j=0;
+    001D6 2766      CLR	R22
+    001D7 2777      CLR	R23
+(0015)   for(k=0;k<n;k++)
+    001D8 2744      CLR	R20
+    001D9 2755      CLR	R21
+    001DA C00B      RJMP	0x01E6
+(0016)     for(j=0;j<1140;j++);
+    001DB 2766      CLR	R22
+    001DC 2777      CLR	R23
+    001DD C002      RJMP	0x01E0
+    001DE 5F6F      SUBI	R22,0xFF
+    001DF 4F7F      SBCI	R23,0xFF
+    001E0 3764      CPI	R22,0x74
+    001E1 E0E4      LDI	R30,4
+    001E2 077E      CPC	R23,R30
+    001E3 F3D0      BCS	0x01DE
+    001E4 5F4F      SUBI	R20,0xFF
+    001E5 4F5F      SBCI	R21,0xFF
+    001E6 1740      CP	R20,R16
+    001E7 0751      CPC	R21,R17
+    001E8 F390      BCS	0x01DB
+    001E9 940C 0373 JMP	pop_xgsetF000
+_Beep:
+  L_time               --> R10
+  H_time               --> R12
+    001EB 940E 0369 CALL	push_xgset003C
+    001ED 0159      MOVW	R10,R18
+    001EE 0168      MOVW	R12,R16
+(0017) }
+(0018) 
+(0019) //////////////////////////////////////
+(0020) void Beep(unsigned int H_time,unsigned int L_time)
+(0021) {
+(0022)    PORTG|=(1<<4);
+    001EF 9180 0065 LDS	R24,0x65
+    001F1 6180      ORI	R24,0x10
+    001F2 9380 0065 STS	0x65,R24
+(0023)    delay_nms(H_time);
+    001F4 0186      MOVW	R16,R12
+    001F5 DFDE      RCALL	_delay_nms
+(0024)    PORTG&=~(1<<4);
+    001F6 9180 0065 LDS	R24,0x65
+    001F8 7E8F      ANDI	R24,0xEF
+    001F9 9380 0065 STS	0x65,R24
+(0025)    delay_nms(L_time);
+    001FB 0185      MOVW	R16,R10
+    001FC DFD7      RCALL	_delay_nms
+    001FD 940C 035E JMP	pop_xgset003C
+(0026)    
+(0027) }
+(0028) ////////////////////////////////////////////////
+(0029) void timer1_init(void)
+(0030) {
+(0031)  TCCR1B = 0x00; //stop
+_timer1_init:
+    001FF 2422      CLR	R2
+    00200 BC2E      OUT	0x2E,R2
+(0032)  TCNT1H = 0x8F; //setup
+    00201 E88F      LDI	R24,0x8F
+    00202 BD8D      OUT	0x2D,R24
+(0033)  TCNT1L = 0x81;
+    00203 E881      LDI	R24,0x81
+    00204 BD8C      OUT	0x2C,R24
+(0034)  OCR1AH = 0x70;
+    00205 E780      LDI	R24,0x70
+    00206 BD8B      OUT	0x2B,R24
+(0035)  OCR1AL = 0x7F;
+    00207 E78F      LDI	R24,0x7F
+    00208 BD8A      OUT	0x2A,R24
+(0036)  OCR1BH = 0x70;
+    00209 E780      LDI	R24,0x70
+    0020A BD89      OUT	0x29,R24
+(0037)  OCR1BL = 0x7F;
+    0020B E78F      LDI	R24,0x7F
+    0020C BD88      OUT	0x28,R24
+(0038)  OCR1CH = 0x70;
+    0020D E780      LDI	R24,0x70
+    0020E 9380 0079 STS	0x79,R24
+(0039)  OCR1CL = 0x7F;
+    00210 E78F      LDI	R24,0x7F
+    00211 9380 0078 STS	0x78,R24
+(0040)  ICR1H  = 0x70;
+    00213 E780      LDI	R24,0x70
+    00214 BD87      OUT	0x27,R24
+(0041)  ICR1L  = 0x7F;
+    00215 E78F      LDI	R24,0x7F
+    00216 BD86      OUT	0x26,R24
+(0042)  TCCR1A = 0x00;
+    00217 BC2F      OUT	0x2F,R2
+(0043)  TCCR1B = 0x04; //start Timer
+    00218 E084      LDI	R24,4
+    00219 BD8E      OUT	0x2E,R24
+    0021A 9508      RET
+_timer1_ovf_isr:
+    0021B 922A      ST	-Y,R2
+    0021C 938A      ST	-Y,R24
+    0021D 939A      ST	-Y,R25
+    0021E B62F      IN	R2,0x3F
+    0021F 922A      ST	-Y,R2
+(0044) }
+(0045) 
+(0046) /////////////////////////////////////////////////
+(0047) #pragma interrupt_handler timer1_ovf_isr:15
+(0048) void timer1_ovf_isr(void)
+(0049) {
+(0050)  TCNT1H = 0x8F; //reload counter high value
+    00220 E88F      LDI	R24,0x8F
+    00221 BD8D      OUT	0x2D,R24
+(0051)  TCNT1L = 0x81; //reload counter low value
+    00222 E881      LDI	R24,0x81
+    00223 BD8C      OUT	0x2C,R24
+(0052)  sec++;
+    00224 9180 010B LDS	R24,sec
+    00226 5F8F      SUBI	R24,0xFF
+    00227 9380 010B STS	sec,R24
+(0053)  if(sec>=60){sec=0;
+    00229 338C      CPI	R24,0x3C
+    0022A F060      BCS	0x0237
+    0022B 2422      CLR	R2
+    0022C 9220 010B STS	sec,R2
+(0054)              min++;
+    0022E 9180 010A LDS	R24,min
+    00230 5F8F      SUBI	R24,0xFF
+    00231 9380 010A STS	min,R24
+(0055) 			 if(min>=60)min=0;
+    00233 338C      CPI	R24,0x3C
+    00234 F010      BCS	0x0237
+    00235 9220 010A STS	min,R2
+(0056)              }
+(0057)  countnum++;
+    00237 9180 0115 LDS	R24,countnum
+    00239 5F8F      SUBI	R24,0xFF
+    0023A 9380 0115 STS	countnum,R24
+(0058)  if(countnum>7) countnum=0;
+    0023C E087      LDI	R24,7
+    0023D 9020 0115 LDS	R2,countnum
+    0023F 1582      CP	R24,R2
+    00240 F418      BCC	0x0244
+    00241 2422      CLR	R2
+    00242 9220 0115 STS	countnum,R2
+    00244 9029      LD	R2,Y+
+    00245 BE2F      OUT	0x3F,R2
+    00246 9199      LD	R25,Y+
+    00247 9189      LD	R24,Y+
+    00248 9029      LD	R2,Y+
+    00249 9518      RETI
+_Int0:
+  i                    --> R16
+    0024A 922A      ST	-Y,R2
+    0024B 923A      ST	-Y,R3
+    0024C 930A      ST	-Y,R16
+    0024D 931A      ST	-Y,R17
+    0024E 938A      ST	-Y,R24
+    0024F B62F      IN	R2,0x3F
+    00250 922A      ST	-Y,R2
+(0059)                     
+(0060) }
+(0061) /////////////////////////////////////////////
+(0062) #pragma interrupt_handler Int0:2
+(0063) void Int0(void)
+(0064) { unsigned int i;
+(0065)   i=1000;
+    00251 EE08      LDI	R16,0xE8
+    00252 E013      LDI	R17,3
+    00253 C003      RJMP	0x0257
+(0066)   while(i--)
+(0067)   {
+(0068)     if((PIND&(1<<PD2))==0)
+    00254 9982      SBIC	0x10,2
+    00255 C001      RJMP	0x0257
+(0069) 	{ return;
+    00256 C00A      RJMP	0x0261
+    00257 0118      MOVW	R2,R16
+    00258 5001      SUBI	R16,1
+    00259 4010      SBCI	R17,0
+    0025A 2022      TST	R2
+    0025B F7C1      BNE	0x0254
+    0025C 2033      TST	R3
+    0025D F7B1      BNE	0x0254
+(0070) 	}
+(0071)   }
+(0072)   state=1;
+    0025E E081      LDI	R24,1
+    0025F 9380 010C STS	state,R24
+    00261 9029      LD	R2,Y+
+    00262 BE2F      OUT	0x3F,R2
+    00263 9189      LD	R24,Y+
+    00264 9119      LD	R17,Y+
+    00265 9109      LD	R16,Y+
+    00266 9039      LD	R3,Y+
+    00267 9029      LD	R2,Y+
+    00268 9518      RETI
+_Int1:
+  i                    --> R16
+    00269 922A      ST	-Y,R2
+    0026A 923A      ST	-Y,R3
+    0026B 930A      ST	-Y,R16
+    0026C 931A      ST	-Y,R17
+    0026D 938A      ST	-Y,R24
+    0026E B62F      IN	R2,0x3F
+    0026F 922A      ST	-Y,R2
+(0073) }
+(0074) ///////////////////////////////////////////
+(0075) #pragma interrupt_handler Int1:3
+(0076) void Int1(void)
+(0077) { unsigned int i;
+(0078)   i=1000;
+    00270 EE08      LDI	R16,0xE8
+    00271 E013      LDI	R17,3
+    00272 C003      RJMP	0x0276
+(0079)   while(i--)
+(0080)   {if((PIND&(1<<PD3))==0)
+    00273 9983      SBIC	0x10,3
+    00274 C001      RJMP	0x0276
+(0081)   {return;
+    00275 C00A      RJMP	0x0280
+    00276 0118      MOVW	R2,R16
+    00277 5001      SUBI	R16,1
+    00278 4010      SBCI	R17,0
+    00279 2022      TST	R2
+    0027A F7C1      BNE	0x0273
+    0027B 2033      TST	R3
+    0027C F7B1      BNE	0x0273
+(0082)   }
+(0083)   }
+(0084)   state=2;
+    0027D E082      LDI	R24,2
+    0027E 9380 010C STS	state,R24
+    00280 9029      LD	R2,Y+
+    00281 BE2F      OUT	0x3F,R2
+    00282 9189      LD	R24,Y+
+    00283 9119      LD	R17,Y+
+    00284 9109      LD	R16,Y+
+    00285 9039      LD	R3,Y+
+    00286 9029      LD	R2,Y+
+    00287 9518      RETI
+(0085) }
+(0086) ////////////////////////////////////////////////////
+(0087) void io_init(void)
+(0088) {DDRA=0xFF;
+_io_init:
+    00288 EF8F      LDI	R24,0xFF
+    00289 BB8A      OUT	0x1A,R24
+(0089)  PORTA=0x00;
+    0028A 2422      CLR	R2
+    0028B BA2B      OUT	0x1B,R2
+(0090)  DDRC=0xFF;
+    0028C BB84      OUT	0x14,R24
+(0091)  PORTC=0xFF;
+    0028D BB85      OUT	0x15,R24
+(0092)  DDRD=0x00;
+    0028E BA21      OUT	0x11,R2
+(0093)  PORTD=0xFF;
+    0028F BB82      OUT	0x12,R24
+(0094)  DDRG|=(1<<4);
+    00290 9180 0064 LDS	R24,0x64
+    00292 6180      ORI	R24,0x10
+    00293 9380 0064 STS	0x64,R24
+(0095)  PORTG&=~(1<<4);
+    00295 9180 0065 LDS	R24,0x65
+    00297 7E8F      ANDI	R24,0xEF
+    00298 9380 0065 STS	0x65,R24
+    0029A 9508      RET
+_disp:
+    0029B 9724      SBIW	R28,4
+(0096) }
+(0097) ////////////////////////////////////////////////
+(0098) void disp(void)
+(0099) {
+(0100)  	 minute[1]=min/10+'0';
+    0029C E01A      LDI	R17,0xA
+    0029D 9100 010A LDS	R16,min
+    0029F 940E 0348 CALL	div8u
+    002A1 2F80      MOV	R24,R16
+    002A2 5D80      SUBI	R24,0xD0
+    002A3 9380 0114 STS	minute+1,R24
+(0101) 	 minute[0]=min%10+'0';
+    002A5 E01A      LDI	R17,0xA
+    002A6 9100 010A LDS	R16,min
+    002A8 940E 0346 CALL	mod8u
+    002AA 2F80      MOV	R24,R16
+    002AB 5D80      SUBI	R24,0xD0
+    002AC 9380 0113 STS	minute,R24
+(0102) 	 second[1]=sec/10+'0';
+    002AE E01A      LDI	R17,0xA
+    002AF 9100 010B LDS	R16,sec
+    002B1 940E 0348 CALL	div8u
+    002B3 2F80      MOV	R24,R16
+    002B4 5D80      SUBI	R24,0xD0
+    002B5 9380 0112 STS	second+1,R24
+(0103) 	 second[0]=sec%10+'0';
+    002B7 E01A      LDI	R17,0xA
+    002B8 9100 010B LDS	R16,sec
+    002BA 940E 0346 CALL	mod8u
+    002BC 2F80      MOV	R24,R16
+    002BD 5D80      SUBI	R24,0xD0
+    002BE 9380 0111 STS	second,R24
+(0104) 	 WriteChar(1,0,8,title);
+    002C0 E080      LDI	R24,0
+    002C1 E091      LDI	R25,1
+    002C2 839B      STD	Y+3,R25
+    002C3 838A      STD	Y+2,R24
+    002C4 E088      LDI	R24,0x8
+    002C5 E090      LDI	R25,0
+    002C6 8399      STD	Y+1,R25
+    002C7 8388      ST	Y,R24
+    002C8 2722      CLR	R18
+    002C9 E001      LDI	R16,1
+    002CA DED7      RCALL	_WriteChar
+(0105) 	 WriteNum(1,9,minute[1]);
+    002CB 9020 0114 LDS	R2,minute+1
+    002CD 8228      ST	Y,R2
+    002CE E029      LDI	R18,0x9
+    002CF E001      LDI	R16,1
+    002D0 DEAD      RCALL	_WriteNum
+(0106) 	 WriteNum(1,10,minute[0]);
+    002D1 9020 0113 LDS	R2,minute
+    002D3 8228      ST	Y,R2
+    002D4 E02A      LDI	R18,0xA
+    002D5 E001      LDI	R16,1
+    002D6 DEA7      RCALL	_WriteNum
+(0107) 	 if(sec%2==0)  WriteChar(1,11,1,":");
+    002D7 E012      LDI	R17,2
+    002D8 9100 010B LDS	R16,sec
+    002DA 940E 0346 CALL	mod8u
+    002DC 2300      TST	R16
+    002DD F461      BNE	0x02EA
+    002DE E08F      LDI	R24,0xF
+    002DF E091      LDI	R25,1
+    002E0 839B      STD	Y+3,R25
+    002E1 838A      STD	Y+2,R24
+    002E2 E081      LDI	R24,1
+    002E3 E090      LDI	R25,0
+    002E4 8399      STD	Y+1,R25
+    002E5 8388      ST	Y,R24
+    002E6 E02B      LDI	R18,0xB
+    002E7 E001      LDI	R16,1
+    002E8 DEB9      RCALL	_WriteChar
+    002E9 C00B      RJMP	0x02F5
+(0108) 	 else          WriteChar(1,11,1," ");
+    002EA E08D      LDI	R24,0xD
+    002EB E091      LDI	R25,1
+    002EC 839B      STD	Y+3,R25
+    002ED 838A      STD	Y+2,R24
+    002EE E081      LDI	R24,1
+    002EF E090      LDI	R25,0
+    002F0 8399      STD	Y+1,R25
+    002F1 8388      ST	Y,R24
+    002F2 E02B      LDI	R18,0xB
+    002F3 E001      LDI	R16,1
+    002F4 DEAD      RCALL	_WriteChar
+(0109) 	 WriteNum(1,12,second[1]);
+    002F5 9020 0112 LDS	R2,second+1
+    002F7 8228      ST	Y,R2
+    002F8 E02C      LDI	R18,0xC
+    002F9 E001      LDI	R16,1
+    002FA DE83      RCALL	_WriteNum
+(0110) 	 WriteNum(1,13,second[0]);
+    002FB 9020 0111 LDS	R2,second
+    002FD 8228      ST	Y,R2
+    002FE E02D      LDI	R18,0xD
+    002FF E001      LDI	R16,1
+    00300 DE7D      RCALL	_WriteNum
+    00301 9624      ADIW	R28,4
+    00302 9508      RET
+(0111) 	} 
+(0112) ////////////////////////////////////////////
+(0113) 
+(0114)  
+(0115) 
+(0116) void init_devices(void)
+(0117) {
+(0118)  CLI(); //disable all interrupts
+_init_devices:
+    00303 94F8      BCLR	7
+(0119)  timer1_init();
+    00304 DEFA      RCALL	_timer1_init
+(0120)  if(state==0)TIMSK = 0x04; //timer interrupt sources
+    00305 9020 010C LDS	R2,state
+    00307 2022      TST	R2
+    00308 F419      BNE	0x030C
+    00309 E084      LDI	R24,4
+    0030A BF87      OUT	0x37,R24
+    0030B C002      RJMP	0x030E
+(0121)  else        TIMSK = 0x00;
+    0030C 2422      CLR	R2
+    0030D BE27      OUT	0x37,R2
+(0122)  SEI(); //re-enable interrupts
+    0030E 9478      BSET	7
+(0123)  DDRE|=(1<<2);//LED灯的HC573打开
+    0030F 9A12      SBI	0x02,2
+(0124)  PORTE|=(1<<2);
+    00310 9A1A      SBI	0x03,2
+(0125)  DDRA=0xFF;
+    00311 EF8F      LDI	R24,0xFF
+    00312 BB8A      OUT	0x1A,R24
+(0126)  PORTA=0x00;
+    00313 2422      CLR	R2
+    00314 BA2B      OUT	0x1B,R2
+    00315 9508      RET
+(0127) }
+(0128) ////////////////////////////////////////////
+(0129) 
+(0130) 
+(0131) void main(void)
+(0132) {//signed char i=0;
+(0133)  io_init();
+_main:
+    00316 DF71      RCALL	_io_init
+(0134)  LcdInit();
+    00317 DDAA      RCALL	_LcdInit
+(0135)  init_devices(); 
+    00318 DFEA      RCALL	_init_devices
+    00319 C02A      RJMP	0x0344
+(0136)  
+(0137)  while(1)
+(0138)  	{
+(0139) 		// PORTA=~(1<<countnum);
+(0140) 		 disp();
+    0031A DF80      RCALL	_disp
+(0141) 		 if((PIND&(1<<PD0))==0)
+    0031B 9980      SBIC	0x10,0
+    0031C C004      RJMP	0x0321
+(0142) 		   state=1;
+    0031D E081      LDI	R24,1
+    0031E 9380 010C STS	state,R24
+    00320 C00A      RJMP	0x032B
+(0143) 		 else if((PIND&(1<<PD1))==0)
+    00321 9981      SBIC	0x10,1
+    00322 C008      RJMP	0x032B
+(0144) 		   {state=0;
+    00323 2422      CLR	R2
+    00324 9220 010C STS	state,R2
+(0145) 		    Beep(1000,400);}
+    00326 E920      LDI	R18,0x90
+    00327 E031      LDI	R19,1
+    00328 EE08      LDI	R16,0xE8
+    00329 E013      LDI	R17,3
+    0032A DEC0      RCALL	_Beep
+(0146) 		 if((PIND&(1<<PD2))==0)
+    0032B 9982      SBIC	0x10,2
+    0032C C00E      RJMP	0x033B
+(0147) 		   {Beep(300,100);
+    0032D E624      LDI	R18,0x64
+    0032E E030      LDI	R19,0
+    0032F E20C      LDI	R16,0x2C
+    00330 E011      LDI	R17,1
+    00331 DEB9      RCALL	_Beep
+(0148) 		      if(state==1) sec++;
+    00332 9180 010C LDS	R24,state
+    00334 3081      CPI	R24,1
+    00335 F429      BNE	0x033B
+    00336 9180 010B LDS	R24,sec
+    00338 5F8F      SUBI	R24,0xFF
+    00339 9380 010B STS	sec,R24
+(0149) 		    
+(0150) 		     }
+(0151) 		   
+(0152) 		   
+(0153) 		   
+(0154) 		 if(state==0)TIMSK = 0x04; //timer interrupt sources
+    0033B 9020 010C LDS	R2,state
+    0033D 2022      TST	R2
+    0033E F419      BNE	0x0342
+    0033F E084      LDI	R24,4
+    00340 BF87      OUT	0x37,R24
+    00341 C002      RJMP	0x0344
+(0155)          else       TIMSK = 0x00;
+FILE: <library>
+    00342 2422      CLR	R2
+    00343 BE27      OUT	0x37,R2
+    00344 CFD5      RJMP	0x031A
+    00345 9508      RET
+mod8u:
+    00346 9468      BSET	6
+    00347 C001      RJMP	xdiv8u
+div8u:
+    00348 94E8      BCLR	6
+xdiv8u:
+    00349 932A      ST	-Y,R18
+    0034A 92FA      ST	-Y,R15
+    0034B 92EA      ST	-Y,R14
+    0034C 24FF      CLR	R15
+    0034D 24EE      CLR	R14
+    0034E E120      LDI	R18,0x10
+    0034F 0F00      LSL	R16
+    00350 1CFF      ROL	R15
+    00351 1CEE      ROL	R14
+    00352 16E1      CP	R14,R17
+    00353 F010      BCS	0x0356
+    00354 1AE1      SUB	R14,R17
+    00355 9503      INC	R16
+    00356 952A      DEC	R18
+    00357 F7B9      BNE	0x034F
+    00358 F40E      BRTC	0x035A
+    00359 2D0E      MOV	R16,R14
+    0035A 90E9      LD	R14,Y+
+    0035B 90F9      LD	R15,Y+
+    0035C 9129      LD	R18,Y+
+    0035D 9508      RET
+pop_xgset003C:
+    0035E 90A9      LD	R10,Y+
+    0035F 90B9      LD	R11,Y+
+    00360 90C9      LD	R12,Y+
+    00361 90D9      LD	R13,Y+
+    00362 9508      RET
+push_xgsetF0FC:
+    00363 937A      ST	-Y,R23
+    00364 936A      ST	-Y,R22
+push_xgset30FC:
+    00365 935A      ST	-Y,R21
+    00366 934A      ST	-Y,R20
+push_xgset00FC:
+    00367 92FA      ST	-Y,R15
+    00368 92EA      ST	-Y,R14
+push_xgset003C:
+    00369 92DA      ST	-Y,R13
+    0036A 92CA      ST	-Y,R12
+    0036B 92BA      ST	-Y,R11
+    0036C 92AA      ST	-Y,R10
+    0036D 9508      RET
+push_xgsetF000:
+    0036E 937A      ST	-Y,R23
+    0036F 936A      ST	-Y,R22
+    00370 935A      ST	-Y,R21
+    00371 934A      ST	-Y,R20
+    00372 9508      RET
+pop_xgsetF000:
+    00373 9149      LD	R20,Y+
+    00374 9159      LD	R21,Y+
+    00375 9169      LD	R22,Y+
+    00376 9179      LD	R23,Y+
+    00377 9508      RET
+push_xgsetF00C:
+    00378 937A      ST	-Y,R23
+    00379 936A      ST	-Y,R22
+    0037A 935A      ST	-Y,R21
+    0037B 934A      ST	-Y,R20
+    0037C 92BA      ST	-Y,R11
+    0037D 92AA      ST	-Y,R10
+    0037E 9508      RET
+pop_xgsetF00C:
+    0037F 90A9      LD	R10,Y+
+    00380 90B9      LD	R11,Y+
+    00381 9149      LD	R20,Y+
+    00382 9159      LD	R21,Y+
+    00383 9169      LD	R22,Y+
+    00384 9179      LD	R23,Y+
+    00385 9508      RET
+push_xgsetF03C:
+    00386 937A      ST	-Y,R23
+    00387 936A      ST	-Y,R22
+    00388 935A      ST	-Y,R21
+    00389 934A      ST	-Y,R20
+    0038A 92DA      ST	-Y,R13
+    0038B 92CA      ST	-Y,R12
+    0038C 92BA      ST	-Y,R11
+    0038D 92AA      ST	-Y,R10
+    0038E 9508      RET
+pop_xgsetF03C:
+    0038F 90A9      LD	R10,Y+
+    00390 90B9      LD	R11,Y+
+    00391 90C9      LD	R12,Y+
+    00392 90D9      LD	R13,Y+
+    00393 9149      LD	R20,Y+
+    00394 9159      LD	R21,Y+
+    00395 9169      LD	R22,Y+
+    00396 9179      LD	R23,Y+
+    00397 9508      RET

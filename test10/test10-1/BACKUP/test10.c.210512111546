@@ -1,0 +1,96 @@
+#include<iom128v.h>
+#include <macros.h>
+#include"1602.h"
+#define uchar unsigned char
+#define uint unsigned int
+unsigned char countnum;
+uchar minute[2];
+uchar second[2];
+uchar title[]={"Time is: "};
+uchar min=0,sec=0;
+////////////////////////////////////////////////
+void timer1_init(void)
+{
+ TCCR1B = 0x00; //stop
+ TCNT1H = 0x8F; //setup
+ TCNT1L = 0x81;
+ OCR1AH = 0x70;
+ OCR1AL = 0x7F;
+ OCR1BH = 0x70;
+ OCR1BL = 0x7F;
+ OCR1CH = 0x70;
+ OCR1CL = 0x7F;
+ ICR1H  = 0x70;
+ ICR1L  = 0x7F;
+ TCCR1A = 0x00;
+ TCCR1B = 0x04; //start Timer
+}
+/////////////////////////////////////////////////
+#pragma interrupt_handler timer1_ovf_isr:15
+void timer1_ovf_isr(void)
+{
+ TCNT1H = 0x8F; //reload counter high value
+ TCNT1L = 0x81; //reload counter low value
+ sec++;
+ if(sec>=60){sec=0;
+             min++;
+			 if(min>=60)min=0;
+             }
+ countnum++;
+ if(countnum>7) countnum=0;
+                    
+}
+////////////////////////////////////////////////////
+void io_init(void)
+{DDRA=0xFF;
+ PORTA=0x00;
+ DDRC=0xFF;
+ PORTC=0xFF;
+ DDRD=0x00;
+ PORTD=0xFF;
+}
+////////////////////////////////////////////////
+void disp(void)
+{
+ 	 minute[1]=min/10+'0';
+	 minute[0]=min%10+'0';
+	 second[1]=sec/10+'0';
+	 second[0]=sec%10+'0';
+	 WriteChar(1,0,8,title);
+	 WriteNum(1,9,minute[1]);
+	 WriteNum(1,10,minute[0]);
+	 if(sec%2==0)  WriteChar(1,11,1,":");
+	 else          WriteChar(1,11,1," ");
+	 WriteNum(1,12,second[1]);
+	 WriteNum(1,13,second[0]);
+	 
+////////////////////////////////////////////
+
+ }
+
+void init_devices(void)
+{
+ CLI(); //disable all interrupts
+ timer1_init();
+ TIMSK = 0x04; //timer interrupt sources
+ SEI(); //re-enable interrupts
+ DDRE|=(1<<2);//LEDµÆµÄHC573´ò¿ª
+ PORTE|=(1<<2);
+ DDRA=0xFF;
+ PORTA=0x00;
+}
+////////////////////////////////////////////
+
+
+void main(void)
+{signed char i=0;
+ io_init();
+ LcdInit();
+ init_devices(); 
+ 
+ while(1)
+ 	{
+		 PORTA=~(1<<countnum);
+		 disp();
+	}
+}

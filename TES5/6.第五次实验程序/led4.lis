@@ -1,0 +1,606 @@
+                        .module led4.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile led4.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile led4.c
+ 0000           _num::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 3F06              .byte 63,6
+                        .area data(ram, con, rel)
+ 0002                   .dbfile led4.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 5B4F              .byte 91,'O
+                        .area data(ram, con, rel)
+ 0004                   .dbfile led4.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 666D              .byte 'f,'m
+                        .area data(ram, con, rel)
+ 0006                   .dbfile led4.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 7D07              .byte 125,7
+                        .area data(ram, con, rel)
+ 0008                   .dbfile led4.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 7F6F              .byte 127,'o
+                        .area data(ram, con, rel)
+ 000A                   .dbfile led4.c
+ 000A                   .dbfile F:\.[School]\Chip\iccv7\TES5\6.第五次实验程序\led4.c
+ 000A                   .dbsym e num _num A[10:10]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile F:\.[School]\Chip\iccv7\TES5\6.第五次实验程序\led4.c
+ 0000                   .dbfunc e io_init _io_init fV
+                        .even
+ 0000           _io_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 6
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; unsigned char num[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,
+ 0000           ;                           0x7F,0x6F};  //共阴极
+ 0000           ; void io_init(void)
+ 0000           ; {DDRA=0XFF; //设置为输出
+ 0000                   .dbline 6
+ 0000 8FEF              ldi R24,255
+ 0002 8ABB              out 0x1a,R24
+ 0004                   .dbline 7
+ 0004           ;  PORTA=0X00; //初始值为不显示
+ 0004 2224              clr R2
+ 0006 2BBA              out 0x1b,R2
+ 0008                   .dbline 8
+ 0008           ;  DDRB=0XFF; //设置为输出
+ 0008 87BB              out 0x17,R24
+ 000A                   .dbline 9
+ 000A           ;  PORTB=0XFF; //初始值为不显示
+ 000A 88BB              out 0x18,R24
+ 000C                   .dbline 10
+ 000C           ;  DDRA=0X00; //设置为输入
+ 000C 2ABA              out 0x1a,R2
+ 000E                   .dbline 11
+ 000E           ;  PORTA=0XFF;
+ 000E 8BBB              out 0x1b,R24
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e delay _delay fV
+ 0012           ;              j -> R20,R21
+ 0012           ;              i -> R16,R17
+                        .even
+ 0012           _delay::
+ 0012 4A93              st -y,R20
+ 0014 5A93              st -y,R21
+ 0016                   .dbline -1
+ 0016                   .dbline 14
+ 0016           ; }
+ 0016           ; void delay(unsigned int i)
+ 0016           ; {  unsigned j;
+ 0016 0AC0              xjmp L4
+ 0018           L3:
+ 0018                   .dbline 16
+ 0018           ;    while(--i)
+ 0018           ;       { for(j=1;j<=100;j++)  
+ 0018                   .dbline 16
+ 0018 41E0              ldi R20,1
+ 001A 50E0              ldi R21,0
+ 001C 02C0              xjmp L9
+ 001E           L6:
+ 001E                   .dbline 17
+ 001E           ;             ;
+ 001E           L7:
+ 001E                   .dbline 16
+ 001E 4F5F              subi R20,255  ; offset = 1
+ 0020 5F4F              sbci R21,255
+ 0022           L9:
+ 0022                   .dbline 16
+ 0022 84E6              ldi R24,100
+ 0024 90E0              ldi R25,0
+ 0026 8417              cp R24,R20
+ 0028 9507              cpc R25,R21
+ 002A C8F7              brsh L6
+ 002C           X0:
+ 002C                   .dbline 18
+ 002C           ;               }
+ 002C           L4:
+ 002C                   .dbline 15
+ 002C C801              movw R24,R16
+ 002E 0197              sbiw R24,1
+ 0030 8C01              movw R16,R24
+ 0032 0030              cpi R16,0
+ 0034 0107              cpc R16,R17
+ 0036 81F7              brne L3
+ 0038           X1:
+ 0038                   .dbline -2
+ 0038           L2:
+ 0038                   .dbline 0 ; func end
+ 0038 5991              ld R21,y+
+ 003A 4991              ld R20,y+
+ 003C 0895              ret
+ 003E                   .dbsym r j 20 i
+ 003E                   .dbsym r i 16 i
+ 003E                   .dbend
+ 003E                   .dbfunc e display _display fV
+ 003E           ;              i -> R20
+ 003E           ;              j -> R22
+ 003E           ;           disp -> R10,R11
+                        .even
+ 003E           _display::
+ 003E 0E940000          xcall push_xgsetF00C
+ 0042 5801              movw R10,R16
+ 0044                   .dbline -1
+ 0044                   .dbline 21
+ 0044           ; }
+ 0044           ; void display(unsigned char disp[4])
+ 0044           ; { unsigned char i,j;
+ 0044                   .dbline 22
+ 0044           ;   for(i=0;i<40;i++)
+ 0044 4427              clr R20
+ 0046 2CC0              xjmp L14
+ 0048           L11:
+ 0048                   .dbline 23
+ 0048           ;     for(j=0;j<4;j++)
+ 0048 6627              clr R22
+ 004A 27C0              xjmp L18
+ 004C           L15:
+ 004C                   .dbline 24
+ 004C           ;          { PORTB=~(1<<j);
+ 004C                   .dbline 24
+ 004C 01E0              ldi R16,1
+ 004E 162F              mov R17,R22
+ 0050 0E940000          xcall lsl8
+ 0054 202E              mov R2,R16
+ 0056 2094              com R2
+ 0058 28BA              out 0x18,R2
+ 005A                   .dbline 25
+ 005A           ;            if(j==2)
+ 005A 6230              cpi R22,2
+ 005C 71F4              brne L19
+ 005E           X2:
+ 005E                   .dbline 26
+ 005E           ;                   PORTA=num[disp[j]]|BIT(7);
+ 005E E62F              mov R30,R22
+ 0060 FF27              clr R31
+ 0062 EA0D              add R30,R10
+ 0064 FB1D              adc R31,R11
+ 0066 E081              ldd R30,z+0
+ 0068 FF27              clr R31
+ 006A 80E0              ldi R24,<_num
+ 006C 90E0              ldi R25,>_num
+ 006E E80F              add R30,R24
+ 0070 F91F              adc R31,R25
+ 0072 8081              ldd R24,z+0
+ 0074 8068              ori R24,128
+ 0076 8BBB              out 0x1b,R24
+ 0078 0CC0              xjmp L20
+ 007A           L19:
+ 007A                   .dbline 27
+ 007A           ;                else PORTA=num[disp[j]];
+ 007A E62F              mov R30,R22
+ 007C FF27              clr R31
+ 007E EA0D              add R30,R10
+ 0080 FB1D              adc R31,R11
+ 0082 E081              ldd R30,z+0
+ 0084 FF27              clr R31
+ 0086 80E0              ldi R24,<_num
+ 0088 90E0              ldi R25,>_num
+ 008A E80F              add R30,R24
+ 008C F91F              adc R31,R25
+ 008E 2080              ldd R2,z+0
+ 0090 2BBA              out 0x1b,R2
+ 0092           L20:
+ 0092                   .dbline 28
+ 0092           ;                     delay(5); 
+ 0092 05E0              ldi R16,5
+ 0094 10E0              ldi R17,0
+ 0096 BDDF              xcall _delay
+ 0098                   .dbline 30
+ 0098           ;                               
+ 0098           ;               }
+ 0098           L16:
+ 0098                   .dbline 23
+ 0098 6395              inc R22
+ 009A           L18:
+ 009A                   .dbline 23
+ 009A 6430              cpi R22,4
+ 009C B8F2              brlo L15
+ 009E           X3:
+ 009E           L12:
+ 009E                   .dbline 22
+ 009E 4395              inc R20
+ 00A0           L14:
+ 00A0                   .dbline 22
+ 00A0 4832              cpi R20,40
+ 00A2 08F4              brsh X5
+ 00A4 D1CF              xjmp L11
+ 00A6           X5:
+ 00A6           X4:
+ 00A6                   .dbline -2
+ 00A6           L10:
+ 00A6                   .dbline 0 ; func end
+ 00A6 0C940000          xjmp pop_xgsetF00C
+ 00AA                   .dbsym r i 20 c
+ 00AA                   .dbsym r j 22 c
+ 00AA                   .dbsym r disp 10 pc
+ 00AA                   .dbend
+ 00AA                   .dbfunc e main _main fV
+ 00AA           ;      statuskey -> R10
+ 00AA           ;            min -> R20
+ 00AA           ;            sec -> R22
+ 00AA           ;           disp -> y+0
+                        .even
+ 00AA           _main::
+ 00AA 2497              sbiw R28,4
+ 00AC                   .dbline -1
+ 00AC                   .dbline 33
+ 00AC           ; }
+ 00AC           ; void main(void)
+ 00AC           ; { unsigned char min=0,sec=0,disp[4];
+ 00AC                   .dbline 33
+ 00AC 4427              clr R20
+ 00AE                   .dbline 33
+ 00AE 6627              clr R22
+ 00B0                   .dbline 35
+ 00B0           ;   
+ 00B0           ;    unsigned char statuskey=0;
+ 00B0 AA24              clr R10
+ 00B2                   .dbline 36
+ 00B2           ;    io_init();
+ 00B2 A6DF              xcall _io_init
+ 00B4 7EC0              xjmp L23
+ 00B6           L22:
+ 00B6                   .dbline 38
+ 00B6           ; while(1)
+ 00B6           ;  {   
+ 00B6                   .dbline 40
+ 00B6           ;  
+ 00B6           ;     for(min=0;min<60;min++)
+ 00B6 4427              clr R20
+ 00B8 79C0              xjmp L28
+ 00BA           L25:
+ 00BA                   .dbline 41
+ 00BA           ;           for(sec=0;sec<60;sec++)
+ 00BA 6627              clr R22
+ 00BC 73C0              xjmp L32
+ 00BE           L29:
+ 00BE                   .dbline 42
+ 00BE           ;                  {   disp[0]=sec%10;
+ 00BE                   .dbline 42
+ 00BE 1AE0              ldi R17,10
+ 00C0 062F              mov R16,R22
+ 00C2 0E940000          xcall mod8u
+ 00C6 0883              std y+0,R16
+ 00C8                   .dbline 43
+ 00C8           ;                disp[1]=sec/10;
+ 00C8 1AE0              ldi R17,10
+ 00CA 062F              mov R16,R22
+ 00CC 0E940000          xcall div8u
+ 00D0 0983              std y+1,R16
+ 00D2                   .dbline 44
+ 00D2           ;                disp[2]=min%10;
+ 00D2 1AE0              ldi R17,10
+ 00D4 042F              mov R16,R20
+ 00D6 0E940000          xcall mod8u
+ 00DA 0A83              std y+2,R16
+ 00DC                   .dbline 45
+ 00DC           ;                disp[3]=min/10;
+ 00DC 1AE0              ldi R17,10
+ 00DE 042F              mov R16,R20
+ 00E0 0E940000          xcall div8u
+ 00E4 0B83              std y+3,R16
+ 00E6                   .dbline 46
+ 00E6           ;                display(disp);
+ 00E6 8E01              movw R16,R28
+ 00E8 AADF              xcall _display
+ 00EA                   .dbline 48
+ 00EA           ;                       
+ 00EA           ;                        if((PIND&(1<<PD0))==0)
+ 00EA 8099              sbic 0x10,0
+ 00EC 5AC0              rjmp L36
+ 00EE           X6:
+ 00EE                   .dbline 49
+ 00EE           ;             {
+ 00EE                   .dbline 50
+ 00EE           ;                   for(min=0;min<60;min++)
+ 00EE 4427              clr R20
+ 00F0 55C0              xjmp L41
+ 00F2           L38:
+ 00F2                   .dbline 51
+ 00F2           ;                  for(sec=0;sec<60;sec++)
+ 00F2 6627              clr R22
+ 00F4 4FC0              xjmp L45
+ 00F6           L42:
+ 00F6                   .dbline 52
+ 00F6           ;                   {   disp[0]=sec%10;
+ 00F6                   .dbline 52
+ 00F6 1AE0              ldi R17,10
+ 00F8 062F              mov R16,R22
+ 00FA 0E940000          xcall mod8u
+ 00FE 0883              std y+0,R16
+ 0100                   .dbline 53
+ 0100           ;                disp[1]=sec/10;
+ 0100 1AE0              ldi R17,10
+ 0102 062F              mov R16,R22
+ 0104 0E940000          xcall div8u
+ 0108 0983              std y+1,R16
+ 010A                   .dbline 54
+ 010A           ;                disp[2]=min%10;
+ 010A 1AE0              ldi R17,10
+ 010C 042F              mov R16,R20
+ 010E 0E940000          xcall mod8u
+ 0112 0A83              std y+2,R16
+ 0114                   .dbline 55
+ 0114           ;                disp[3]=min/10;
+ 0114 1AE0              ldi R17,10
+ 0116 042F              mov R16,R20
+ 0118 0E940000          xcall div8u
+ 011C 0B83              std y+3,R16
+ 011E                   .dbline 56
+ 011E           ;                display(disp);
+ 011E 8E01              movw R16,R28
+ 0120 8EDF              xcall _display
+ 0122                   .dbline 57
+ 0122           ;                         if((PIND&(1<<PD1))==0)
+ 0122 8199              sbic 0x10,1
+ 0124 36C0              rjmp L49
+ 0126           X7:
+ 0126                   .dbline 58
+ 0126           ;             {
+ 0126 16C0              xjmp L52
+ 0128           L51:
+ 0128                   .dbline 60
+ 0128           ;                   while(1)
+ 0128           ;                   {   disp[0]=sec%10;
+ 0128                   .dbline 60
+ 0128 1AE0              ldi R17,10
+ 012A 062F              mov R16,R22
+ 012C 0E940000          xcall mod8u
+ 0130 0883              std y+0,R16
+ 0132                   .dbline 61
+ 0132           ;                disp[1]=sec/10;
+ 0132 1AE0              ldi R17,10
+ 0134 062F              mov R16,R22
+ 0136 0E940000          xcall div8u
+ 013A 0983              std y+1,R16
+ 013C                   .dbline 62
+ 013C           ;                disp[2]=min%10;
+ 013C 1AE0              ldi R17,10
+ 013E 042F              mov R16,R20
+ 0140 0E940000          xcall mod8u
+ 0144 0A83              std y+2,R16
+ 0146                   .dbline 63
+ 0146           ;                disp[3]=min/10;
+ 0146 1AE0              ldi R17,10
+ 0148 042F              mov R16,R20
+ 014A 0E940000          xcall div8u
+ 014E 0B83              std y+3,R16
+ 0150                   .dbline 64
+ 0150           ;                display(disp);
+ 0150 8E01              movw R16,R28
+ 0152 75DF              xcall _display
+ 0154                   .dbline 65
+ 0154           ;                        }
+ 0154           L52:
+ 0154                   .dbline 59
+ 0154 E9CF              xjmp L51
+ 0156           X8:
+ 0156                   .dbline 67
+ 0156           ;                        if((PIND&(1<<PD2))==0)
+ 0156           ;              {
+ 0156                   .dbline 68
+ 0156           ;                   for(min=min;min<60;min++)
+ 0156 1BC0              xjmp L62
+ 0158           L59:
+ 0158                   .dbline 69
+ 0158           ;                  for(sec=sec;sec<60;sec++)
+ 0158 17C0              xjmp L66
+ 015A           L63:
+ 015A                   .dbline 70
+ 015A           ;                    {   disp[0]=sec%10;
+ 015A                   .dbline 70
+ 015A 1AE0              ldi R17,10
+ 015C 062F              mov R16,R22
+ 015E 0E940000          xcall mod8u
+ 0162 0883              std y+0,R16
+ 0164                   .dbline 71
+ 0164           ;                disp[1]=sec/10;
+ 0164 1AE0              ldi R17,10
+ 0166 062F              mov R16,R22
+ 0168 0E940000          xcall div8u
+ 016C 0983              std y+1,R16
+ 016E                   .dbline 72
+ 016E           ;                disp[2]=min%10;
+ 016E 1AE0              ldi R17,10
+ 0170 042F              mov R16,R20
+ 0172 0E940000          xcall mod8u
+ 0176 0A83              std y+2,R16
+ 0178                   .dbline 73
+ 0178           ;                disp[3]=min/10;
+ 0178 1AE0              ldi R17,10
+ 017A 042F              mov R16,R20
+ 017C 0E940000          xcall div8u
+ 0180 0B83              std y+3,R16
+ 0182                   .dbline 74
+ 0182           ;                display(disp);
+ 0182 8E01              movw R16,R28
+ 0184 5CDF              xcall _display
+ 0186                   .dbline 75
+ 0186           ;                         }
+ 0186           L64:
+ 0186                   .dbline 69
+ 0186 6395              inc R22
+ 0188           L66:
+ 0188                   .dbline 69
+ 0188 6C33              cpi R22,60
+ 018A 38F3              brlo L63
+ 018C           X9:
+ 018C           L60:
+ 018C                   .dbline 68
+ 018C 4395              inc R20
+ 018E           L62:
+ 018E                   .dbline 68
+ 018E 4C33              cpi R20,60
+ 0190 18F3              brlo L59
+ 0192           X10:
+ 0192                   .dbline 76
+ 0192           ;                         }
+ 0192           L57:
+ 0192                   .dbline 77
+ 0192           ;                     }
+ 0192           L49:
+ 0192                   .dbline 78
+ 0192           ;                   }
+ 0192           L43:
+ 0192                   .dbline 51
+ 0192 6395              inc R22
+ 0194           L45:
+ 0194                   .dbline 51
+ 0194 6C33              cpi R22,60
+ 0196 08F4              brsh X16
+ 0198 AECF              xjmp L42
+ 019A           X16:
+ 019A           X11:
+ 019A           L39:
+ 019A                   .dbline 50
+ 019A 4395              inc R20
+ 019C           L41:
+ 019C                   .dbline 50
+ 019C 4C33              cpi R20,60
+ 019E 08F4              brsh X17
+ 01A0 A8CF              xjmp L38
+ 01A2           X17:
+ 01A2           X12:
+ 01A2                   .dbline 79
+ 01A2           ;                  } 
+ 01A2           L36:
+ 01A2                   .dbline 82
+ 01A2           ;                  
+ 01A2           ;                  
+ 01A2           ;               }
+ 01A2           L30:
+ 01A2                   .dbline 41
+ 01A2 6395              inc R22
+ 01A4           L32:
+ 01A4                   .dbline 41
+ 01A4 6C33              cpi R22,60
+ 01A6 08F4              brsh X18
+ 01A8 8ACF              xjmp L29
+ 01AA           X18:
+ 01AA           X13:
+ 01AA           L26:
+ 01AA                   .dbline 40
+ 01AA 4395              inc R20
+ 01AC           L28:
+ 01AC                   .dbline 40
+ 01AC 4C33              cpi R20,60
+ 01AE 08F4              brsh X19
+ 01B0 84CF              xjmp L25
+ 01B2           X19:
+ 01B2           X14:
+ 01B2                   .dbline 168
+ 01B2           ;     
+ 01B2           ;         /* 
+ 01B2           ;     if((PINC&(1<<PC1))==0)
+ 01B2           ;             {if(result>0)
+ 01B2           ;                      result=result-1;
+ 01B2           ;                  else result=0;
+ 01B2           ;                         
+ 01B2           ;                 }  
+ 01B2           ;      if((PINC&(1<<PC2))==0)
+ 01B2           ;             {if(statuskey!=1)
+ 01B2           ;                   {result=1;
+ 01B2           ;                        delay(200);
+ 01B2           ;                        statuskey=1;
+ 01B2           ;                        }
+ 01B2           ;            else
+ 01B2           ;                   {result=result*2;
+ 01B2           ;                        }   
+ 01B2           ;                 
+ 01B2           ;                 }
+ 01B2           ;               if((PINC&(1<<PC3))==0)
+ 01B2           ;             {if(statuskey!=2)
+ 01B2           ;                   {result=9998;
+ 01B2           ;                        delay(200);
+ 01B2           ;                        statuskey=2;
+ 01B2           ;                        }
+ 01B2           ;            else
+ 01B2           ;                   {result=result/2;
+ 01B2           ;                        }   
+ 01B2           ;                 
+ 01B2           ;                   }
+ 01B2           ;               if((PINC&(1<<PC4))==0)
+ 01B2           ;             {if(statuskey!=3)
+ 01B2           ;                   {result=1;
+ 01B2           ;                        delay(200);
+ 01B2           ;                        statuskey=3;
+ 01B2           ;                        }
+ 01B2           ;            else
+ 01B2           ;                   {result=result+2;
+ 01B2           ;                        }   
+ 01B2           ;                 
+ 01B2           ;                   }
+ 01B2           ;                if((PINC&(1<<PC5))==0)
+ 01B2           ;             {if(statuskey!=4)
+ 01B2           ;                   {result=2;
+ 01B2           ;                        delay(200);
+ 01B2           ;                        statuskey=4;
+ 01B2           ;                        }
+ 01B2           ;            else
+ 01B2           ;                   {result=result+2;
+ 01B2           ;                        }   
+ 01B2           ;                 
+ 01B2           ;                   }
+ 01B2           ;                       
+ 01B2           ;                 if((PINC&(1<<PC6))==0)
+ 01B2           ;             {
+ 01B2           ;                   for(result=0;result<10;result++)
+ 01B2           ;                        {
+ 01B2           ;                            disp[0]=result%10;
+ 01B2           ;                  disp[1]=result/10%10;
+ 01B2           ;                  disp[2]=result/100%10;
+ 01B2           ;                  disp[3]=result/1000;
+ 01B2           ;                  display(disp);
+ 01B2           ;                                delay(200);
+ 01B2           ;                         }
+ 01B2           ;                        for(result=9;result>1;result--)
+ 01B2           ;                        {
+ 01B2           ;                            disp[0]=result%10;
+ 01B2           ;                  disp[1]=result/10%10;
+ 01B2           ;                  disp[2]=result/100%10;
+ 01B2           ;                  disp[3]=result/1000;
+ 01B2           ;                  display(disp);
+ 01B2           ;                                delay(200);
+ 01B2           ;                         }
+ 01B2           ;                    }
+ 01B2           ;                        if((PINC&(1<<PC7))==0)
+ 01B2           ;              {
+ 01B2           ;                   result=0;
+ 01B2           ;                          
+ 01B2           ;                   }
+ 01B2           ; 
+ 01B2           ;    disp[0]=result%10;
+ 01B2           ;    disp[1]=result/10%10;
+ 01B2           ;    disp[2]=result/100%10;
+ 01B2           ;    disp[3]=result/1000;
+ 01B2           ;    display(disp);*/
+ 01B2           ;    }
+ 01B2           L23:
+ 01B2                   .dbline 37
+ 01B2 81CF              xjmp L22
+ 01B4           X15:
+ 01B4                   .dbline -2
+ 01B4           L21:
+ 01B4                   .dbline 0 ; func end
+ 01B4 2496              adiw R28,4
+ 01B6 0895              ret
+ 01B8                   .dbsym r statuskey 10 c
+ 01B8                   .dbsym r min 20 c
+ 01B8                   .dbsym r sec 22 c
+ 01B8                   .dbsym l disp 0 A[4:4]c
+ 01B8                   .dbend
+ 01B8           ;    
+ 01B8           ; }

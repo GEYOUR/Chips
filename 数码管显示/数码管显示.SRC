@@ -1,0 +1,11 @@
+[Files]
+config.h
+delay.c
+delay.h
+hc595.c
+hc595.h
+main.c
+spi.c
+spi.h
+[Headers]
+[Documents]

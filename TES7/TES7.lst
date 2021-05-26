@@ -1,0 +1,331 @@
+Interrupt Vectors
+    00000 940C 0056 JMP	__text_start|__start
+
+Program Code (text area)
+__text_start|__start:
+    00056 E5CF      LDI	R28,0x5F
+    00057 E0D4      LDI	R29,4
+    00058 BFCD      OUT	0x3D,R28
+    00059 BFDE      OUT	0x3E,R29
+    0005A 51CE      SUBI	R28,0x1E
+    0005B 40D0      SBCI	R29,0
+    0005C EA0A      LDI	R16,0xAA
+    0005D 8308      ST	Y,R16
+    0005E 2400      CLR	R0
+    0005F EBE8      LDI	R30,0xB8
+    00060 E0F0      LDI	R31,0
+    00061 E010      LDI	R17,0
+    00062 3BE8      CPI	R30,0xB8
+    00063 07F1      CPC	R31,R17
+    00064 F011      BEQ	0x0067
+    00065 9201      ST	Z+,R0
+    00066 CFFB      RJMP	0x0062
+    00067 8300      ST	Z,R16
+    00068 E5E4      LDI	R30,0x54
+    00069 E0F0      LDI	R31,0
+    0006A E6A0      LDI	R26,0x60
+    0006B E0B0      LDI	R27,0
+    0006C E010      LDI	R17,0
+    0006D E000      LDI	R16,0
+    0006E BF0B      OUT	0x3B,R16
+    0006F 3AEC      CPI	R30,0xAC
+    00070 07F1      CPC	R31,R17
+    00071 F021      BEQ	0x0076
+    00072 95C8      LPM
+    00073 9631      ADIW	R30,1
+    00074 920D      ST	X+,R0
+    00075 CFF9      RJMP	0x006F
+    00076 940E 00A5 CALL	_main
+_exit:
+    00078 CFFF      RJMP	_exit
+FILE: F:\.[School]\Chip\iccv7\TES7\leddisp.c
+(0001) #include<iom16v.h>
+(0002) #include<stdio.h>
+(0003) unsigned char Table_of_Digits[]=
+(0004) {
+(0005) 	0x00,0x3e,0x41,0x41,0x41,0x3e,0x00,0x00,
+(0006) 	0x00,0x00,0x00,0x21,0x7f,0x01,0x00,0x00,
+(0007) 	0x00,0x27,0x45,0x45,0x45,0x39,0x00,0x00,
+(0008) 	0x00,0x22,0x49,0x49,0x49,0x36,0x00,0x00,
+(0009) 	0x00,0x0c,0x14,0x24,0x7f,0x04,0x00,0x00,
+(0010) 	0x00,0x72,0x51,0x51,0x51,0x4e,0x00,0x00,
+(0011) 	0x00,0x3e,0x49,0x49,0x49,0x26,0x00,0x00,
+(0012) 	0x00,0x40,0x40,0x40,0x4f,0x70,0x00,0x00,
+(0013) 	0x00,0x36,0x49,0x49,0x49,0x36,0x00,0x00,
+(0014) 	0x00,0x32,0x49,0x49,0x49,0x3e,0x00,0x00
+(0015) };
+(0016) unsigned char row[]=
+(0017) {
+(0018) 	0b10000000,0b01000000,
+(0019) 	0b00100000,0b00010000,
+(0020) 	0b00001000,0b00000100,
+(0021) 	0b00000010,0b00000001
+(0022) };
+(0023) 
+(0024) void init(void)
+(0025) {
+(0026) 	DDRC=0xFF;
+_init:
+    00079 EF8F      LDI	R24,0xFF
+    0007A BB84      OUT	0x14,R24
+(0027) 	PORTC=0xFF;
+    0007B BB85      OUT	0x15,R24
+(0028) 	DDRD=0xFF;
+    0007C BB81      OUT	0x11,R24
+(0029) 	PORTD=0XFF;
+    0007D BB82      OUT	0x12,R24
+(0030) 	DDRA=0x00;
+    0007E 2422      CLR	R2
+    0007F BA2A      OUT	0x1A,R2
+(0031) 	PORTA=0XFF;
+    00080 BB8B      OUT	0x1B,R24
+    00081 9508      RET
+_disp:
+  j                    --> R20
+  i                    --> R16
+    00082 934A      ST	-Y,R20
+(0032) }
+(0033) 
+(0034) void disp(unsigned char i)
+(0035) {
+(0036) 	unsigned char j;
+(0037) 	for(j=0;j<8;j++)
+    00083 2744      CLR	R20
+    00084 C01C      RJMP	0x00A1
+(0038) 	{PORTC=Table_of_Digits[j+i*8];
+    00085 2E20      MOV	R2,R16
+    00086 2433      CLR	R3
+    00087 0C22      LSL	R2
+    00088 1C33      ROL	R3
+    00089 0C22      LSL	R2
+    0008A 1C33      ROL	R3
+    0008B 0C22      LSL	R2
+    0008C 1C33      ROL	R3
+    0008D 2FE4      MOV	R30,R20
+    0008E 27FF      CLR	R31
+    0008F 0DE2      ADD	R30,R2
+    00090 1DF3      ADC	R31,R3
+    00091 E680      LDI	R24,0x60
+    00092 E090      LDI	R25,0
+    00093 0FE8      ADD	R30,R24
+    00094 1FF9      ADC	R31,R25
+    00095 8020      LD	R2,Z
+    00096 BA25      OUT	0x15,R2
+(0039)      PORTD=~row[j];
+    00097 EB80      LDI	R24,0xB0
+    00098 E090      LDI	R25,0
+    00099 2FE4      MOV	R30,R20
+    0009A 27FF      CLR	R31
+    0009B 0FE8      ADD	R30,R24
+    0009C 1FF9      ADC	R31,R25
+    0009D 8020      LD	R2,Z
+    0009E 9420      COM	R2
+    0009F BA22      OUT	0x12,R2
+    000A0 9543      INC	R20
+    000A1 3048      CPI	R20,0x8
+    000A2 F310      BCS	0x0085
+    000A3 9149      LD	R20,Y+
+    000A4 9508      RET
+_main:
+  a                    --> R12
+  key                  --> R22
+  i                    --> Y,+0
+  time                 --> R10
+    000A5 9721      SBIW	R28,1
+(0040) 	 }
+(0041) }
+(0042) 
+(0043) void main(void)
+(0044) {
+(0045) 	unsigned char i=9;
+    000A6 E089      LDI	R24,0x9
+    000A7 8388      ST	Y,R24
+(0046) 	unsigned char a=0;
+    000A8 24CC      CLR	R12
+(0047) 	unsigned char key=0;
+    000A9 2766      CLR	R22
+(0048) 	unsigned int time=0;
+    000AA 24AA      CLR	R10
+    000AB 24BB      CLR	R11
+(0049) 	init();
+    000AC DFCC      RCALL	_init
+    000AD C07A      RJMP	0x0128
+(0050) 	while(1)
+(0051) 	{      
+(0052) 		//for(i=9;i>0;i--)
+(0053) 		
+(0054) 		 while((i==9)&(key==0))
+(0055) 		   {for(i=9;i>0;i--)
+    000AE E089      LDI	R24,0x9
+    000AF 8388      ST	Y,R24
+    000B0 C010      RJMP	0x00C1
+(0056) 			    for(time=0;time<=2000;time++)
+    000B1 24AA      CLR	R10
+    000B2 24BB      CLR	R11
+    000B3 C005      RJMP	0x00B9
+(0057) 			      {disp(i);}
+    000B4 8108      LD	R16,Y
+    000B5 DFCC      RCALL	_disp
+    000B6 01C5      MOVW	R24,R10
+    000B7 9601      ADIW	R24,1
+    000B8 015C      MOVW	R10,R24
+    000B9 ED80      LDI	R24,0xD0
+    000BA E097      LDI	R25,7
+    000BB 158A      CP	R24,R10
+    000BC 059B      CPC	R25,R11
+    000BD F7B0      BCC	0x00B4
+    000BE 8008      LD	R0,Y
+    000BF 940A      DEC	R0
+    000C0 8208      ST	Y,R0
+    000C1 E080      LDI	R24,0
+    000C2 8008      LD	R0,Y
+    000C3 1580      CP	R24,R0
+    000C4 F360      BCS	0x00B1
+    000C5 8188      LD	R24,Y
+    000C6 3089      CPI	R24,0x9
+    000C7 F419      BNE	0x00CB
+    000C8 E041      LDI	R20,1
+    000C9 E050      LDI	R21,0
+    000CA C002      RJMP	0x00CD
+    000CB 2744      CLR	R20
+    000CC 2755      CLR	R21
+    000CD 2366      TST	R22
+    000CE F421      BNE	0x00D3
+    000CF E081      LDI	R24,1
+    000D0 E090      LDI	R25,0
+    000D1 017C      MOVW	R14,R24
+    000D2 C002      RJMP	0x00D5
+    000D3 24EE      CLR	R14
+    000D4 24FF      CLR	R15
+    000D5 011A      MOVW	R2,R20
+    000D6 202E      AND	R2,R14
+    000D7 203F      AND	R3,R15
+    000D8 2022      TST	R2
+    000D9 F6A1      BNE	0x00AE
+    000DA 2033      TST	R3
+    000DB F691      BNE	0x00AE
+(0058) 			   
+(0059) 			  
+(0060) 			  //if(i>3){break;}
+(0061) 			// if(i=1)
+(0062) 			 // {continue;}
+(0063) 			   // if((PINA&(1<<PA0))==0)
+(0064)                  // {key=1;}
+(0065) 			 }
+(0066) 			 
+(0067) 		 if((PINA&(1<<PA0))==0)
+    000DC 99C8      SBIC	0x19,0
+    000DD C00A      RJMP	0x00E8
+(0068) 		    {key=1;
+    000DE E061      LDI	R22,1
+(0069) 			  if(i<9){i++;}
+    000DF 8188      LD	R24,Y
+    000E0 3089      CPI	R24,0x9
+    000E1 F420      BCC	0x00E6
+    000E2 2E08      MOV	R0,R24
+    000E3 9403      INC	R0
+    000E4 8208      ST	Y,R0
+    000E5 C002      RJMP	0x00E8
+(0070) 			  else{i=0;}
+    000E6 2400      CLR	R0
+    000E7 8208      ST	Y,R0
+(0071) 			  }
+(0072) 		  if((PINA&(1<<PA1))==0)
+    000E8 99C9      SBIC	0x19,1
+    000E9 C009      RJMP	0x00F3
+(0073) 		    {
+(0074) 			  if(i>0){i--;}
+    000EA E080      LDI	R24,0
+    000EB 8008      LD	R0,Y
+    000EC 1580      CP	R24,R0
+    000ED F418      BCC	0x00F1
+    000EE 940A      DEC	R0
+    000EF 8208      ST	Y,R0
+    000F0 C002      RJMP	0x00F3
+(0075) 			  else{i=9;}
+    000F1 E089      LDI	R24,0x9
+    000F2 8388      ST	Y,R24
+(0076) 			  }  
+(0077) 		if((PINA&(1<<PA2))==0)
+    000F3 99CA      SBIC	0x19,2
+    000F4 C017      RJMP	0x010C
+(0078) 		    {
+(0079) 			  for(i=0;i<=9;i++)
+    000F5 2400      CLR	R0
+    000F6 8208      ST	Y,R0
+    000F7 C010      RJMP	0x0108
+(0080) 			    for(time=0;time<=2000;time++)
+    000F8 24AA      CLR	R10
+    000F9 24BB      CLR	R11
+    000FA C005      RJMP	0x0100
+(0081) 			      {disp(i);}
+    000FB 8108      LD	R16,Y
+    000FC DF85      RCALL	_disp
+    000FD 01C5      MOVW	R24,R10
+    000FE 9601      ADIW	R24,1
+    000FF 015C      MOVW	R10,R24
+    00100 ED80      LDI	R24,0xD0
+    00101 E097      LDI	R25,7
+    00102 158A      CP	R24,R10
+    00103 059B      CPC	R25,R11
+    00104 F7B0      BCC	0x00FB
+    00105 8008      LD	R0,Y
+    00106 9403      INC	R0
+    00107 8208      ST	Y,R0
+    00108 E089      LDI	R24,0x9
+    00109 8008      LD	R0,Y
+    0010A 1580      CP	R24,R0
+    0010B F760      BCC	0x00F8
+(0082) 			  }  
+(0083) 		if((PINA&(1<<PA3))==0)
+    0010C 99CB      SBIC	0x19,3
+    0010D C002      RJMP	0x0110
+(0084) 		    {
+(0085) 			  i=0;
+    0010E 2400      CLR	R0
+    0010F 8208      ST	Y,R0
+(0086) 			  }  
+(0087) 		 if((PINA&(1<<PA4))==0)
+    00110 99CC      SBIC	0x19,4
+    00111 C002      RJMP	0x0114
+(0088) 		    {
+(0089) 			  i=20;
+    00112 E184      LDI	R24,0x14
+    00113 8388      ST	Y,R24
+(0090) 			  }
+(0091) 		 a=i; 
+    00114 80C8      LD	R12,Y
+(0092) 	     if((PINA&(1<<PA5))==0)
+    00115 99CD      SBIC	0x19,5
+    00116 C001      RJMP	0x0118
+(0093) 		    {
+(0094) 			  i=a;
+    00117 82C8      ST	Y,R12
+(0095) 			  }
+(0096) 		   
+(0097) 		 if((PINA&(1<<PA6))==0)
+    00118 99CE      SBIC	0x19,6
+    00119 C001      RJMP	0x011B
+(0098) 		    {
+(0099) 			  i=a;
+    0011A 82C8      ST	Y,R12
+(0100) 			  } 
+(0101) 		for(time=0;time<=2000;time++)
+    0011B 24AA      CLR	R10
+    0011C 24BB      CLR	R11
+    0011D C005      RJMP	0x0123
+(0102) 			     {disp(i);}
+FILE: <library>
+    0011E 8108      LD	R16,Y
+    0011F DF62      RCALL	_disp
+    00120 01C5      MOVW	R24,R10
+    00121 9601      ADIW	R24,1
+    00122 015C      MOVW	R10,R24
+    00123 ED80      LDI	R24,0xD0
+    00124 E097      LDI	R25,7
+    00125 158A      CP	R24,R10
+    00126 059B      CPC	R25,R11
+    00127 F7B0      BCC	0x011E
+    00128 CF9C      RJMP	0x00C5
+    00129 9621      ADIW	R28,1
+    0012A 9508      RET

@@ -1,0 +1,119 @@
+Interrupt Vectors
+    00000 940C 002B JMP	__start|__text_start
+    00026 940C 004E JMP	_Int_TCCR0
+
+Program Code (text area)
+__start|__text_start:
+    0002B E5CF      LDI	R28,0x5F
+    0002C E0D4      LDI	R29,4
+    0002D BFCD      OUT	0x3D,R28
+    0002E BFDE      OUT	0x3E,R29
+    0002F 51CE      SUBI	R28,0x1E
+    00030 40D0      SBCI	R29,0
+    00031 EA0A      LDI	R16,0xAA
+    00032 8308      ST	Y,R16
+    00033 2400      CLR	R0
+    00034 E6E2      LDI	R30,0x62
+    00035 E0F0      LDI	R31,0
+    00036 E010      LDI	R17,0
+    00037 36E2      CPI	R30,0x62
+    00038 07F1      CPC	R31,R17
+    00039 F011      BEQ	0x003C
+    0003A 9201      ST	Z+,R0
+    0003B CFFB      RJMP	0x0037
+    0003C 8300      ST	Z,R16
+    0003D E5E4      LDI	R30,0x54
+    0003E E0F0      LDI	R31,0
+    0003F E6A0      LDI	R26,0x60
+    00040 E0B0      LDI	R27,0
+    00041 E010      LDI	R17,0
+    00042 E000      LDI	R16,0
+    00043 BF0B      OUT	0x3B,R16
+    00044 35E6      CPI	R30,0x56
+    00045 07F1      CPC	R31,R17
+    00046 F021      BEQ	0x004B
+    00047 95C8      LPM
+    00048 9631      ADIW	R30,1
+    00049 920D      ST	X+,R0
+    0004A CFF9      RJMP	0x0044
+    0004B 940E 0076 CALL	_main
+_exit:
+    0004D CFFF      RJMP	_exit
+_Int_TCCR0:
+    0004E 922A      ST	-Y,R2
+    0004F 923A      ST	-Y,R3
+    00050 938A      ST	-Y,R24
+    00051 939A      ST	-Y,R25
+    00052 93AA      ST	-Y,R26
+    00053 93EA      ST	-Y,R30
+    00054 B62F      IN	R2,0x3F
+    00055 922A      ST	-Y,R2
+FILE: F:\.[School]\Chip\iccv7\第9讲课堂小测\计时器.c
+(0001) #include<iom16v.h>
+(0002) #include <macros.h>
+(0003) 
+(0004) int jishu=0; //全局变量，用于计算
+(0005) 
+(0006) #pragma interrupt_handler Int_TCCR0: 20
+(0007) //定时器中断，注意中断向量号
+(0008) void Int_TCCR0(void){ 
+(0009)      jishu++; //计数器jishu加1
+    00056 9180 0060 LDS	R24,jishu
+    00058 9190 0061 LDS	R25,jishu+1
+    0005A 9601      ADIW	R24,1
+    0005B 9390 0061 STS	jishu+1,R25
+    0005D 9380 0060 STS	jishu,R24
+(0010)      if(jishu==1000)
+    0005F 3E88      CPI	R24,0xE8
+    00060 E0E3      LDI	R30,3
+    00061 079E      CPC	R25,R30
+    00062 F451      BNE	0x006D
+(0011)        //当jishu=1000，表明1s时间到
+(0012)        {
+(0013)           PORTA =PORTA^0b00100000; 
+    00063 E280      LDI	R24,0x20
+    00064 B22B      IN	R2,0x1B
+    00065 2628      EOR	R2,R24
+    00066 BA2B      OUT	0x1B,R2
+(0014)                    //翻转PA5的电平信号
+(0015)           jishu=0; //jishu清“0”，非常重要
+    00067 2422      CLR	R2
+    00068 2433      CLR	R3
+    00069 9230 0061 STS	jishu+1,R3
+    0006B 9220 0060 STS	jishu,R2
+(0016)        }
+    0006D 9029      LD	R2,Y+
+    0006E BE2F      OUT	0x3F,R2
+    0006F 91E9      LD	R30,Y+
+    00070 91A9      LD	R26,Y+
+    00071 9199      LD	R25,Y+
+    00072 9189      LD	R24,Y+
+    00073 9039      LD	R3,Y+
+    00074 9029      LD	R2,Y+
+    00075 9518      RETI
+(0017) }
+(0018) void main(void)
+(0019) { PORTA=0x00; //定义PA口输出
+_main:
+    00076 2422      CLR	R2
+    00077 BA2B      OUT	0x1B,R2
+(0020)   DDRA=0xFF;
+    00078 EF8F      LDI	R24,0xFF
+    00079 BB8A      OUT	0x1A,R24
+(0021)   TCCR0=0x0B; //CTC模式，系统频率64分频，OC0引脚断开
+    0007A E08B      LDI	R24,0xB
+    0007B BF83      OUT	0x33,R24
+(0022)   TCNT0=0x00; 
+    0007C BE22      OUT	0x32,R2
+(0023)   OCR0=0x3E; //1ms定时的比较值
+    0007D E38E      LDI	R24,0x3E
+    0007E BF8C      OUT	0x3C,R24
+(0024)   TIMSK=0x02; //T/C0比较匹配中断开放
+    0007F E082      LDI	R24,2
+    00080 BF89      OUT	0x39,R24
+(0025)   SEI();
+    00081 9478      BSET	7
+(0026)   while(1)
+FILE: <library>
+    00082 CFFF      RJMP	0x0082
+    00083 9508      RET

@@ -1,0 +1,697 @@
+                        .module leddisp.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile leddisp.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile leddisp.c
+ 0000           _Table_of_Digits::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 003E              .byte 0,62
+                        .area data(ram, con, rel)
+ 0002                   .dbfile leddisp.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 4141              .byte 'A,'A
+                        .area data(ram, con, rel)
+ 0004                   .dbfile leddisp.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 413E              .byte 'A,62
+                        .area data(ram, con, rel)
+ 0006                   .dbfile leddisp.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0008                   .dbfile leddisp.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 000A                   .dbfile leddisp.c
+ 000A                   .blkb 2
+                        .area idata
+ 000A 0021              .byte 0,33
+                        .area data(ram, con, rel)
+ 000C                   .dbfile leddisp.c
+ 000C                   .blkb 2
+                        .area idata
+ 000C 7F01              .byte 127,1
+                        .area data(ram, con, rel)
+ 000E                   .dbfile leddisp.c
+ 000E                   .blkb 2
+                        .area idata
+ 000E 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0010                   .dbfile leddisp.c
+ 0010                   .blkb 2
+                        .area idata
+ 0010 0027              .byte 0,39
+                        .area data(ram, con, rel)
+ 0012                   .dbfile leddisp.c
+ 0012                   .blkb 2
+                        .area idata
+ 0012 4545              .byte 'E,'E
+                        .area data(ram, con, rel)
+ 0014                   .dbfile leddisp.c
+ 0014                   .blkb 2
+                        .area idata
+ 0014 4539              .byte 'E,57
+                        .area data(ram, con, rel)
+ 0016                   .dbfile leddisp.c
+ 0016                   .blkb 2
+                        .area idata
+ 0016 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0018                   .dbfile leddisp.c
+ 0018                   .blkb 2
+                        .area idata
+ 0018 0022              .byte 0,34
+                        .area data(ram, con, rel)
+ 001A                   .dbfile leddisp.c
+ 001A                   .blkb 2
+                        .area idata
+ 001A 4949              .byte 'I,'I
+                        .area data(ram, con, rel)
+ 001C                   .dbfile leddisp.c
+ 001C                   .blkb 2
+                        .area idata
+ 001C 4936              .byte 'I,54
+                        .area data(ram, con, rel)
+ 001E                   .dbfile leddisp.c
+ 001E                   .blkb 2
+                        .area idata
+ 001E 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0020                   .dbfile leddisp.c
+ 0020                   .blkb 2
+                        .area idata
+ 0020 000C              .byte 0,12
+                        .area data(ram, con, rel)
+ 0022                   .dbfile leddisp.c
+ 0022                   .blkb 2
+                        .area idata
+ 0022 1424              .byte 20,36
+                        .area data(ram, con, rel)
+ 0024                   .dbfile leddisp.c
+ 0024                   .blkb 2
+                        .area idata
+ 0024 7F04              .byte 127,4
+                        .area data(ram, con, rel)
+ 0026                   .dbfile leddisp.c
+ 0026                   .blkb 2
+                        .area idata
+ 0026 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0028                   .dbfile leddisp.c
+ 0028                   .blkb 2
+                        .area idata
+ 0028 0072              .byte 0,'r
+                        .area data(ram, con, rel)
+ 002A                   .dbfile leddisp.c
+ 002A                   .blkb 2
+                        .area idata
+ 002A 5151              .byte 'Q,'Q
+                        .area data(ram, con, rel)
+ 002C                   .dbfile leddisp.c
+ 002C                   .blkb 2
+                        .area idata
+ 002C 514E              .byte 'Q,'N
+                        .area data(ram, con, rel)
+ 002E                   .dbfile leddisp.c
+ 002E                   .blkb 2
+                        .area idata
+ 002E 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0030                   .dbfile leddisp.c
+ 0030                   .blkb 2
+                        .area idata
+ 0030 003E              .byte 0,62
+                        .area data(ram, con, rel)
+ 0032                   .dbfile leddisp.c
+ 0032                   .blkb 2
+                        .area idata
+ 0032 4949              .byte 'I,'I
+                        .area data(ram, con, rel)
+ 0034                   .dbfile leddisp.c
+ 0034                   .blkb 2
+                        .area idata
+ 0034 4926              .byte 'I,38
+                        .area data(ram, con, rel)
+ 0036                   .dbfile leddisp.c
+ 0036                   .blkb 2
+                        .area idata
+ 0036 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0038                   .dbfile leddisp.c
+ 0038                   .blkb 2
+                        .area idata
+ 0038 0040              .byte 0,64
+                        .area data(ram, con, rel)
+ 003A                   .dbfile leddisp.c
+ 003A                   .blkb 2
+                        .area idata
+ 003A 4040              .byte 64,64
+                        .area data(ram, con, rel)
+ 003C                   .dbfile leddisp.c
+ 003C                   .blkb 2
+                        .area idata
+ 003C 4F70              .byte 'O,'p
+                        .area data(ram, con, rel)
+ 003E                   .dbfile leddisp.c
+ 003E                   .blkb 2
+                        .area idata
+ 003E 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0040                   .dbfile leddisp.c
+ 0040                   .blkb 2
+                        .area idata
+ 0040 0036              .byte 0,54
+                        .area data(ram, con, rel)
+ 0042                   .dbfile leddisp.c
+ 0042                   .blkb 2
+                        .area idata
+ 0042 4949              .byte 'I,'I
+                        .area data(ram, con, rel)
+ 0044                   .dbfile leddisp.c
+ 0044                   .blkb 2
+                        .area idata
+ 0044 4936              .byte 'I,54
+                        .area data(ram, con, rel)
+ 0046                   .dbfile leddisp.c
+ 0046                   .blkb 2
+                        .area idata
+ 0046 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0048                   .dbfile leddisp.c
+ 0048                   .blkb 2
+                        .area idata
+ 0048 0032              .byte 0,50
+                        .area data(ram, con, rel)
+ 004A                   .dbfile leddisp.c
+ 004A                   .blkb 2
+                        .area idata
+ 004A 4949              .byte 'I,'I
+                        .area data(ram, con, rel)
+ 004C                   .dbfile leddisp.c
+ 004C                   .blkb 2
+                        .area idata
+ 004C 493E              .byte 'I,62
+                        .area data(ram, con, rel)
+ 004E                   .dbfile leddisp.c
+ 004E                   .blkb 2
+                        .area idata
+ 004E 0000              .byte 0,0
+                        .area data(ram, con, rel)
+ 0050                   .dbfile leddisp.c
+ 0050                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0050                   .dbsym e Table_of_Digits _Table_of_Digits A[80:80]c
+ 0050           _row::
+ 0050                   .blkb 2
+                        .area idata
+ 0050 8040              .byte 128,64
+                        .area data(ram, con, rel)
+ 0052                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0052                   .blkb 2
+                        .area idata
+ 0052 2010              .byte 32,16
+                        .area data(ram, con, rel)
+ 0054                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0054                   .blkb 2
+                        .area idata
+ 0054 0804              .byte 8,4
+                        .area data(ram, con, rel)
+ 0056                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0056                   .blkb 2
+                        .area idata
+ 0056 0201              .byte 2,1
+                        .area data(ram, con, rel)
+ 0058                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0058                   .dbsym e row _row A[8:8]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile F:\.[School]\Chip\iccv7\TES7\leddisp.c
+ 0000                   .dbfunc e init _init fV
+                        .even
+ 0000           _init::
+ 0000                   .dbline -1
+ 0000                   .dbline 25
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include<stdio.h>
+ 0000           ; unsigned char Table_of_Digits[]=
+ 0000           ; {
+ 0000           ;       0x00,0x3e,0x41,0x41,0x41,0x3e,0x00,0x00,
+ 0000           ;       0x00,0x00,0x00,0x21,0x7f,0x01,0x00,0x00,
+ 0000           ;       0x00,0x27,0x45,0x45,0x45,0x39,0x00,0x00,
+ 0000           ;       0x00,0x22,0x49,0x49,0x49,0x36,0x00,0x00,
+ 0000           ;       0x00,0x0c,0x14,0x24,0x7f,0x04,0x00,0x00,
+ 0000           ;       0x00,0x72,0x51,0x51,0x51,0x4e,0x00,0x00,
+ 0000           ;       0x00,0x3e,0x49,0x49,0x49,0x26,0x00,0x00,
+ 0000           ;       0x00,0x40,0x40,0x40,0x4f,0x70,0x00,0x00,
+ 0000           ;       0x00,0x36,0x49,0x49,0x49,0x36,0x00,0x00,
+ 0000           ;       0x00,0x32,0x49,0x49,0x49,0x3e,0x00,0x00
+ 0000           ; };
+ 0000           ; unsigned char row[]=
+ 0000           ; {
+ 0000           ;       0b10000000,0b01000000,
+ 0000           ;       0b00100000,0b00010000,
+ 0000           ;       0b00001000,0b00000100,
+ 0000           ;       0b00000010,0b00000001
+ 0000           ; };
+ 0000           ; 
+ 0000           ; void init(void)
+ 0000           ; {
+ 0000                   .dbline 26
+ 0000           ;       DDRC=0xFF;
+ 0000 8FEF              ldi R24,255
+ 0002 84BB              out 0x14,R24
+ 0004                   .dbline 27
+ 0004           ;       PORTC=0xFF;
+ 0004 85BB              out 0x15,R24
+ 0006                   .dbline 28
+ 0006           ;       DDRD=0xFF;
+ 0006 81BB              out 0x11,R24
+ 0008                   .dbline 29
+ 0008           ;       PORTD=0XFF;
+ 0008 82BB              out 0x12,R24
+ 000A                   .dbline 30
+ 000A           ;       DDRA=0x00;
+ 000A 2224              clr R2
+ 000C 2ABA              out 0x1a,R2
+ 000E                   .dbline 31
+ 000E           ;       PORTA=0XFF;
+ 000E 8BBB              out 0x1b,R24
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e disp _disp fV
+ 0012           ;              j -> R20
+ 0012           ;              i -> R16
+                        .even
+ 0012           _disp::
+ 0012 4A93              st -y,R20
+ 0014                   .dbline -1
+ 0014                   .dbline 35
+ 0014           ; }
+ 0014           ; 
+ 0014           ; void disp(unsigned char i)
+ 0014           ; {
+ 0014                   .dbline 37
+ 0014           ;       unsigned char j;
+ 0014           ;       for(j=0;j<8;j++)
+ 0014 4427              clr R20
+ 0016 1CC0              xjmp L6
+ 0018           L3:
+ 0018                   .dbline 38
+ 0018           ;       {PORTC=Table_of_Digits[j+i*8];
+ 0018                   .dbline 38
+ 0018 202E              mov R2,R16
+ 001A 3324              clr R3
+ 001C 220C              lsl R2
+ 001E 331C              rol R3
+ 0020 220C              lsl R2
+ 0022 331C              rol R3
+ 0024 220C              lsl R2
+ 0026 331C              rol R3
+ 0028 E42F              mov R30,R20
+ 002A FF27              clr R31
+ 002C E20D              add R30,R2
+ 002E F31D              adc R31,R3
+ 0030 80E0              ldi R24,<_Table_of_Digits
+ 0032 90E0              ldi R25,>_Table_of_Digits
+ 0034 E80F              add R30,R24
+ 0036 F91F              adc R31,R25
+ 0038 2080              ldd R2,z+0
+ 003A 25BA              out 0x15,R2
+ 003C                   .dbline 39
+ 003C           ;      PORTD=~row[j];
+ 003C 80E0              ldi R24,<_row
+ 003E 90E0              ldi R25,>_row
+ 0040 E42F              mov R30,R20
+ 0042 FF27              clr R31
+ 0044 E80F              add R30,R24
+ 0046 F91F              adc R31,R25
+ 0048 2080              ldd R2,z+0
+ 004A 2094              com R2
+ 004C 22BA              out 0x12,R2
+ 004E                   .dbline 40
+ 004E           ;        }
+ 004E           L4:
+ 004E                   .dbline 37
+ 004E 4395              inc R20
+ 0050           L6:
+ 0050                   .dbline 37
+ 0050 4830              cpi R20,8
+ 0052 10F3              brlo L3
+ 0054           X0:
+ 0054                   .dbline -2
+ 0054           L2:
+ 0054                   .dbline 0 ; func end
+ 0054 4991              ld R20,y+
+ 0056 0895              ret
+ 0058                   .dbsym r j 20 c
+ 0058                   .dbsym r i 16 c
+ 0058                   .dbend
+ 0058                   .dbfunc e main _main fV
+ 0058           ;              a -> R12
+ 0058           ;            key -> R22
+ 0058           ;              i -> y+0
+ 0058           ;           time -> R10,R11
+                        .even
+ 0058           _main::
+ 0058 2197              sbiw R28,1
+ 005A                   .dbline -1
+ 005A                   .dbline 44
+ 005A           ; }
+ 005A           ; 
+ 005A           ; void main(void)
+ 005A           ; {
+ 005A                   .dbline 45
+ 005A           ;       unsigned char i=9;
+ 005A 89E0              ldi R24,9
+ 005C 8883              std y+0,R24
+ 005E                   .dbline 46
+ 005E           ;       unsigned char a=0;
+ 005E CC24              clr R12
+ 0060                   .dbline 47
+ 0060           ;       unsigned char key=0;
+ 0060 6627              clr R22
+ 0062                   .dbline 48
+ 0062           ;       unsigned int time=0;
+ 0062 AA24              clr R10
+ 0064 BB24              clr R11
+ 0066                   .dbline 49
+ 0066           ;       init();
+ 0066 CCDF              xcall _init
+ 0068 7AC0              xjmp L9
+ 006A           L11:
+ 006A                   .dbline 55
+ 006A           ;       while(1)
+ 006A           ;       {      
+ 006A           ;               //for(i=9;i>0;i--)
+ 006A           ;               
+ 006A           ;                while((i==9)&(key==0))
+ 006A           ;                  {for(i=9;i>0;i--)
+ 006A                   .dbline 55
+ 006A 89E0              ldi R24,9
+ 006C 8883              std y+0,R24
+ 006E 10C0              xjmp L17
+ 0070           L14:
+ 0070                   .dbline 56
+ 0070           ;                           for(time=0;time<=2000;time++)
+ 0070 AA24              clr R10
+ 0072 BB24              clr R11
+ 0074 05C0              xjmp L21
+ 0076           L18:
+ 0076                   .dbline 57
+ 0076           ;                             {disp(i);}
+ 0076                   .dbline 57
+ 0076 0881              ldd R16,y+0
+ 0078 CCDF              xcall _disp
+ 007A                   .dbline 57
+ 007A           L19:
+ 007A                   .dbline 56
+ 007A C501              movw R24,R10
+ 007C 0196              adiw R24,1
+ 007E 5C01              movw R10,R24
+ 0080           L21:
+ 0080                   .dbline 56
+ 0080 80ED              ldi R24,2000
+ 0082 97E0              ldi R25,7
+ 0084 8A15              cp R24,R10
+ 0086 9B05              cpc R25,R11
+ 0088 B0F7              brsh L18
+ 008A           X1:
+ 008A           L15:
+ 008A                   .dbline 55
+ 008A 0880              ldd R0,y+0
+ 008C 0A94              dec R0
+ 008E 0882              std y+0,R0
+ 0090           L17:
+ 0090                   .dbline 55
+ 0090 80E0              ldi R24,0
+ 0092 0880              ldd R0,y+0
+ 0094 8015              cp R24,R0
+ 0096 60F3              brlo L14
+ 0098           X2:
+ 0098                   .dbline 65
+ 0098           ;                          
+ 0098           ;                         
+ 0098           ;                         //if(i>3){break;}
+ 0098           ;                       // if(i=1)
+ 0098           ;                        // {continue;}
+ 0098           ;                          // if((PINA&(1<<PA0))==0)
+ 0098           ;                  // {key=1;}
+ 0098           ;                        }
+ 0098           L12:
+ 0098                   .dbline 54
+ 0098 8881              ldd R24,y+0
+ 009A 8930              cpi R24,9
+ 009C 19F4              brne L22
+ 009E           X3:
+ 009E 41E0              ldi R20,1
+ 00A0 50E0              ldi R21,0
+ 00A2 02C0              xjmp L23
+ 00A4           L22:
+ 00A4 4427              clr R20
+ 00A6 5527              clr R21
+ 00A8           L23:
+ 00A8 6623              tst R22
+ 00AA 21F4              brne L24
+ 00AC           X4:
+ 00AC 81E0              ldi R24,1
+ 00AE 90E0              ldi R25,0
+ 00B0 7C01              movw R14,R24
+ 00B2 02C0              xjmp L25
+ 00B4           L24:
+ 00B4 EE24              clr R14
+ 00B6 FF24              clr R15
+ 00B8           L25:
+ 00B8 1A01              movw R2,R20
+ 00BA 2E20              and R2,R14
+ 00BC 3F20              and R3,R15
+ 00BE 2220              tst R2
+ 00C0 A1F6              brne L11
+ 00C2 3320              tst R3
+ 00C4 91F6              brne L11
+ 00C6           X5:
+ 00C6                   .dbline 67
+ 00C6           ;                        
+ 00C6           ;                if((PINA&(1<<PA0))==0)
+ 00C6 C899              sbic 0x19,0
+ 00C8 0AC0              rjmp L26
+ 00CA           X6:
+ 00CA                   .dbline 68
+ 00CA           ;                   {key=1;
+ 00CA                   .dbline 68
+ 00CA 61E0              ldi R22,1
+ 00CC                   .dbline 69
+ 00CC           ;                         if(i<9){i++;}
+ 00CC 8881              ldd R24,y+0
+ 00CE 8930              cpi R24,9
+ 00D0 20F4              brsh L28
+ 00D2           X7:
+ 00D2                   .dbline 69
+ 00D2                   .dbline 69
+ 00D2 082E              mov R0,R24
+ 00D4 0394              inc R0
+ 00D6 0882              std y+0,R0
+ 00D8                   .dbline 69
+ 00D8 02C0              xjmp L29
+ 00DA           L28:
+ 00DA                   .dbline 70
+ 00DA           ;                         else{i=0;}
+ 00DA                   .dbline 70
+ 00DA 0024              clr R0
+ 00DC 0882              std y+0,R0
+ 00DE                   .dbline 70
+ 00DE           L29:
+ 00DE                   .dbline 71
+ 00DE           ;                         }
+ 00DE           L26:
+ 00DE                   .dbline 72
+ 00DE           ;                 if((PINA&(1<<PA1))==0)
+ 00DE C999              sbic 0x19,1
+ 00E0 09C0              rjmp L30
+ 00E2           X8:
+ 00E2                   .dbline 73
+ 00E2           ;                   {
+ 00E2                   .dbline 74
+ 00E2           ;                         if(i>0){i--;}
+ 00E2 80E0              ldi R24,0
+ 00E4 0880              ldd R0,y+0
+ 00E6 8015              cp R24,R0
+ 00E8 18F4              brsh L32
+ 00EA           X9:
+ 00EA                   .dbline 74
+ 00EA                   .dbline 74
+ 00EA 0A94              dec R0
+ 00EC 0882              std y+0,R0
+ 00EE                   .dbline 74
+ 00EE 02C0              xjmp L33
+ 00F0           L32:
+ 00F0                   .dbline 75
+ 00F0           ;                         else{i=9;}
+ 00F0                   .dbline 75
+ 00F0 89E0              ldi R24,9
+ 00F2 8883              std y+0,R24
+ 00F4                   .dbline 75
+ 00F4           L33:
+ 00F4                   .dbline 76
+ 00F4           ;                         }  
+ 00F4           L30:
+ 00F4                   .dbline 77
+ 00F4           ;               if((PINA&(1<<PA2))==0)
+ 00F4 CA99              sbic 0x19,2
+ 00F6 17C0              rjmp L34
+ 00F8           X10:
+ 00F8                   .dbline 78
+ 00F8           ;                   {
+ 00F8                   .dbline 79
+ 00F8           ;                         for(i=0;i<=9;i++)
+ 00F8 0024              clr R0
+ 00FA 0882              std y+0,R0
+ 00FC 10C0              xjmp L39
+ 00FE           L36:
+ 00FE                   .dbline 80
+ 00FE           ;                           for(time=0;time<=2000;time++)
+ 00FE AA24              clr R10
+ 0100 BB24              clr R11
+ 0102 05C0              xjmp L43
+ 0104           L40:
+ 0104                   .dbline 81
+ 0104           ;                             {disp(i);}
+ 0104                   .dbline 81
+ 0104 0881              ldd R16,y+0
+ 0106 85DF              xcall _disp
+ 0108                   .dbline 81
+ 0108           L41:
+ 0108                   .dbline 80
+ 0108 C501              movw R24,R10
+ 010A 0196              adiw R24,1
+ 010C 5C01              movw R10,R24
+ 010E           L43:
+ 010E                   .dbline 80
+ 010E 80ED              ldi R24,2000
+ 0110 97E0              ldi R25,7
+ 0112 8A15              cp R24,R10
+ 0114 9B05              cpc R25,R11
+ 0116 B0F7              brsh L40
+ 0118           X11:
+ 0118           L37:
+ 0118                   .dbline 79
+ 0118 0880              ldd R0,y+0
+ 011A 0394              inc R0
+ 011C 0882              std y+0,R0
+ 011E           L39:
+ 011E                   .dbline 79
+ 011E 89E0              ldi R24,9
+ 0120 0880              ldd R0,y+0
+ 0122 8015              cp R24,R0
+ 0124 60F7              brsh L36
+ 0126           X12:
+ 0126                   .dbline 82
+ 0126           ;                         }  
+ 0126           L34:
+ 0126                   .dbline 83
+ 0126           ;               if((PINA&(1<<PA3))==0)
+ 0126 CB99              sbic 0x19,3
+ 0128 02C0              rjmp L44
+ 012A           X13:
+ 012A                   .dbline 84
+ 012A           ;                   {
+ 012A                   .dbline 85
+ 012A           ;                         i=0;
+ 012A 0024              clr R0
+ 012C 0882              std y+0,R0
+ 012E                   .dbline 86
+ 012E           ;                         }  
+ 012E           L44:
+ 012E                   .dbline 87
+ 012E           ;                if((PINA&(1<<PA4))==0)
+ 012E CC99              sbic 0x19,4
+ 0130 02C0              rjmp L46
+ 0132           X14:
+ 0132                   .dbline 88
+ 0132           ;                   {
+ 0132                   .dbline 89
+ 0132           ;                         i=20;
+ 0132 84E1              ldi R24,20
+ 0134 8883              std y+0,R24
+ 0136                   .dbline 90
+ 0136           ;                         }
+ 0136           L46:
+ 0136                   .dbline 91
+ 0136           ;                a=i; 
+ 0136 C880              ldd R12,y+0
+ 0138                   .dbline 92
+ 0138           ;            if((PINA&(1<<PA5))==0)
+ 0138 CD99              sbic 0x19,5
+ 013A 01C0              rjmp L48
+ 013C           X15:
+ 013C                   .dbline 93
+ 013C           ;                   {
+ 013C                   .dbline 94
+ 013C           ;                         i=a;
+ 013C C882              std y+0,R12
+ 013E                   .dbline 95
+ 013E           ;                         }
+ 013E           L48:
+ 013E                   .dbline 97
+ 013E           ;                  
+ 013E           ;                if((PINA&(1<<PA6))==0)
+ 013E CE99              sbic 0x19,6
+ 0140 01C0              rjmp L50
+ 0142           X16:
+ 0142                   .dbline 98
+ 0142           ;                   {
+ 0142                   .dbline 99
+ 0142           ;                         i=a;
+ 0142 C882              std y+0,R12
+ 0144                   .dbline 100
+ 0144           ;                         } 
+ 0144           L50:
+ 0144                   .dbline 101
+ 0144           ;               for(time=0;time<=2000;time++)
+ 0144 AA24              clr R10
+ 0146 BB24              clr R11
+ 0148 05C0              xjmp L55
+ 014A           L52:
+ 014A                   .dbline 102
+ 014A           ;                            {disp(i);}
+ 014A                   .dbline 102
+ 014A 0881              ldd R16,y+0
+ 014C 62DF              xcall _disp
+ 014E                   .dbline 102
+ 014E           L53:
+ 014E                   .dbline 101
+ 014E C501              movw R24,R10
+ 0150 0196              adiw R24,1
+ 0152 5C01              movw R10,R24
+ 0154           L55:
+ 0154                   .dbline 101
+ 0154 80ED              ldi R24,2000
+ 0156 97E0              ldi R25,7
+ 0158 8A15              cp R24,R10
+ 015A 9B05              cpc R25,R11
+ 015C B0F7              brsh L52
+ 015E           X17:
+ 015E                   .dbline 103
+ 015E           ;       }
+ 015E           L9:
+ 015E                   .dbline 50
+ 015E 9CCF              xjmp L12
+ 0160           X18:
+ 0160                   .dbline -2
+ 0160           L7:
+ 0160                   .dbline 0 ; func end
+ 0160 2196              adiw R28,1
+ 0162 0895              ret
+ 0164                   .dbsym r a 12 c
+ 0164                   .dbsym r key 22 c
+ 0164                   .dbsym l i 0 c
+ 0164                   .dbsym r time 10 i
+ 0164                   .dbend
+ 0164           ;       
+ 0164           ; }

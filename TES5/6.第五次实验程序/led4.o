@@ -1,0 +1,216 @@
+XL
+H 3 areas A global symbols
+M led4.c
+S push_xgsetF00C Ref0000
+S lsl8 Ref0000
+S pop_xgsetF00C Ref0000
+S mod8u Ref0000
+S div8u Ref0000
+A text size 1B8 flags 0
+dbfile led4.c
+dbfile F:\.[School]\Chip\iccv7\TES5\6.第五次实验程序\led4.c
+dbfunc e io_init 0 fV
+dbline FFFFFFFF 0
+dbline 6 0
+dbline 6 0
+dbline 7 4
+dbline 8 8
+dbline 9 A
+dbline A C
+dbline B E
+dbline FFFFFFFE 10
+dbline 0 10
+dbfunc e delay 12 fV
+dbsym r j 14 i
+dbsym r i 10 i
+dbline FFFFFFFF 16
+dbline E 16
+dbline 10 18
+dbline 10 18
+dbline 11 1E
+dbline 10 1E
+dbline 10 22
+dbline 12 2C
+dbline F 2C
+dbline FFFFFFFE 38
+dbline 0 38
+dbfunc e display 3E fV
+dbsym r i 14 c
+dbsym r j 16 c
+dbsym r disp A pc
+dbline FFFFFFFF 44
+dbline 15 44
+dbline 16 44
+dbline 17 48
+dbline 18 4C
+dbline 18 4C
+dbline 19 5A
+dbline 1A 5E
+dbline 1B 7A
+dbline 1C 92
+dbline 1E 98
+dbline 17 98
+dbline 17 9A
+dbline 16 9E
+dbline 16 A0
+dbline FFFFFFFE A6
+dbline 0 A6
+dbfunc e main AA fV
+dbsym r statuskey A c
+dbsym r min 14 c
+dbsym r sec 16 c
+dbsym l disp 0 A[4:4]c
+dbline FFFFFFFF AC
+dbline 21 AC
+dbline 21 AC
+dbline 21 AE
+dbline 23 B0
+dbline 24 B2
+dbline 26 B6
+dbline 28 B6
+dbline 29 BA
+dbline 2A BE
+dbline 2A BE
+dbline 2B C8
+dbline 2C D2
+dbline 2D DC
+dbline 2E E6
+dbline 30 EA
+dbline 31 EE
+dbline 32 EE
+dbline 33 F2
+dbline 34 F6
+dbline 34 F6
+dbline 35 100
+dbline 36 10A
+dbline 37 114
+dbline 38 11E
+dbline 39 122
+dbline 3A 126
+dbline 3C 128
+dbline 3C 128
+dbline 3D 132
+dbline 3E 13C
+dbline 3F 146
+dbline 40 150
+dbline 41 154
+dbline 3B 154
+dbline 43 156
+dbline 44 156
+dbline 45 158
+dbline 46 15A
+dbline 46 15A
+dbline 47 164
+dbline 48 16E
+dbline 49 178
+dbline 4A 182
+dbline 4B 186
+dbline 45 186
+dbline 45 188
+dbline 44 18C
+dbline 44 18E
+dbline 4C 192
+dbline 4D 192
+dbline 4E 192
+dbline 33 192
+dbline 33 194
+dbline 32 19A
+dbline 32 19C
+dbline 4F 1A2
+dbline 52 1A2
+dbline 29 1A2
+dbline 29 1A4
+dbline 28 1AA
+dbline 28 1AC
+dbline A8 1B2
+dbline 25 1B2
+dbline FFFFFFFE 1B4
+dbline 0 1B4
+S _main Def00AA
+S _io_init Def0000
+S _display Def003E
+S _delay Def0012
+A data size A flags 20
+dbfile led4.c
+dbfile F:\.[School]\Chip\iccv7\TES5\6.第五次实验程序\led4.c
+dbsym e num 0 A[10:10]c
+S _num Def0000
+A idata size A flags 0
+T 00 00 3F 06
+R 00 00 02 00
+T 02 00 5B 4F
+R 00 00 02 00
+T 04 00 66 6D
+R 00 00 02 00
+T 06 00 7D 07
+R 00 00 02 00
+T 08 00 7F 6F
+R 00 00 02 00
+T 00 00 8F EF 8A BB 22 24 2B BA 87 BB 88 BB 2A BA
+R 00 00 00 00
+T 0E 00 8B BB 08 95
+R 00 00 00 00
+T 12 00 4A 93 5A 93 0A C0 41 E0 50 E0 02 C0 4F 5F
+R 00 00 00 00
+T 20 00 5F 4F 84 E6 90 E0 84 17 95 07 C8 F7 C8 01
+R 00 00 00 00
+T 2E 00 01 97 8C 01 00 30 01 07 81 F7 59 91 49 91
+R 00 00 00 00
+T 3C 00 08 95
+R 00 00 00 00
+T 3E 00 0E 94 00 00 58 01 44 27 2C C0 66 27 27 C0
+R 00 00 00 00 12 04 00 00
+T 4C 00 01 E0 16 2F 0E 94 00 00 20 2E 20 94 28 BA
+R 00 00 00 00 12 08 01 00
+T 5A 00 62 30 71 F4 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 68 00 FF 27 80 E0 90 E0 E8 0F F9 1F 80 81 80 68
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 76 00 8B BB 0C C0 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 84 00 FF 27 80 E0 90 E0 E8 0F F9 1F 20 80 2B BA
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 92 00 05 E0 10 E0 BD DF 63 95 64 30 B8 F2 43 95
+R 00 00 00 00
+T A0 00 48 32 08 F4 D1 CF 0C 94 00 00
+R 00 00 00 00 12 0A 02 00
+T AA 00 24 97 44 27 66 27 AA 24 A6 DF 7E C0 44 27
+R 00 00 00 00
+T B8 00 79 C0 66 27 73 C0 1A E0 06 2F 0E 94 00 00
+R 00 00 00 00 12 0E 03 00
+T C6 00 08 83 1A E0 06 2F 0E 94 00 00 09 83 1A E0
+R 00 00 00 00 12 0A 04 00
+T D4 00 04 2F 0E 94 00 00 0A 83 1A E0 04 2F
+R 00 00 00 00 12 06 03 00
+T E0 00 0E 94 00 00 0B 83 8E 01 AA DF 80 99 5A C0
+R 00 00 00 00 12 04 04 00
+T EE 00 44 27 55 C0 66 27 4F C0 1A E0 06 2F
+R 00 00 00 00
+T FA 00 0E 94 00 00 08 83 1A E0 06 2F 0E 94 00 00
+R 00 00 00 00 12 04 03 00 12 0E 04 00
+T 08 01 09 83 1A E0 04 2F 0E 94 00 00 0A 83 1A E0
+R 00 00 00 00 12 0A 03 00
+T 16 01 04 2F 0E 94 00 00 0B 83 8E 01 8E DF 81 99
+R 00 00 00 00 12 06 04 00
+T 24 01 36 C0 16 C0 1A E0 06 2F 0E 94 00 00 08 83
+R 00 00 00 00 12 0C 03 00
+T 32 01 1A E0 06 2F 0E 94 00 00 09 83 1A E0 04 2F
+R 00 00 00 00 12 08 04 00
+T 40 01 0E 94 00 00 0A 83 1A E0 04 2F 0E 94 00 00
+R 00 00 00 00 12 04 03 00 12 0E 04 00
+T 4E 01 0B 83 8E 01 75 DF E9 CF 1B C0 17 C0 1A E0
+R 00 00 00 00
+T 5C 01 06 2F 0E 94 00 00 08 83 1A E0 06 2F
+R 00 00 00 00 12 06 03 00
+T 68 01 0E 94 00 00 09 83 1A E0 04 2F 0E 94 00 00
+R 00 00 00 00 12 04 04 00 12 0E 03 00
+T 76 01 0A 83 1A E0 04 2F 0E 94 00 00 0B 83 8E 01
+R 00 00 00 00 12 0A 04 00
+T 84 01 5C DF 63 95 6C 33 38 F3 43 95 4C 33 18 F3
+R 00 00 00 00
+T 92 01 63 95 6C 33 08 F4 AE CF 43 95 4C 33 08 F4
+R 00 00 00 00
+T A0 01 A8 CF 63 95 6C 33 08 F4 8A CF 43 95 4C 33
+R 00 00 00 00
+T AE 01 08 F4 84 CF 81 CF 24 96 08 95
+R 00 00 00 00

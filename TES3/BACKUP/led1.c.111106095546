@@ -1,0 +1,31 @@
+#include "iom16v.h"
+char num[10]={0x02,0xA7,0x44,0x05,0xA1,0x11,0x10,0x87,
+                          0x00,0x01};
+void io_init(void)
+{DDRC=0XFF;
+ PORTC=0XFF;
+ DDRD=0XFF;
+ PORTD=0X00;
+ DDRA=0X00;
+ PORTA=0XFF;
+}
+void delay(char i)
+{char a,b;
+  for(a=0;a<i;a++)
+   for(b=0;b;b++)
+       ;
+}
+void main(void)
+{ char j=0;
+io_init();
+while(1)
+   { if ((PINA & (1 << PA6)) == 0) { 
+                                   PORTC=num[j];
+								    if(j<9) j++;
+									else j=0;
+									delay(200);
+                                   }
+     if ((PINA & (1 << PA7)) == 0) {}
+   
+  }
+}

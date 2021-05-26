@@ -1,0 +1,182 @@
+XL
+H 3 areas A global symbols
+M led4.c
+S push_xgsetF00C Ref0000
+S lsl8 Ref0000
+S pop_xgsetF00C Ref0000
+S mod8u Ref0000
+S div8u Ref0000
+A text size 14A flags 0
+dbfile led4.c
+dbfile E:\教学资料\单片机原理及应用\第六讲实验课\练习\led4.c
+dbfunc e io_init 0 fV
+dbline FFFFFFFF 0
+dbline 6 0
+dbline 6 0
+dbline 7 4
+dbline 8 8
+dbline 9 A
+dbline A C
+dbline B E
+dbline FFFFFFFE 10
+dbline 0 10
+dbfunc e delay 12 fV
+dbsym r j 14 i
+dbsym r i 10 i
+dbline FFFFFFFF 16
+dbline F 16
+dbline 11 18
+dbline 11 18
+dbline 12 1E
+dbline 11 1E
+dbline 11 22
+dbline 13 2C
+dbline 10 2C
+dbline FFFFFFFE 38
+dbline 0 38
+dbfunc e display 3E fV
+dbsym r i 14 c
+dbsym r j 16 c
+dbsym r disp A pc
+dbline FFFFFFFF 44
+dbline 16 44
+dbline 17 44
+dbline 18 48
+dbline 19 4C
+dbline 19 4C
+dbline 1A 5A
+dbline 1B 5E
+dbline 1C 7A
+dbline 1D 92
+dbline 1E 98
+dbline 18 98
+dbline 18 9A
+dbline 17 9E
+dbline 17 A0
+dbline FFFFFFFE A6
+dbline 0 A6
+dbfunc e main AA fV
+dbsym r state A c
+dbsym r min 14 c
+dbsym r sec 16 c
+dbsym l disp 0 A[4:4]c
+dbline FFFFFFFF AC
+dbline 21 AC
+dbline 21 AC
+dbline 21 AE
+dbline 21 B0
+dbline 22 B2
+dbline 24 B6
+dbline 26 B6
+dbline 27 BA
+dbline 27 BA
+dbline 28 BE
+dbline 2A BE
+dbline 2B C2
+dbline 2D C2
+dbline 2E C6
+dbline 2E C6
+dbline 2F CA
+dbline 2F CA
+dbline 30 CC
+dbline 31 CE
+dbline 32 CE
+dbline 33 D2
+dbline 34 D4
+dbline 34 D4
+dbline 34 D8
+dbline 35 DA
+dbline 36 E4
+dbline 37 EE
+dbline 38 F8
+dbline 39 102
+dbline 3A 106
+dbline 33 106
+dbline 3B 108
+dbline 3C 108
+dbline 3D 112
+dbline 3E 11C
+dbline 3F 126
+dbline 40 130
+dbline 41 134
+dbline 2D 134
+dbline 2D 136
+dbline 43 13C
+dbline 2A 13C
+dbline 2A 13E
+dbline 45 144
+dbline 23 144
+dbline FFFFFFFE 146
+dbline 0 146
+S _main Def00AA
+S _io_init Def0000
+S _display Def003E
+S _delay Def0012
+A data size A flags 20
+dbfile led4.c
+dbfile E:\教学资料\单片机原理及应用\第六讲实验课\练习\led4.c
+dbsym e num 0 A[10:10]c
+S _num Def0000
+A idata size A flags 0
+T 00 00 3F 06
+R 00 00 02 00
+T 02 00 5B 4F
+R 00 00 02 00
+T 04 00 66 6D
+R 00 00 02 00
+T 06 00 7D 07
+R 00 00 02 00
+T 08 00 7F 6F
+R 00 00 02 00
+T 00 00 8F EF 8A BB 22 24 2B BA 87 BB 88 BB 21 BA
+R 00 00 00 00
+T 0E 00 88 BB 08 95
+R 00 00 00 00
+T 12 00 4A 93 5A 93 0A C0 41 E0 50 E0 02 C0 4F 5F
+R 00 00 00 00
+T 20 00 5F 4F 84 E6 90 E0 84 17 95 07 C8 F7 C8 01
+R 00 00 00 00
+T 2E 00 01 97 8C 01 00 30 01 07 81 F7 59 91 49 91
+R 00 00 00 00
+T 3C 00 08 95
+R 00 00 00 00
+T 3E 00 0E 94 00 00 58 01 44 27 2C C0 66 27 27 C0
+R 00 00 00 00 12 04 00 00
+T 4C 00 01 E0 16 2F 0E 94 00 00 20 2E 20 94 28 BA
+R 00 00 00 00 12 08 01 00
+T 5A 00 62 30 71 F4 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 68 00 FF 27 80 E0 90 E0 E8 0F F9 1F 80 81 80 68
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 76 00 8B BB 0C C0 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 84 00 FF 27 80 E0 90 E0 E8 0F F9 1F 20 80 2B BA
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 92 00 05 E0 10 E0 BD DF 63 95 64 30 B8 F2 43 95
+R 00 00 00 00
+T A0 00 48 32 08 F4 D1 CF 0C 94 00 00
+R 00 00 00 00 12 0A 02 00
+T AA 00 24 97 44 27 66 27 AA 24 A6 DF 47 C0 82 99
+R 00 00 00 00
+T B8 00 02 C0 83 E0 A8 2E 44 27 3E C0 66 27 38 C0
+R 00 00 00 00
+T C6 00 80 99 02 C0 66 27 44 27 81 99 1B C0 19 C0
+R 00 00 00 00
+T D4 00 82 99 01 C0 17 C0 1A E0 06 2F 0E 94 00 00
+R 00 00 00 00 12 0E 03 00
+T E2 00 08 83 1A E0 06 2F 0E 94 00 00 09 83 1A E0
+R 00 00 00 00 12 0A 04 00
+T F0 00 04 2F 0E 94 00 00 0A 83 1A E0 04 2F
+R 00 00 00 00 12 06 03 00
+T FC 00 0E 94 00 00 0B 83 8E 01 9C DF E6 CF 1A E0
+R 00 00 00 00 12 04 04 00
+T 0A 01 06 2F 0E 94 00 00 08 83 1A E0 06 2F
+R 00 00 00 00 12 06 03 00
+T 16 01 0E 94 00 00 09 83 1A E0 04 2F 0E 94 00 00
+R 00 00 00 00 12 04 04 00 12 0E 03 00
+T 24 01 0A 83 1A E0 04 2F 0E 94 00 00 0B 83 8E 01
+R 00 00 00 00 12 0A 04 00
+T 32 01 85 DF 63 95 6C 33 08 F4 C5 CF 43 95 4C 33
+R 00 00 00 00
+T 40 01 08 F4 BF CF B8 CF 24 96 08 95
+R 00 00 00 00

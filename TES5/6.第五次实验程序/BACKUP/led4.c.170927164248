@@ -1,0 +1,31 @@
+#include "iom16v.h"
+unsigned char num[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,
+                          0x7F,0x6F};  //共阴极
+void io_init(void)
+{DDRA=0XFF; //设置为输出
+ PORTA=0X00; //初始值为不显示
+ DDRB=0XFF; //设置为输出
+ PORTB=0XFF; //初始值为不显示
+}
+void delay(unsigned int i)
+{  unsigned j;
+   while(--i)
+      { for(j=0;j<=100;j++)  
+            ;
+		}
+}
+void main(void)
+{ 
+signed char i,j;
+io_init();
+while(1)
+   {           	 
+       for(j=0;j<3;j++)
+	   { PORTB=~(1<<j);
+	     for(i=0;i<=9;i++)
+		         { PORTA=num[i];
+				   delay(1000); //如果是PROTUES,请设置为1000，如果是真实硬件请设置为10000000
+				  } 
+		}
+   }
+}

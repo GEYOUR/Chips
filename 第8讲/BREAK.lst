@@ -1,0 +1,278 @@
+Interrupt Vectors
+    00000 940C 0073 JMP	__text_start|__start
+    00002 940C 00B0 JMP	_Int0
+    00004 940C 00CF JMP	_Int1
+
+Program Code (text area)
+__text_start|__start:
+    00073 EFCF      LDI	R28,0xFF
+    00074 E2D1      LDI	R29,0x21
+    00075 BFCD      OUT	0x3D,R28
+    00076 BFDE      OUT	0x3E,R29
+    00077 51CE      SUBI	R28,0x1E
+    00078 40D0      SBCI	R29,0
+    00079 EA0A      LDI	R16,0xAA
+    0007A 8308      ST	Y,R16
+    0007B 2400      CLR	R0
+    0007C E0E1      LDI	R30,1
+    0007D E0F2      LDI	R31,2
+    0007E E012      LDI	R17,2
+    0007F 30E1      CPI	R30,1
+    00080 07F1      CPC	R31,R17
+    00081 F011      BEQ	0x0084
+    00082 9201      ST	Z+,R0
+    00083 CFFB      RJMP	0x007F
+    00084 8300      ST	Z,R16
+    00085 EEE4      LDI	R30,0xE4
+    00086 E0F0      LDI	R31,0
+    00087 E0A0      LDI	R26,0
+    00088 E0B2      LDI	R27,2
+    00089 E010      LDI	R17,0
+    0008A E000      LDI	R16,0
+    0008B BF0B      OUT	0x3B,R16
+    0008C 3EE5      CPI	R30,0xE5
+    0008D 07F1      CPC	R31,R17
+    0008E F021      BEQ	0x0093
+    0008F 95C8      LPM
+    00090 9631      ADIW	R30,1
+    00091 920D      ST	X+,R0
+    00092 CFF9      RJMP	0x008C
+    00093 940E 00F8 CALL	_main
+_exit:
+    00095 CFFF      RJMP	_exit
+FILE: C:\bbb.c
+(0001) #include <iom16v.h>
+(0002) #include <macros.h>
+(0003) char state=0; //全局开关变量
+(0004) /*端口初始化函数*/
+(0005) void io_init(void)
+(0006) {DDRA=0xFF; //设置为输出
+_io_init:
+    00096 EF8F      LDI	R24,0xFF
+    00097 BB8A      OUT	0x1A,R24
+(0007)  PORTA=0x00;
+    00098 2422      CLR	R2
+    00099 BA2B      OUT	0x1B,R2
+(0008)  DDRB=0xFF; //设置为输出
+    0009A BB87      OUT	0x17,R24
+(0009)  PORTB=0x00;
+    0009B BA28      OUT	0x18,R2
+(0010)  DDRD=0x00; //设置为输入
+    0009C BA21      OUT	0x11,R2
+(0011)  PORTD=0xFF;
+    0009D BB82      OUT	0x12,R24
+    0009E 9508      RET
+(0012) }
+(0013) /*中断初始化函数*/
+(0014) void int_init(void) {
+(0015) 	CLI();			 /*关全局中断*/
+_int_init:
+    0009F 94F8      BCLR	7
+(0016)     GICR|=0xC0;      //INT0,IN1中断允许
+    000A0 B78B      IN	R24,0x3B
+    000A1 6C80      ORI	R24,0xC0
+    000A2 BF8B      OUT	0x3B,R24
+(0017)     MCUCR=0x0A;      //INT0,IN1下降沿触发
+    000A3 E08A      LDI	R24,0xA
+    000A4 BF85      OUT	0x35,R24
+(0018)     GIFR=0xC0;    //清除掉INT0,IN1中断标志位
+    000A5 EC80      LDI	R24,0xC0
+    000A6 BF8A      OUT	0x3A,R24
+(0019) 	SEI();			 /*全局中断允许*/
+    000A7 9478      BSET	7
+    000A8 9508      RET
+(0020) }
+(0021) void delay(unsigned int i) //延时函数
+(0022) {  
+(0023)    while(--i)
+_delay:
+  i                    --> R16
+    000A9 01C8      MOVW	R24,R16
+    000AA 9701      SBIW	R24,1
+    000AB 018C      MOVW	R16,R24
+    000AC 3000      CPI	R16,0
+    000AD 0701      CPC	R16,R17
+    000AE F7D1      BNE	0x00A9
+    000AF 9508      RET
+_Int0:
+  i                    --> R16
+    000B0 922A      ST	-Y,R2
+    000B1 923A      ST	-Y,R3
+    000B2 930A      ST	-Y,R16
+    000B3 931A      ST	-Y,R17
+    000B4 938A      ST	-Y,R24
+    000B5 B62F      IN	R2,0x3F
+    000B6 922A      ST	-Y,R2
+(0024)       { 
+(0025)             ;
+(0026) 		}
+(0027) }
+(0028) /*外部中断INT0，下降沿触发*/
+(0029) #pragma interrupt_handler Int0: 2 
+(0030) //中断程序，外部中断0，向量号为2
+(0031) void Int0(void) {
+(0032) unsigned int i;
+(0033) i = 1000;			/*防按键颤动代码*/
+    000B7 EE08      LDI	R16,0xE8
+    000B8 E013      LDI	R17,3
+    000B9 C003      RJMP	0x00BD
+(0034) while (i--) {
+(0035) 				if ((PIND & (1 << PD2)) != 0) {	/*按键是否为低电平*/
+    000BA 9B82      SBIS	0x10,2
+    000BB C001      RJMP	0x00BD
+(0036) 						return ;
+    000BC C00A      RJMP	0x00C7
+    000BD 0118      MOVW	R2,R16
+    000BE 5001      SUBI	R16,1
+    000BF 4010      SBCI	R17,0
+    000C0 2022      TST	R2
+    000C1 F7C1      BNE	0x00BA
+    000C2 2033      TST	R3
+    000C3 F7B1      BNE	0x00BA
+(0037) 									}
+(0038) 						}
+(0039) 													
+(0040) 			state=1;	/*设置为状态1*/
+    000C4 E081      LDI	R24,1
+    000C5 9380 0200 STS	state,R24
+    000C7 9029      LD	R2,Y+
+    000C8 BE2F      OUT	0x3F,R2
+    000C9 9189      LD	R24,Y+
+    000CA 9119      LD	R17,Y+
+    000CB 9109      LD	R16,Y+
+    000CC 9039      LD	R3,Y+
+    000CD 9029      LD	R2,Y+
+    000CE 9518      RETI
+_Int1:
+  i                    --> R16
+    000CF 922A      ST	-Y,R2
+    000D0 923A      ST	-Y,R3
+    000D1 930A      ST	-Y,R16
+    000D2 931A      ST	-Y,R17
+    000D3 938A      ST	-Y,R24
+    000D4 B62F      IN	R2,0x3F
+    000D5 922A      ST	-Y,R2
+(0041) 	      }
+(0042) #pragma interrupt_handler Int1:3 
+(0043) void Int1(void) {
+(0044)        unsigned int i;
+(0045) 	   i = 1000;	
+    000D6 EE08      LDI	R16,0xE8
+    000D7 E013      LDI	R17,3
+    000D8 C003      RJMP	0x00DC
+(0046) 	   while (i --) {
+(0047) 	   if ((PIND & (1 << PD3)) != 0) {
+    000D9 9B83      SBIS	0x10,3
+    000DA C001      RJMP	0x00DC
+(0048) 	   return ;
+    000DB C00A      RJMP	0x00E6
+    000DC 0118      MOVW	R2,R16
+    000DD 5001      SUBI	R16,1
+    000DE 4010      SBCI	R17,0
+    000DF 2022      TST	R2
+    000E0 F7C1      BNE	0x00D9
+    000E1 2033      TST	R3
+    000E2 F7B1      BNE	0x00D9
+(0049)              }
+(0050) 			} 
+(0051) 			
+(0052) 	  state=2;	/*设置为状态2*/
+    000E3 E082      LDI	R24,2
+    000E4 9380 0200 STS	state,R24
+    000E6 9029      LD	R2,Y+
+    000E7 BE2F      OUT	0x3F,R2
+    000E8 9189      LD	R24,Y+
+    000E9 9119      LD	R17,Y+
+    000EA 9109      LD	R16,Y+
+    000EB 9039      LD	R3,Y+
+    000EC 9029      LD	R2,Y+
+    000ED 9518      RETI
+(0053) }
+(0054) void blink(void) 
+(0055) //一直闪烁，验证中断效果是否起作用
+(0056) {PORTA=0x01;
+_blink:
+    000EE E081      LDI	R24,1
+    000EF BB8B      OUT	0x1B,R24
+(0057)  delay(100000);
+    000F0 EA00      LDI	R16,0xA0
+    000F1 E816      LDI	R17,0x86
+    000F2 DFB6      RCALL	_delay
+(0058)  PORTA=0x00;
+    000F3 2422      CLR	R2
+    000F4 BA2B      OUT	0x1B,R2
+(0059)  delay(100000);
+    000F5 EA00      LDI	R16,0xA0
+    000F6 E816      LDI	R17,0x86
+    000F7 CFB1      RJMP	_delay
+(0060) }
+(0061) void main(void)
+(0062) { signed char j=0;
+_main:
+  j                    --> R20
+    000F8 2744      CLR	R20
+(0063) io_init();
+    000F9 DF9C      RCALL	_io_init
+(0064) int_init();
+    000FA DFA4      RCALL	_int_init
+    000FB C029      RJMP	0x0125
+(0065) while(1)
+(0066) { switch(state)
+    000FC 9160 0200 LDS	R22,state
+    000FE 2777      CLR	R23
+    000FF 3061      CPI	R22,1
+    00100 E0E0      LDI	R30,0
+    00101 077E      CPC	R23,R30
+    00102 F029      BEQ	0x0108
+    00103 3062      CPI	R22,2
+    00104 E0E0      LDI	R30,0
+    00105 077E      CPC	R23,R30
+    00106 F079      BEQ	0x0116
+    00107 C01C      RJMP	0x0124
+(0067) {
+(0068) case 1: PORTB=(1<<j);delay(10000);
+    00108 E001      LDI	R16,1
+    00109 2F14      MOV	R17,R20
+    0010A 940E 0127 CALL	lsl8
+    0010C BB08      OUT	0x18,R16
+    0010D E100      LDI	R16,0x10
+    0010E E217      LDI	R17,0x27
+    0010F DF99      RCALL	_delay
+(0069) if(j<7) j++;else j=0;
+    00110 3047      CPI	R20,7
+    00111 F414      BGE	0x0114
+    00112 9543      INC	R20
+    00113 C010      RJMP	0x0124
+    00114 2744      CLR	R20
+(0070) break;
+    00115 C00E      RJMP	0x0124
+(0071) case 2: PORTB=(1<<j);delay(10000);
+    00116 E001      LDI	R16,1
+    00117 2F14      MOV	R17,R20
+    00118 940E 0127 CALL	lsl8
+    0011A BB08      OUT	0x18,R16
+    0011B E100      LDI	R16,0x10
+    0011C E217      LDI	R17,0x27
+    0011D DF8B      RCALL	_delay
+(0072) if (j>0) j--;else j=7;
+    0011E 2422      CLR	R2
+    0011F 1624      CP	R2,R20
+    00120 F414      BGE	0x0123
+    00121 954A      DEC	R20
+    00122 C001      RJMP	0x0124
+    00123 E047      LDI	R20,7
+(0073)   break;
+(0074) default: break;
+(0075) }
+(0076) blink(); //随便闪着玩，看有没有干扰
+FILE: <library>
+    00124 DFC9      RCALL	_blink
+    00125 CFD6      RJMP	0x00FC
+    00126 9508      RET
+lsl8:
+    00127 2311      TST	R17
+    00128 F019      BEQ	0x012C
+    00129 0F00      LSL	R16
+    0012A 951A      DEC	R17
+    0012B CFFB      RJMP	lsl8
+    0012C 9508      RET

@@ -1,0 +1,33 @@
+#include "iom16v.h"
+unsigned char num[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,
+                          0x7F,0x6F};  //共阴极
+void io_init(void)
+{DDRC=0XFF; //设置为输出
+ PORTC=0X00; //初始值为不显示
+ DDRD=0XFF; //设置为输出
+ PORTD=0XFF; //初始值为不显示
+
+}
+void delay(unsigned int i)
+{unsigned int a,b,c;
+  for(a=0;a<i;a++)
+   for(b=0;b;b++)
+    for(c=0;c;c++)   ;
+}
+void main(void)
+{ signed char i,j=0;
+io_init();
+while(1)
+   {           	 
+        PORTD=0b11111101;
+		PORTC=num[1];
+		//delay(60000);
+		//PORTC=0x00;
+		//delay(60000);
+	  /*for(i=0;i<=7;i++)
+		         {PORTC=(1<<i);
+				  delay(60000);
+				  } */
+			
+   }
+}

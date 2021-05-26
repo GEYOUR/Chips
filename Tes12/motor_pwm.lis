@@ -1,0 +1,361 @@
+                        .module motor_pwm.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile motor_pwm.c
+ 0000                   .dbfile F:\.[School]\Chip\iccv7\Tes12\motor_pwm.c
+ 0000                   .dbfunc e io_init _io_init fV
+                        .even
+ 0000           _io_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 5
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; 
+ 0000           ; void io_init(void)   
+ 0000           ; {   DDRA=0x00;   
+ 0000                   .dbline 5
+ 0000 2224              clr R2
+ 0002 2ABA              out 0x1a,R2
+ 0004                   .dbline 6
+ 0004           ;     PORTA=0xFF;
+ 0004 8FEF              ldi R24,255
+ 0006 8BBB              out 0x1b,R24
+ 0008                   .dbline 7
+ 0008           ;       DDRD=0xFF; 
+ 0008 81BB              out 0x11,R24
+ 000A                   .dbline 8
+ 000A           ;       PORTD=0xFF; 
+ 000A 82BB              out 0x12,R24
+ 000C                   .dbline 9
+ 000C           ;     DDRB=0xFF; 
+ 000C 87BB              out 0x17,R24
+ 000E                   .dbline 10
+ 000E           ;       PORTB=0xFF;
+ 000E 88BB              out 0x18,R24
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e pwm_init _pwm_init fV
+                        .even
+ 0012           _pwm_init::
+ 0012                   .dbline -1
+ 0012                   .dbline 17
+ 0012           ;       
+ 0012           ;   
+ 0012           ;       
+ 0012           ; }
+ 0012           ; ///////////////////////////////////////////////
+ 0012           ; void pwm_init(void) 
+ 0012           ; {  TCCR0|=(1<<WGM00)|(1<<COM01)|(1<<CS02);
+ 0012                   .dbline 17
+ 0012 83B7              in R24,0x33
+ 0014 8466              ori R24,100
+ 0016 83BF              out 0x33,R24
+ 0018                   .dbline 18
+ 0018           ;    TCCR2|=(1<<WGM20)|(1<<COM21)|(1<<CS22);   
+ 0018 85B5              in R24,0x25
+ 001A 8466              ori R24,100
+ 001C 85BD              out 0x25,R24
+ 001E                   .dbline -2
+ 001E           L2:
+ 001E                   .dbline 0 ; func end
+ 001E 0895              ret
+ 0020                   .dbend
+ 0020                   .dbfunc e delay _delay fV
+ 0020           ;              j -> R20,R21
+ 0020           ;              i -> R16,R17
+                        .even
+ 0020           _delay::
+ 0020 4A93              st -y,R20
+ 0022 5A93              st -y,R21
+ 0024                   .dbline -1
+ 0024                   .dbline 24
+ 0024           ; 
+ 0024           ; 
+ 0024           ; }
+ 0024           ; //////////////////////////////////////////////
+ 0024           ; void delay(unsigned int i)
+ 0024           ; {  unsigned j;
+ 0024 0AC0              xjmp L5
+ 0026           L4:
+ 0026                   .dbline 26
+ 0026           ;    while(--i)
+ 0026           ;       { for(j=1;j<=100;j++)  
+ 0026                   .dbline 26
+ 0026 41E0              ldi R20,1
+ 0028 50E0              ldi R21,0
+ 002A 02C0              xjmp L10
+ 002C           L7:
+ 002C                   .dbline 27
+ 002C           ;             ;
+ 002C           L8:
+ 002C                   .dbline 26
+ 002C 4F5F              subi R20,255  ; offset = 1
+ 002E 5F4F              sbci R21,255
+ 0030           L10:
+ 0030                   .dbline 26
+ 0030 84E6              ldi R24,100
+ 0032 90E0              ldi R25,0
+ 0034 8417              cp R24,R20
+ 0036 9507              cpc R25,R21
+ 0038 C8F7              brsh L7
+ 003A           X0:
+ 003A                   .dbline 28
+ 003A           ;               }
+ 003A           L5:
+ 003A                   .dbline 25
+ 003A C801              movw R24,R16
+ 003C 0197              sbiw R24,1
+ 003E 8C01              movw R16,R24
+ 0040 0030              cpi R16,0
+ 0042 0107              cpc R16,R17
+ 0044 81F7              brne L4
+ 0046           X1:
+ 0046                   .dbline -2
+ 0046           L3:
+ 0046                   .dbline 0 ; func end
+ 0046 5991              ld R21,y+
+ 0048 4991              ld R20,y+
+ 004A 0895              ret
+ 004C                   .dbsym r j 20 i
+ 004C                   .dbsym r i 16 i
+ 004C                   .dbend
+ 004C                   .dbfunc e main _main fV
+ 004C           ;          speed -> R20,R21
+                        .even
+ 004C           _main::
+ 004C                   .dbline -1
+ 004C                   .dbline 37
+ 004C           ; }
+ 004C           ; 
+ 004C           ; /////////////////
+ 004C           ; 
+ 004C           ; //////////////////////
+ 004C           ; 
+ 004C           ; /////////////////////////////////////////////////////
+ 004C           ; void main(void)
+ 004C           ; { int speed=0;
+ 004C                   .dbline 37
+ 004C 4427              clr R20
+ 004E 5527              clr R21
+ 0050                   .dbline 38
+ 0050           ;   io_init();
+ 0050 D7DF              xcall _io_init
+ 0052                   .dbline 40
+ 0052           ;  
+ 0052           ;   pwm_init();    
+ 0052 DFDF              xcall _pwm_init
+ 0054                   .dbline 41
+ 0054           ;   OCR0 = speed;  
+ 0054 4CBF              out 0x3c,R20
+ 0056                   .dbline 42
+ 0056           ;   OCR2= speed;
+ 0056 43BD              out 0x23,R20
+ 0058 3FC0              xjmp L13
+ 005A           L12:
+ 005A                   .dbline 44
+ 005A           ;   while(1)
+ 005A           ;    {   
+ 005A                   .dbline 45
+ 005A           ;     if ((PINA & (1 << PA0)) == 0)
+ 005A C899              sbic 0x19,0
+ 005C 06C0              rjmp L15
+ 005E           X2:
+ 005E                   .dbline 46
+ 005E           ;        {   speed=100;    
+ 005E                   .dbline 46
+ 005E 44E6              ldi R20,100
+ 0060 50E0              ldi R21,0
+ 0062                   .dbline 48
+ 0062           ;           
+ 0062           ;            OCR0=speed;       
+ 0062 4CBF              out 0x3c,R20
+ 0064                   .dbline 49
+ 0064           ;            OCR2=speed;      
+ 0064 43BD              out 0x23,R20
+ 0066                   .dbline 50
+ 0066           ;            PORTD=(1<<PD0)|(1<<PD2);   
+ 0066 85E0              ldi R24,5
+ 0068 82BB              out 0x12,R24
+ 006A                   .dbline 52
+ 006A           ;            
+ 006A           ;         }
+ 006A           L15:
+ 006A                   .dbline 54
+ 006A           ; 
+ 006A           ; if ((PINA & (1 << PA1)) == 0) 
+ 006A C999              sbic 0x19,1
+ 006C 06C0              rjmp L17
+ 006E           X3:
+ 006E                   .dbline 55
+ 006E           ;   {
+ 006E                   .dbline 56
+ 006E           ;      speed=25;
+ 006E 49E1              ldi R20,25
+ 0070 50E0              ldi R21,0
+ 0072                   .dbline 57
+ 0072           ;      OCR0=speed;  
+ 0072 4CBF              out 0x3c,R20
+ 0074                   .dbline 58
+ 0074           ;      OCR2=speed;
+ 0074 43BD              out 0x23,R20
+ 0076                   .dbline 59
+ 0076           ;       PORTD=(1<<PD1)|(1<<PD3);
+ 0076 8AE0              ldi R24,10
+ 0078 82BB              out 0x12,R24
+ 007A                   .dbline 62
+ 007A           ;               
+ 007A           ;                       
+ 007A           ;   }
+ 007A           L17:
+ 007A                   .dbline 64
+ 007A           ;       
+ 007A           ; if ((PINA & (1 << PA2)) == 0)
+ 007A CA99              sbic 0x19,2
+ 007C 0EC0              rjmp L19
+ 007E           X4:
+ 007E                   .dbline 65
+ 007E           ;     {
+ 007E                   .dbline 66
+ 007E           ;          if(speed<250)        
+ 007E 4A3F              cpi R20,250
+ 0080 E0E0              ldi R30,0
+ 0082 5E07              cpc R21,R30
+ 0084 1CF4              brge L21
+ 0086           X5:
+ 0086                   .dbline 68
+ 0086           ;                
+ 0086           ;                 speed=speed+25;
+ 0086 475E              subi R20,231  ; offset = 25
+ 0088 5F4F              sbci R21,255
+ 008A 02C0              xjmp L22
+ 008C           L21:
+ 008C                   .dbline 70
+ 008C           ;          else 
+ 008C           ;                   speed=250;
+ 008C 4AEF              ldi R20,250
+ 008E 50E0              ldi R21,0
+ 0090           L22:
+ 0090                   .dbline 71
+ 0090           ;         OCR0=speed;     
+ 0090 4CBF              out 0x3c,R20
+ 0092                   .dbline 72
+ 0092           ;         OCR2=speed;
+ 0092 43BD              out 0x23,R20
+ 0094                   .dbline 73
+ 0094           ;           delay(200); 
+ 0094 08EC              ldi R16,200
+ 0096 10E0              ldi R17,0
+ 0098 C3DF              xcall _delay
+ 009A                   .dbline 75
+ 009A           ;          
+ 009A           ;       }
+ 009A           L19:
+ 009A                   .dbline 77
+ 009A           ; 
+ 009A           ; if ((PINA & (1 << PA3)) == 0) 
+ 009A CB99              sbic 0x19,3
+ 009C 0FC0              rjmp L23
+ 009E           X6:
+ 009E                   .dbline 78
+ 009E           ;   {    if(speed>25) 
+ 009E                   .dbline 78
+ 009E 89E1              ldi R24,25
+ 00A0 90E0              ldi R25,0
+ 00A2 8417              cp R24,R20
+ 00A4 9507              cpc R25,R21
+ 00A6 1CF4              brge L25
+ 00A8           X7:
+ 00A8                   .dbline 80
+ 00A8           ;       
+ 00A8           ;                    speed=speed-25;
+ 00A8 4951              subi R20,25
+ 00AA 5040              sbci R21,0
+ 00AC 02C0              xjmp L26
+ 00AE           L25:
+ 00AE                   .dbline 82
+ 00AE           ;         else 
+ 00AE           ;                     speed=25;
+ 00AE 49E1              ldi R20,25
+ 00B0 50E0              ldi R21,0
+ 00B2           L26:
+ 00B2                   .dbline 83
+ 00B2           ;         OCR0=speed;     
+ 00B2 4CBF              out 0x3c,R20
+ 00B4                   .dbline 84
+ 00B4           ;         OCR2=speed;
+ 00B4 43BD              out 0x23,R20
+ 00B6                   .dbline 85
+ 00B6           ;       delay(200); 
+ 00B6 08EC              ldi R16,200
+ 00B8 10E0              ldi R17,0
+ 00BA B2DF              xcall _delay
+ 00BC                   .dbline 87
+ 00BC           ;      
+ 00BC           ;  }
+ 00BC           L23:
+ 00BC                   .dbline 89
+ 00BC           ;       
+ 00BC           ; if ((PINA & (1 << PA4)) == 0) 
+ 00BC CC99              sbic 0x19,4
+ 00BE 02C0              rjmp L27
+ 00C0           X8:
+ 00C0                   .dbline 90
+ 00C0           ; {      PORTD=(1<<PD0)|(1<<PD3);       
+ 00C0                   .dbline 90
+ 00C0 89E0              ldi R24,9
+ 00C2 82BB              out 0x12,R24
+ 00C4                   .dbline 92
+ 00C4           ;       
+ 00C4           ; }
+ 00C4           L27:
+ 00C4                   .dbline 93
+ 00C4           ; if ((PINA & (1 << PA5)) == 0) 
+ 00C4 CD99              sbic 0x19,5
+ 00C6 02C0              rjmp L29
+ 00C8           X9:
+ 00C8                   .dbline 94
+ 00C8           ;  {     PORTD=(1<<PD1)|(1<<PD2);       
+ 00C8                   .dbline 94
+ 00C8 86E0              ldi R24,6
+ 00CA 82BB              out 0x12,R24
+ 00CC                   .dbline 96
+ 00CC           ;     
+ 00CC           ;   }
+ 00CC           L29:
+ 00CC                   .dbline 97
+ 00CC           ;  if ((PINA & (1 << PA6)) == 0) 
+ 00CC CE99              sbic 0x19,6
+ 00CE 04C0              rjmp L31
+ 00D0           X10:
+ 00D0                   .dbline 98
+ 00D0           ;  {    speed=0;
+ 00D0                   .dbline 98
+ 00D0 4427              clr R20
+ 00D2 5527              clr R21
+ 00D4                   .dbline 99
+ 00D4           ;       OCR0=speed;     
+ 00D4 4CBF              out 0x3c,R20
+ 00D6                   .dbline 100
+ 00D6           ;         OCR2=speed;
+ 00D6 43BD              out 0x23,R20
+ 00D8                   .dbline 102
+ 00D8           ;     
+ 00D8           ;   }
+ 00D8           L31:
+ 00D8                   .dbline 104
+ 00D8           ;    
+ 00D8           ; }
+ 00D8           L13:
+ 00D8                   .dbline 43
+ 00D8 C0CF              xjmp L12
+ 00DA           X11:
+ 00DA                   .dbline -2
+ 00DA           L11:
+ 00DA                   .dbline 0 ; func end
+ 00DA 0895              ret
+ 00DC                   .dbsym r speed 20 I
+ 00DC                   .dbend
+ 00DC           ; }
+ 00DC           ;       

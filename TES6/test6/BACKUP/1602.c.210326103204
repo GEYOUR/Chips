@@ -1,0 +1,24 @@
+#include<iom128v.h>
+#include"1602.h"
+#define uchar unsigned char 
+#define uint unsigned int 
+
+void io_init(void)
+{DDRA=0xFF;
+ PORTA=0xFF;
+ DDRC=0xFF;
+ PORTC=0xFF;
+ DDRD=0x00;
+ PORTD=0xFF;
+}
+void main(void)
+{ uchar wz[]={"WWW.WWWWW.COM"};
+  uchar gd[]={"Good Luck!"};
+  io_init();
+  LcdInit();
+  while(1)
+  {
+   WriteChar(1,1,13,wz);
+   WriteChar(2,3,10,gd);
+  }
+}

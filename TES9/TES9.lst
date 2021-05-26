@@ -1,0 +1,280 @@
+Interrupt Vectors
+    00000 940C 0030 JMP	__text_start|__start
+    00002 940C 007C JMP	_Int0
+    00004 940C 009B JMP	_Int1
+
+Program Code (text area)
+__text_start|__start:
+    00030 E5CF      LDI	R28,0x5F
+    00031 E0D4      LDI	R29,4
+    00032 BFCD      OUT	0x3D,R28
+    00033 BFDE      OUT	0x3E,R29
+    00034 51CE      SUBI	R28,0x1E
+    00035 40D0      SBCI	R29,0
+    00036 EA0A      LDI	R16,0xAA
+    00037 8308      ST	Y,R16
+    00038 2400      CLR	R0
+    00039 E6EB      LDI	R30,0x6B
+    0003A E0F0      LDI	R31,0
+    0003B E010      LDI	R17,0
+    0003C 36EB      CPI	R30,0x6B
+    0003D 07F1      CPC	R31,R17
+    0003E F011      BEQ	0x0041
+    0003F 9201      ST	Z+,R0
+    00040 CFFB      RJMP	0x003C
+    00041 8300      ST	Z,R16
+    00042 E5E4      LDI	R30,0x54
+    00043 E0F0      LDI	R31,0
+    00044 E6A0      LDI	R26,0x60
+    00045 E0B0      LDI	R27,0
+    00046 E010      LDI	R17,0
+    00047 E000      LDI	R16,0
+    00048 BF0B      OUT	0x3B,R16
+    00049 35EF      CPI	R30,0x5F
+    0004A 07F1      CPC	R31,R17
+    0004B F021      BEQ	0x0050
+    0004C 95C8      LPM
+    0004D 9631      ADIW	R30,1
+    0004E 920D      ST	X+,R0
+    0004F CFF9      RJMP	0x0049
+    00050 940E 00BA CALL	_main
+_exit:
+    00052 CFFF      RJMP	_exit
+FILE: E:\.[School]\Chip\iccv7\TES9\LED_BREAK.c
+(0001) #include<iom16v.h>
+(0002) #include<macros.h>
+(0003) unsigned char num[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+(0004) 
+(0005) char state=0;
+(0006) void ioit(void)
+(0007) {DDRA=0xFF;
+_ioit:
+    00053 EF8F      LDI	R24,0xFF
+    00054 BB8A      OUT	0x1A,R24
+(0008)  PORTA=0x00;
+    00055 2422      CLR	R2
+    00056 BA2B      OUT	0x1B,R2
+(0009)  DDRB=0xFF;
+    00057 BB87      OUT	0x17,R24
+(0010)  PORTB=0x00;
+    00058 BA28      OUT	0x18,R2
+(0011)  DDRD=0x00;
+    00059 BA21      OUT	0x11,R2
+(0012)  PORTD=0xFF;
+    0005A BB82      OUT	0x12,R24
+    0005B 9508      RET
+(0013) }
+(0014) void int_init(void)
+(0015) {  CLI();
+_int_init:
+    0005C 94F8      BCLR	7
+(0016)    GICR|=0xC0;
+    0005D B78B      IN	R24,0x3B
+    0005E 6C80      ORI	R24,0xC0
+    0005F BF8B      OUT	0x3B,R24
+(0017)    MCUCR=0x0A;
+    00060 E08A      LDI	R24,0xA
+    00061 BF85      OUT	0x35,R24
+(0018)    GIFR=0xC0;
+    00062 EC80      LDI	R24,0xC0
+    00063 BF8A      OUT	0x3A,R24
+(0019)    SEI();
+    00064 9478      BSET	7
+    00065 9508      RET
+_delay:
+  j                    --> R20
+  i                    --> R16
+    00066 934A      ST	-Y,R20
+    00067 935A      ST	-Y,R21
+(0020) }
+(0021) void delay(unsigned int i)
+(0022) { unsigned int j;
+    00068 C00A      RJMP	0x0073
+(0023)   while(--i)
+(0024)     { for(j=0;j<=100;j++)
+    00069 2744      CLR	R20
+    0006A 2755      CLR	R21
+    0006B C002      RJMP	0x006E
+    0006C 5F4F      SUBI	R20,0xFF
+    0006D 4F5F      SBCI	R21,0xFF
+    0006E E684      LDI	R24,0x64
+    0006F E090      LDI	R25,0
+    00070 1784      CP	R24,R20
+    00071 0795      CPC	R25,R21
+    00072 F7C8      BCC	0x006C
+    00073 01C8      MOVW	R24,R16
+    00074 9701      SBIW	R24,1
+    00075 018C      MOVW	R16,R24
+    00076 3000      CPI	R16,0
+    00077 0701      CPC	R16,R17
+    00078 F781      BNE	0x0069
+    00079 9159      LD	R21,Y+
+    0007A 9149      LD	R20,Y+
+    0007B 9508      RET
+_Int0:
+  i                    --> R16
+    0007C 922A      ST	-Y,R2
+    0007D 923A      ST	-Y,R3
+    0007E 930A      ST	-Y,R16
+    0007F 931A      ST	-Y,R17
+    00080 938A      ST	-Y,R24
+    00081 B62F      IN	R2,0x3F
+    00082 922A      ST	-Y,R2
+(0025) 	    ;
+(0026) 	}
+(0027) }
+(0028) #pragma interrupt_handler Int0:2
+(0029) void Int0(void)
+(0030) { unsigned int i;
+(0031)   i=1000;
+    00083 EE08      LDI	R16,0xE8
+    00084 E013      LDI	R17,3
+    00085 C003      RJMP	0x0089
+(0032)   while(i--)
+(0033)   {
+(0034)     if((PIND&(1<<PD2))!=0)
+    00086 9B82      SBIS	0x10,2
+    00087 C001      RJMP	0x0089
+(0035) 	{ return;
+    00088 C00A      RJMP	0x0093
+    00089 0118      MOVW	R2,R16
+    0008A 5001      SUBI	R16,1
+    0008B 4010      SBCI	R17,0
+    0008C 2022      TST	R2
+    0008D F7C1      BNE	0x0086
+    0008E 2033      TST	R3
+    0008F F7B1      BNE	0x0086
+(0036) 	}
+(0037)   }
+(0038)   state=1;
+    00090 E081      LDI	R24,1
+    00091 9380 006A STS	state,R24
+    00093 9029      LD	R2,Y+
+    00094 BE2F      OUT	0x3F,R2
+    00095 9189      LD	R24,Y+
+    00096 9119      LD	R17,Y+
+    00097 9109      LD	R16,Y+
+    00098 9039      LD	R3,Y+
+    00099 9029      LD	R2,Y+
+    0009A 9518      RETI
+_Int1:
+  i                    --> R16
+    0009B 922A      ST	-Y,R2
+    0009C 923A      ST	-Y,R3
+    0009D 930A      ST	-Y,R16
+    0009E 931A      ST	-Y,R17
+    0009F 938A      ST	-Y,R24
+    000A0 B62F      IN	R2,0x3F
+    000A1 922A      ST	-Y,R2
+(0039) }
+(0040) #pragma interrupt_handler Int1:3
+(0041) void Int1(void)
+(0042) { unsigned int i;
+(0043)   i=1000;
+    000A2 EE08      LDI	R16,0xE8
+    000A3 E013      LDI	R17,3
+    000A4 C003      RJMP	0x00A8
+(0044)   while(i--)
+(0045)   {if((PIND&(1<<PD3))!=0)
+    000A5 9B83      SBIS	0x10,3
+    000A6 C001      RJMP	0x00A8
+(0046)   {return;
+    000A7 C00A      RJMP	0x00B2
+    000A8 0118      MOVW	R2,R16
+    000A9 5001      SUBI	R16,1
+    000AA 4010      SBCI	R17,0
+    000AB 2022      TST	R2
+    000AC F7C1      BNE	0x00A5
+    000AD 2033      TST	R3
+    000AE F7B1      BNE	0x00A5
+(0047)   }
+(0048)   }
+(0049)   state=2;
+    000AF E082      LDI	R24,2
+    000B0 9380 006A STS	state,R24
+    000B2 9029      LD	R2,Y+
+    000B3 BE2F      OUT	0x3F,R2
+    000B4 9189      LD	R24,Y+
+    000B5 9119      LD	R17,Y+
+    000B6 9109      LD	R16,Y+
+    000B7 9039      LD	R3,Y+
+    000B8 9029      LD	R2,Y+
+    000B9 9518      RETI
+(0050) }
+(0051) void main(void)
+(0052) {signed char i,j=0;
+_main:
+  i                    --> Y,+1
+  j                    --> R20
+    000BA 2744      CLR	R20
+(0053)  ioit();
+    000BB DF97      RCALL	_ioit
+(0054)  int_init();
+    000BC DF9F      RCALL	_int_init
+    000BD C034      RJMP	0x00F2
+(0055)  while(1)
+(0056)  { PORTB=~(1<<0);
+    000BE EF8E      LDI	R24,0xFE
+    000BF BB88      OUT	0x18,R24
+(0057)    switch(state)
+    000C0 9160 006A LDS	R22,state
+    000C2 2777      CLR	R23
+    000C3 3061      CPI	R22,1
+    000C4 E0E0      LDI	R30,0
+    000C5 077E      CPC	R23,R30
+    000C6 F029      BEQ	0x00CC
+    000C7 3062      CPI	R22,2
+    000C8 E0E0      LDI	R30,0
+    000C9 077E      CPC	R23,R30
+    000CA F0A1      BEQ	0x00DF
+    000CB C026      RJMP	0x00F2
+(0058)    {case 1:PORTA=num[j];
+    000CC E680      LDI	R24,0x60
+    000CD E090      LDI	R25,0
+    000CE 2FE4      MOV	R30,R20
+    000CF 27FF      CLR	R31
+    000D0 FDE7      SBRC	R30,7
+    000D1 95F0      COM	R31
+    000D2 0FE8      ADD	R30,R24
+    000D3 1FF9      ADC	R31,R25
+    000D4 8020      LD	R2,Z
+    000D5 BA2B      OUT	0x1B,R2
+(0059)            delay(1000);
+    000D6 EE08      LDI	R16,0xE8
+    000D7 E013      LDI	R17,3
+    000D8 DF8D      RCALL	_delay
+(0060) 		   if(j<9) j++;
+    000D9 3049      CPI	R20,0x9
+    000DA F414      BGE	0x00DD
+    000DB 9543      INC	R20
+    000DC C015      RJMP	0x00F2
+(0061) 		   else j=0;
+    000DD 2744      CLR	R20
+(0062) 		   break;
+    000DE C013      RJMP	0x00F2
+(0063)     case 2:PORTA=num[j];
+    000DF E680      LDI	R24,0x60
+    000E0 E090      LDI	R25,0
+    000E1 2FE4      MOV	R30,R20
+    000E2 27FF      CLR	R31
+    000E3 FDE7      SBRC	R30,7
+    000E4 95F0      COM	R31
+    000E5 0FE8      ADD	R30,R24
+    000E6 1FF9      ADC	R31,R25
+    000E7 8020      LD	R2,Z
+    000E8 BA2B      OUT	0x1B,R2
+(0064) 	       delay(1000);
+    000E9 EE08      LDI	R16,0xE8
+    000EA E013      LDI	R17,3
+    000EB DF7A      RCALL	_delay
+(0065) 		   if(j>0) j--;
+    000EC 2422      CLR	R2
+    000ED 1624      CP	R2,R20
+    000EE F414      BGE	0x00F1
+    000EF 954A      DEC	R20
+    000F0 C001      RJMP	0x00F2
+(0066) 		   else j=9;
+FILE: <library>
+    000F1 E049      LDI	R20,0x9
+    000F2 CFCB      RJMP	0x00BE
+    000F3 9508      RET

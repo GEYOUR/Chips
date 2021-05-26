@@ -1,0 +1,426 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile main.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile main.c
+ 0000           _min::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 0000              .word 0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile main.c
+ 0002                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 0002                   .dbsym e min _min i
+ 0002           _sec::
+ 0002                   .blkb 2
+                        .area idata
+ 0002 0000              .word 0
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 0004                   .dbsym e sec _sec i
+ 0004           _state::
+ 0004                   .blkb 2
+                        .area idata
+ 0004 0000              .word 0
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 0006                   .dbsym e state _state I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 0000                   .dbfunc e timer1_init _timer1_init fV
+                        .even
+ 0000           _timer1_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 12
+ 0000           ; /************************************************
+ 0000           ; 文件：main.c
+ 0000           ; 用途：
+ 0000           ; 注意：内部8M晶振
+ 0000           ; ************************************************/
+ 0000           ; 
+ 0000           ; #include "config.h"
+ 0000           ; volatile unsigned int min=0,sec=0; state=0;
+ 0000           ; extern unsigned char point;
+ 0000           ; extern unsigned char point_pos;
+ 0000           ; void timer1_init(void)
+ 0000           ; {
+ 0000                   .dbline 13
+ 0000           ;  TCCR1B = 0x00; //stop
+ 0000 2224              clr R2
+ 0002 2EBC              out 0x2e,R2
+ 0004                   .dbline 14
+ 0004           ;  TCNT1H = 0x8F; //setup
+ 0004 8FE8              ldi R24,143
+ 0006 8DBD              out 0x2d,R24
+ 0008                   .dbline 15
+ 0008           ;  TCNT1L = 0x81;
+ 0008 81E8              ldi R24,129
+ 000A 8CBD              out 0x2c,R24
+ 000C                   .dbline 16
+ 000C           ;  OCR1AH = 0x70;
+ 000C 80E7              ldi R24,112
+ 000E 8BBD              out 0x2b,R24
+ 0010                   .dbline 17
+ 0010           ;  OCR1AL = 0x7F;
+ 0010 8FE7              ldi R24,127
+ 0012 8ABD              out 0x2a,R24
+ 0014                   .dbline 18
+ 0014           ;  OCR1BH = 0x70;
+ 0014 80E7              ldi R24,112
+ 0016 89BD              out 0x29,R24
+ 0018                   .dbline 19
+ 0018           ;  OCR1BL = 0x7F;
+ 0018 8FE7              ldi R24,127
+ 001A 88BD              out 0x28,R24
+ 001C                   .dbline 20
+ 001C           ;  OCR1CH = 0x70;
+ 001C 80E7              ldi R24,112
+ 001E 80937900          sts 121,R24
+ 0022                   .dbline 21
+ 0022           ;  OCR1CL = 0x7F;
+ 0022 8FE7              ldi R24,127
+ 0024 80937800          sts 120,R24
+ 0028                   .dbline 22
+ 0028           ;  ICR1H  = 0x70;
+ 0028 80E7              ldi R24,112
+ 002A 87BD              out 0x27,R24
+ 002C                   .dbline 23
+ 002C           ;  ICR1L  = 0x7F;
+ 002C 8FE7              ldi R24,127
+ 002E 86BD              out 0x26,R24
+ 0030                   .dbline 24
+ 0030           ;  TCCR1A = 0x00;
+ 0030 2FBC              out 0x2f,R2
+ 0032                   .dbline 25
+ 0032           ;  TCCR1B = 0x04; //start Timer
+ 0032 84E0              ldi R24,4
+ 0034 8EBD              out 0x2e,R24
+ 0036                   .dbline -2
+ 0036           L1:
+ 0036                   .dbline 0 ; func end
+ 0036 0895              ret
+ 0038                   .dbend
+                        .area vector(rom, abs)
+                        .org 56
+ 0038 0C941C00          jmp _timer1_ovf_isr
+                        .area text(rom, con, rel)
+ 0038                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 0038                   .dbfunc e timer1_ovf_isr _timer1_ovf_isr fV
+                        .even
+ 0038           _timer1_ovf_isr::
+ 0038 2A92              st -y,R2
+ 003A 3A92              st -y,R3
+ 003C 8A93              st -y,R24
+ 003E 9A93              st -y,R25
+ 0040 AA93              st -y,R26
+ 0042 EA93              st -y,R30
+ 0044 2FB6              IN R2,63
+ 0046 2A92              st -y,R2
+ 0048                   .dbline -1
+ 0048                   .dbline 30
+ 0048           ; }
+ 0048           ; 
+ 0048           ; #pragma interrupt_handler timer1_ovf_isr:15
+ 0048           ; void timer1_ovf_isr(void)
+ 0048           ; {
+ 0048                   .dbline 31
+ 0048           ;  TCNT1H = 0x8F; //reload counter high value
+ 0048 8FE8              ldi R24,143
+ 004A 8DBD              out 0x2d,R24
+ 004C                   .dbline 32
+ 004C           ;  TCNT1L = 0x81; //reload counter low value
+ 004C 81E8              ldi R24,129
+ 004E 8CBD              out 0x2c,R24
+ 0050                   .dbline 33
+ 0050           ;  sec++;
+ 0050 80910200          lds R24,_sec
+ 0054 90910300          lds R25,_sec+1
+ 0058 0196              adiw R24,1
+ 005A 90930300          sts _sec+1,R25
+ 005E 80930200          sts _sec,R24
+ 0062                   .dbline 34
+ 0062           ;  if(sec>=60) {sec=0;
+ 0062 80910200          lds R24,_sec
+ 0066 90910300          lds R25,_sec+1
+ 006A 8C33              cpi R24,60
+ 006C E0E0              ldi R30,0
+ 006E 9E07              cpc R25,R30
+ 0070 D8F0              brlo L3
+ 0072           X0:
+ 0072                   .dbline 34
+ 0072                   .dbline 34
+ 0072 2224              clr R2
+ 0074 3324              clr R3
+ 0076 30920300          sts _sec+1,R3
+ 007A 20920200          sts _sec,R2
+ 007E                   .dbline 35
+ 007E           ;               min++;
+ 007E 80910000          lds R24,_min
+ 0082 90910100          lds R25,_min+1
+ 0086 0196              adiw R24,1
+ 0088 90930100          sts _min+1,R25
+ 008C 80930000          sts _min,R24
+ 0090                   .dbline 36
+ 0090           ;                         if(min>=60) min=0;
+ 0090 80910000          lds R24,_min
+ 0094 90910100          lds R25,_min+1
+ 0098 8C33              cpi R24,60
+ 009A E0E0              ldi R30,0
+ 009C 9E07              cpc R25,R30
+ 009E 20F0              brlo L5
+ 00A0           X1:
+ 00A0                   .dbline 36
+ 00A0 30920100          sts _min+1,R3
+ 00A4 20920000          sts _min,R2
+ 00A8           L5:
+ 00A8                   .dbline 37
+ 00A8           ;                         }
+ 00A8           L3:
+ 00A8                   .dbline -2
+ 00A8           L2:
+ 00A8                   .dbline 0 ; func end
+ 00A8 2990              ld R2,y+
+ 00AA 2FBE              OUT 63,R2
+ 00AC E991              ld R30,y+
+ 00AE A991              ld R26,y+
+ 00B0 9991              ld R25,y+
+ 00B2 8991              ld R24,y+
+ 00B4 3990              ld R3,y+
+ 00B6 2990              ld R2,y+
+ 00B8 1895              reti
+ 00BA                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C945D00          jmp _int0
+                        .area text(rom, con, rel)
+ 00BA                   .dbfile C:\Users\Administrator\Desktop\数码管显示\main.c
+ 00BA                   .dbfunc e int0 _int0 fV
+                        .even
+ 00BA           _int0::
+ 00BA 8A93              st -y,R24
+ 00BC 9A93              st -y,R25
+ 00BE 8FB7              IN R24,63
+ 00C0 8A93              st -y,R24
+ 00C2                   .dbline -1
+ 00C2                   .dbline 41
+ 00C2           ; }
+ 00C2           ; #pragma interrupt_handler int0:2
+ 00C2           ; void int0(void)
+ 00C2           ; {
+ 00C2                   .dbline 42
+ 00C2           ;  sec--;
+ 00C2 80910200          lds R24,_sec
+ 00C6 90910300          lds R25,_sec+1
+ 00CA 0197              sbiw R24,1
+ 00CC 90930300          sts _sec+1,R25
+ 00D0 80930200          sts _sec,R24
+ 00D4                   .dbline -2
+ 00D4           L7:
+ 00D4                   .dbline 0 ; func end
+ 00D4 8991              ld R24,y+
+ 00D6 8FBF              OUT 63,R24
+ 00D8 9991              ld R25,y+
+ 00DA 8991              ld R24,y+
+ 00DC 1895              reti
+ 00DE                   .dbend
+ 00DE                   .dbfunc e init_devices _init_devices fV
+                        .even
+ 00DE           _init_devices::
+ 00DE                   .dbline -1
+ 00DE                   .dbline 47
+ 00DE           ;  // state=1;
+ 00DE           ; }
+ 00DE           ; 
+ 00DE           ; void init_devices(void)
+ 00DE           ; {
+ 00DE                   .dbline 48
+ 00DE           ;  CLI(); //disable all interrupts
+ 00DE F894              cli
+ 00E0                   .dbline 49
+ 00E0           ;  timer1_init();
+ 00E0 8FDF              xcall _timer1_init
+ 00E2                   .dbline 50
+ 00E2           ;   if(state==1) TIMSK = 0x00; //timer interrupt sources
+ 00E2 80910400          lds R24,_state
+ 00E6 90910500          lds R25,_state+1
+ 00EA 8130              cpi R24,1
+ 00EC E0E0              ldi R30,0
+ 00EE 9E07              cpc R25,R30
+ 00F0 19F4              brne L9
+ 00F2           X2:
+ 00F2                   .dbline 50
+ 00F2 2224              clr R2
+ 00F4 27BE              out 0x37,R2
+ 00F6 02C0              xjmp L10
+ 00F8           L9:
+ 00F8                   .dbline 51
+ 00F8           ;       else TIMSK = 0x04;    
+ 00F8 84E0              ldi R24,4
+ 00FA 87BF              out 0x37,R24
+ 00FC           L10:
+ 00FC                   .dbline 52
+ 00FC           ;   SEI(); //re-enable interrupts
+ 00FC 7894              sei
+ 00FE                   .dbline -2
+ 00FE           L8:
+ 00FE                   .dbline 0 ; func end
+ 00FE 0895              ret
+ 0100                   .dbend
+ 0100                   .dbfunc e disptime _disptime fV
+                        .even
+ 0100           _disptime::
+ 0100                   .dbline -1
+ 0100                   .dbline 55
+ 0100           ; }
+ 0100           ; void disptime(void)
+ 0100           ; {    if(sec%2==0) //偶数次灯亮
+ 0100                   .dbline 55
+ 0100 20900200          lds R2,_sec
+ 0104 30900300          lds R3,_sec+1
+ 0108 20FC              sbrc R2,0
+ 010A 04C0              rjmp L12
+ 010C           X3:
+ 010C                   .dbline 56
+ 010C           ;           point=1;
+ 010C 81E0              ldi R24,1
+ 010E 80930000          sts _point,R24
+ 0112 03C0              xjmp L13
+ 0114           L12:
+ 0114                   .dbline 57
+ 0114           ;        else point=0; //奇数次灯灭
+ 0114 2224              clr R2
+ 0116 20920000          sts _point,R2
+ 011A           L13:
+ 011A                   .dbline 58
+ 011A           ;      point_pos=2;
+ 011A 82E0              ldi R24,2
+ 011C 80930000          sts _point_pos,R24
+ 0120                   .dbline 59
+ 0120           ;        Seg7_Led_Buf[3]=min/10;
+ 0120 2AE0              ldi R18,10
+ 0122 30E0              ldi R19,0
+ 0124 00910000          lds R16,_min
+ 0128 10910100          lds R17,_min+1
+ 012C 0E940000          xcall div16u
+ 0130 00930300          sts _Seg7_Led_Buf+3,R16
+ 0134                   .dbline 60
+ 0134           ;        Seg7_Led_Buf[2]=min%10;
+ 0134 2AE0              ldi R18,10
+ 0136 30E0              ldi R19,0
+ 0138 00910000          lds R16,_min
+ 013C 10910100          lds R17,_min+1
+ 0140 0E940000          xcall mod16u
+ 0144 00930200          sts _Seg7_Led_Buf+2,R16
+ 0148                   .dbline 61
+ 0148           ;        Seg7_Led_Buf[1]=sec/10;
+ 0148 2AE0              ldi R18,10
+ 014A 30E0              ldi R19,0
+ 014C 00910200          lds R16,_sec
+ 0150 10910300          lds R17,_sec+1
+ 0154 0E940000          xcall div16u
+ 0158 00930100          sts _Seg7_Led_Buf+1,R16
+ 015C                   .dbline 62
+ 015C           ;        Seg7_Led_Buf[0]=sec%10;
+ 015C 2AE0              ldi R18,10
+ 015E 30E0              ldi R19,0
+ 0160 00910200          lds R16,_sec
+ 0164 10910300          lds R17,_sec+1
+ 0168 0E940000          xcall mod16u
+ 016C 00930000          sts _Seg7_Led_Buf,R16
+ 0170                   .dbline 63
+ 0170           ;        Seg7_Led_Update();
+ 0170                   .dbline -2
+ 0170           L11:
+ 0170                   .dbline 0 ; func end
+ 0170 0C940000          xjmp _Seg7_Led_Update
+ 0174                   .dbend
+ 0174                   .dbfunc e main _main fV
+                        .even
+ 0174           _main::
+ 0174                   .dbline -1
+ 0174                   .dbline 66
+ 0174           ; }
+ 0174           ; void main(void)
+ 0174           ; {
+ 0174                   .dbline 67
+ 0174           ;  init_devices(); 
+ 0174 B4DF              xcall _init_devices
+ 0176                   .dbline 68
+ 0176           ;  HC_595_init();
+ 0176 0E940000          xcall _HC_595_init
+ 017A 20C0              xjmp L19
+ 017C           L18:
+ 017C                   .dbline 70
+ 017C           ;  while(1)
+ 017C           ;       {
+ 017C                   .dbline 71
+ 017C           ;                disptime();
+ 017C C1DF              xcall _disptime
+ 017E                   .dbline 72
+ 017E           ;                CLI(); //disable all interrupts
+ 017E F894              cli
+ 0180                   .dbline 73
+ 0180           ;          if(state==1) TIMSK = 0x00; //timer interrupt sources
+ 0180 80910400          lds R24,_state
+ 0184 90910500          lds R25,_state+1
+ 0188 8130              cpi R24,1
+ 018A E0E0              ldi R30,0
+ 018C 9E07              cpc R25,R30
+ 018E 19F4              brne L21
+ 0190           X4:
+ 0190                   .dbline 73
+ 0190 2224              clr R2
+ 0192 27BE              out 0x37,R2
+ 0194 02C0              xjmp L22
+ 0196           L21:
+ 0196                   .dbline 74
+ 0196           ;             else TIMSK = 0x04;    
+ 0196 84E0              ldi R24,4
+ 0198 87BF              out 0x37,R24
+ 019A           L22:
+ 019A                   .dbline 75
+ 019A           ;          SEI(); //re-enable interrupts
+ 019A 7894              sei
+ 019C                   .dbline 77
+ 019C           ;                
+ 019C           ;               if((PIND&(1<<PD0))==0)
+ 019C 8099              sbic 0x10,0
+ 019E 06C0              rjmp L23
+ 01A0           X5:
+ 01A0                   .dbline 78
+ 01A0           ;                     {state=1;
+ 01A0                   .dbline 78
+ 01A0 81E0              ldi R24,1
+ 01A2 90E0              ldi R25,0
+ 01A4 90930500          sts _state+1,R25
+ 01A8 80930400          sts _state,R24
+ 01AC                   .dbline 79
+ 01AC           ;                          }
+ 01AC           L23:
+ 01AC                   .dbline 80
+ 01AC           ;           if((PIND&(1<<PD1))==0)
+ 01AC 8199              sbic 0x10,1
+ 01AE 06C0              rjmp L25
+ 01B0           X6:
+ 01B0                   .dbline 81
+ 01B0           ;                     {state=0;
+ 01B0                   .dbline 81
+ 01B0 2224              clr R2
+ 01B2 3324              clr R3
+ 01B4 30920500          sts _state+1,R3
+ 01B8 20920400          sts _state,R2
+ 01BC                   .dbline 82
+ 01BC           ;                          }
+ 01BC           L25:
+ 01BC                   .dbline 83
+ 01BC           ;       }
+ 01BC           L19:
+ 01BC                   .dbline 69
+ 01BC DFCF              xjmp L18
+ 01BE           X7:
+ 01BE                   .dbline -2
+ 01BE           L17:
+ 01BE                   .dbline 0 ; func end
+ 01BE 0895              ret
+ 01C0                   .dbend
+ 01C0           ; }

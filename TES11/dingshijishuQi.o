@@ -1,0 +1,211 @@
+XL
+H 5 areas 10 global symbols
+M dingshijishuQi.c
+S push_xgsetF00C Ref0000
+S lsl8 Ref0000
+S pop_xgsetF00C Ref0000
+S mod8u Ref0000
+S div8u Ref0000
+A text size 19E flags 0
+dbfile dingshijishuQi.c
+dbfile E:\.[School]\Chip\iccv7\TES11\dingshijishuQi.c
+dbfunc e ioit 0 fV
+dbline FFFFFFFF 0
+dbline B 0
+dbline B 0
+dbline C 4
+dbline D 8
+dbline E A
+dbline FFFFFFFE C
+dbline 0 C
+dbfunc e int_init E fV
+dbline FFFFFFFF E
+dbline 11 E
+dbline 11 E
+dbline 12 10
+dbline 13 18
+dbline 14 1E
+dbline 15 24
+dbline 16 2C
+dbline FFFFFFFE 34
+dbline 0 34
+dbfunc e Int_TCCR1 36 fV
+dbline FFFFFFFF 46
+dbline 1C 46
+dbline 1C 46
+dbline 1D 58
+dbline 1E 60
+dbline 1E 60
+dbline 1F 68
+dbline 1F 68
+dbline 20 6E
+dbline 20 76
+dbline 21 7C
+dbline 22 86
+dbline 23 88
+dbline 24 88
+dbline 25 92
+dbline 26 92
+dbline 27 9E
+dbline FFFFFFFE 9E
+dbline 0 9E
+dbfunc e delay B0 fV
+dbsym r j 14 i
+dbsym r i 10 i
+dbline FFFFFFFF B4
+dbline 2A B4
+dbline 2C B6
+dbline 2C B6
+dbline 2C BC
+dbline 2C BC
+dbline 2C C0
+dbline 2D CA
+dbline 2B CA
+dbline FFFFFFFE D6
+dbline 0 D6
+dbfunc e display DC fV
+dbsym r i 14 c
+dbsym r j 16 c
+dbsym r disp A pc
+dbline FFFFFFFF E2
+dbline 30 E2
+dbline 31 E2
+dbline 32 E6
+dbline 33 EA
+dbline 33 EA
+dbline 34 F8
+dbline 35 FC
+dbline 36 118
+dbline 37 130
+dbline 38 136
+dbline 32 136
+dbline 32 138
+dbline 31 13C
+dbline 31 13E
+dbline FFFFFFFE 144
+dbline 0 144
+dbfunc e main 148 fV
+dbline FFFFFFFF 148
+dbline 3B 148
+dbline 3C 148
+dbline 3D 14A
+dbline 3F 14E
+dbline 40 14E
+dbline 41 152
+dbline 41 152
+dbline 41 158
+dbline 41 15C
+dbline 42 15C
+dbline 43 16A
+dbline 44 178
+dbline 45 186
+dbline 46 194
+dbline 47 19A
+dbline 3E 19A
+dbline FFFFFFFE 19C
+dbline 0 19C
+S _main Def0148
+S _ioit Def0000
+S _Int_TCCR1 Def0036
+S _display Def00DC
+S _delay Def00B0
+S _int_init Def000E
+A data size E flags 20
+dbfile dingshijishuQi.c
+dbfile E:\.[School]\Chip\iccv7\TES11\dingshijishuQi.c
+dbsym e num 0 A[10:10]c
+dbsym e jishu A I
+dbsym e min C c
+dbsym e sec D c
+S _jishu Def000A
+S _sec Def000D
+S _min Def000C
+S _num Def0000
+A idata size E flags 0
+A vector size 1C flags C
+A bss size 4 flags 20
+dbfile E:\.[School]\Chip\iccv7\TES11\dingshijishuQi.c
+dbsym e disp 0 A[4:4]c
+S _disp Def0000
+T 00 00 3F 06
+R 00 00 02 00
+T 02 00 5B 4F
+R 00 00 02 00
+T 04 00 66 6D
+R 00 00 02 00
+T 06 00 7D 07
+R 00 00 02 00
+T 08 00 7F 6F
+R 00 00 02 00
+T 0A 00 00 00
+R 00 00 02 00
+T 0C 00 00
+R 00 00 02 00
+T 0D 00 00
+R 00 00 02 00
+T 00 00 8F EF 8A BB 22 24 2B BA 87 BB 28 BA 08 95
+R 00 00 00 00
+T 0E 00 F8 94 22 24 33 24 3D BC 2C BC 8E B5 88 60
+R 00 00 00 00
+T 1C 00 8E BD 8E B5 84 60 8E BD 81 E7 92 E0 9B BD
+R 00 00 00 00
+T 2A 00 8A BD 89 B7 80 61 89 BF 78 94 08 95
+R 00 00 00 00
+T 18 00 0C 94 1B 00
+R 00 00 03 00 10 04 00 00
+T 36 00 2A 92 3A 92 8A 93 9A 93 AA 93 EA 93 2F B6
+R 00 00 00 00
+T 44 00 2A 92 80 91 0A 00 90 91 0B 00 01 96 90 93
+R 00 00 00 00 00 06 01 00 00 0A 01 00
+T 52 00 0B 00 80 93 0A 00 84 36 E0 E0 9E 07 F9 F4
+R 00 00 00 00 00 02 01 00 00 06 01 00
+T 60 00 80 91 0D 00 8B 33 80 F0 22 24 20 92 0D 00
+R 00 00 00 00 00 04 01 00 00 0E 01 00
+T 6E 00 80 91 0C 00 8B 33 18 F0 20 92 0C 00 0B C0
+R 00 00 00 00 00 04 01 00 00 0C 01 00
+T 7C 00 80 91 0C 00 8F 5F 80 93 0C 00 05 C0 80 91
+R 00 00 00 00 00 04 01 00 00 0A 01 00
+T 8A 00 0D 00 8F 5F 80 93 0D 00 22 24 33 24 30 92
+R 00 00 00 00 00 02 01 00 00 08 01 00
+T 98 00 0B 00 20 92 0A 00 29 90 2F BE E9 91 A9 91
+R 00 00 00 00 00 02 01 00 00 06 01 00
+T A6 00 99 91 89 91 39 90 29 90 18 95
+R 00 00 00 00
+T B0 00 4A 93 5A 93 0A C0 41 E0 50 E0 02 C0 4F 5F
+R 00 00 00 00
+T BE 00 5F 4F 84 E6 90 E0 84 17 95 07 C8 F7 C8 01
+R 00 00 00 00
+T CC 00 01 97 8C 01 00 30 01 07 81 F7 59 91 49 91
+R 00 00 00 00
+T DA 00 08 95
+R 00 00 00 00
+T DC 00 0E 94 00 00 58 01 44 27 2C C0 66 27 27 C0
+R 00 00 00 00 12 04 00 00
+T EA 00 01 E0 16 2F 0E 94 00 00 20 2E 20 94 28 BA
+R 00 00 00 00 12 08 01 00
+T F8 00 62 30 71 F4 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 06 01 FF 27 80 E0 90 E0 E8 0F F9 1F 80 81 80 68
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 14 01 8B BB 0C C0 E6 2F FF 27 EA 0D FB 1D E0 81
+R 00 00 00 00
+T 22 01 FF 27 80 E0 90 E0 E8 0F F9 1F 20 80 2B BA
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T 30 01 05 E0 10 E0 BD DF 63 95 64 30 B8 F2 43 95
+R 00 00 00 00
+T 3E 01 48 32 08 F4 D1 CF 0C 94 00 00
+R 00 00 00 00 12 0A 02 00
+T 48 01 5B DF 61 DF 26 C0 80 99 05 C0 22 24 20 92
+R 00 00 00 00
+T 56 01 0D 00 20 92 0C 00 1A E0 00 91 0D 00
+R 00 00 00 00 00 02 01 00 00 06 01 00 00 0C 01 00
+T 62 01 0E 94 00 00 00 93 00 00 1A E0 00 91 0D 00
+R 00 00 00 00 12 04 03 00 00 08 04 00 00 0E 01 00
+T 70 01 0E 94 00 00 00 93 01 00 1A E0 00 91 0C 00
+R 00 00 00 00 12 04 04 00 00 08 04 00 00 0E 01 00
+T 7E 01 0E 94 00 00 00 93 02 00 1A E0 00 91 0C 00
+R 00 00 00 00 12 04 03 00 00 08 04 00 00 0E 01 00
+T 8C 01 0E 94 00 00 00 93 03 00
+R 00 00 00 00 12 04 04 00 00 08 04 00
+T 94 01 00 E0 10 E0 A1 DF D9 CF 08 95
+R 00 00 00 00 20 02 04 00 00 00 40 04 04 00 00 00

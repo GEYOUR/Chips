@@ -1,0 +1,395 @@
+                        .module bbb.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ..\..\..\bbb.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile ..\..\..\bbb.c
+ 0000           _state::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile ..\..\..\bbb.c
+ 0001                   .dbfile C:\bbb.c
+ 0001                   .dbsym e state _state c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\bbb.c
+ 0000                   .dbfunc e io_init _io_init fV
+                        .even
+ 0000           _io_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 6
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; char state=0; //全局开关变量
+ 0000           ; /*端口初始化函数*/
+ 0000           ; void io_init(void)
+ 0000           ; {DDRA=0xFF; //设置为输出
+ 0000                   .dbline 6
+ 0000 8FEF              ldi R24,255
+ 0002 8ABB              out 0x1a,R24
+ 0004                   .dbline 7
+ 0004           ;  PORTA=0x00;
+ 0004 2224              clr R2
+ 0006 2BBA              out 0x1b,R2
+ 0008                   .dbline 8
+ 0008           ;  DDRB=0xFF; //设置为输出
+ 0008 87BB              out 0x17,R24
+ 000A                   .dbline 9
+ 000A           ;  PORTB=0x00;
+ 000A 28BA              out 0x18,R2
+ 000C                   .dbline 10
+ 000C           ;  DDRD=0x00; //设置为输入
+ 000C 21BA              out 0x11,R2
+ 000E                   .dbline 11
+ 000E           ;  PORTD=0xFF;
+ 000E 82BB              out 0x12,R24
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e int_init _int_init fV
+                        .even
+ 0012           _int_init::
+ 0012                   .dbline -1
+ 0012                   .dbline 14
+ 0012           ; }
+ 0012           ; /*中断初始化函数*/
+ 0012           ; void int_init(void) {
+ 0012                   .dbline 15
+ 0012           ;       CLI();                   /*关全局中断*/
+ 0012 F894              cli
+ 0014                   .dbline 16
+ 0014           ;     GICR|=0xC0;      //INT0,IN1中断允许
+ 0014 8BB7              in R24,0x3b
+ 0016 806C              ori R24,192
+ 0018 8BBF              out 0x3b,R24
+ 001A                   .dbline 17
+ 001A           ;     MCUCR=0x0A;      //INT0,IN1下降沿触发
+ 001A 8AE0              ldi R24,10
+ 001C 85BF              out 0x35,R24
+ 001E                   .dbline 18
+ 001E           ;     GIFR=0xC0;    //清除掉INT0,IN1中断标志位
+ 001E 80EC              ldi R24,192
+ 0020 8ABF              out 0x3a,R24
+ 0022                   .dbline 19
+ 0022           ;       SEI();                   /*全局中断允许*/
+ 0022 7894              sei
+ 0024                   .dbline -2
+ 0024           L2:
+ 0024                   .dbline 0 ; func end
+ 0024 0895              ret
+ 0026                   .dbend
+ 0026                   .dbfunc e delay _delay fV
+ 0026           ;              i -> R16,R17
+                        .even
+ 0026           _delay::
+ 0026                   .dbline -1
+ 0026                   .dbline 22
+ 0026           ; }
+ 0026           ; void delay(unsigned int i) //延时函数
+ 0026           ; {  
+ 0026           L4:
+ 0026                   .dbline 24
+ 0026           ;    while(--i)
+ 0026           ;       { 
+ 0026                   .dbline 25
+ 0026           ;             ;
+ 0026                   .dbline 26
+ 0026           ;               }
+ 0026           L5:
+ 0026                   .dbline 23
+ 0026 C801              movw R24,R16
+ 0028 0197              sbiw R24,1
+ 002A 8C01              movw R16,R24
+ 002C 0030              cpi R16,0
+ 002E 0107              cpc R16,R17
+ 0030 D1F7              brne L4
+ 0032           X0:
+ 0032                   .dbline -2
+ 0032           L3:
+ 0032                   .dbline 0 ; func end
+ 0032 0895              ret
+ 0034                   .dbsym r i 16 i
+ 0034                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C941A00          jmp _Int0
+                        .area text(rom, con, rel)
+ 0034                   .dbfile C:\bbb.c
+ 0034                   .dbfunc e Int0 _Int0 fV
+ 0034           ;              i -> R16,R17
+                        .even
+ 0034           _Int0::
+ 0034 2A92              st -y,R2
+ 0036 3A92              st -y,R3
+ 0038 0A93              st -y,R16
+ 003A 1A93              st -y,R17
+ 003C 8A93              st -y,R24
+ 003E 2FB6              IN R2,63
+ 0040 2A92              st -y,R2
+ 0042                   .dbline -1
+ 0042                   .dbline 31
+ 0042           ; }
+ 0042           ; /*外部中断INT0，下降沿触发*/
+ 0042           ; #pragma interrupt_handler Int0: 2 
+ 0042           ; //中断程序，外部中断0，向量号为2
+ 0042           ; void Int0(void) {
+ 0042                   .dbline 33
+ 0042           ; unsigned int i;
+ 0042           ; i = 1000;                     /*防按键颤动代码*/
+ 0042 08EE              ldi R16,1000
+ 0044 13E0              ldi R17,3
+ 0046 03C0              xjmp L9
+ 0048           L8:
+ 0048                   .dbline 34
+ 0048           ; while (i--) {
+ 0048                   .dbline 35
+ 0048           ;                               if ((PIND & (1 << PD2)) != 0) { /*按键是否为低电平*/
+ 0048 829B              sbis 0x10,2
+ 004A 01C0              rjmp L11
+ 004C           X1:
+ 004C                   .dbline 35
+ 004C                   .dbline 36
+ 004C           ;                                               return ;
+ 004C 0AC0              xjmp L7
+ 004E           L11:
+ 004E                   .dbline 38
+ 004E           ;                                                                       }
+ 004E           ;                                               }
+ 004E           L9:
+ 004E                   .dbline 34
+ 004E 1801              movw R2,R16
+ 0050 0150              subi R16,1
+ 0052 1040              sbci R17,0
+ 0054 2220              tst R2
+ 0056 C1F7              brne L8
+ 0058 3320              tst R3
+ 005A B1F7              brne L8
+ 005C           X2:
+ 005C                   .dbline 40
+ 005C           ;                                                                                                       
+ 005C           ;                       state=1;        /*设置为状态1*/
+ 005C 81E0              ldi R24,1
+ 005E 80930000          sts _state,R24
+ 0062                   .dbline -2
+ 0062           L7:
+ 0062                   .dbline 0 ; func end
+ 0062 2990              ld R2,y+
+ 0064 2FBE              OUT 63,R2
+ 0066 8991              ld R24,y+
+ 0068 1991              ld R17,y+
+ 006A 0991              ld R16,y+
+ 006C 3990              ld R3,y+
+ 006E 2990              ld R2,y+
+ 0070 1895              reti
+ 0072                   .dbsym r i 16 i
+ 0072                   .dbend
+                        .area vector(rom, abs)
+                        .org 8
+ 0008 0C943900          jmp _Int1
+                        .area text(rom, con, rel)
+ 0072                   .dbfile C:\bbb.c
+ 0072                   .dbfunc e Int1 _Int1 fV
+ 0072           ;              i -> R16,R17
+                        .even
+ 0072           _Int1::
+ 0072 2A92              st -y,R2
+ 0074 3A92              st -y,R3
+ 0076 0A93              st -y,R16
+ 0078 1A93              st -y,R17
+ 007A 8A93              st -y,R24
+ 007C 2FB6              IN R2,63
+ 007E 2A92              st -y,R2
+ 0080                   .dbline -1
+ 0080                   .dbline 43
+ 0080           ;             }
+ 0080           ; #pragma interrupt_handler Int1:3 
+ 0080           ; void Int1(void) {
+ 0080                   .dbline 45
+ 0080           ;        unsigned int i;
+ 0080           ;          i = 1000;    
+ 0080 08EE              ldi R16,1000
+ 0082 13E0              ldi R17,3
+ 0084 03C0              xjmp L15
+ 0086           L14:
+ 0086                   .dbline 46
+ 0086           ;          while (i --) {
+ 0086                   .dbline 47
+ 0086           ;          if ((PIND & (1 << PD3)) != 0) {
+ 0086 839B              sbis 0x10,3
+ 0088 01C0              rjmp L17
+ 008A           X3:
+ 008A                   .dbline 47
+ 008A                   .dbline 48
+ 008A           ;          return ;
+ 008A 0AC0              xjmp L13
+ 008C           L17:
+ 008C                   .dbline 50
+ 008C           ;              }
+ 008C           ;                       } 
+ 008C           L15:
+ 008C                   .dbline 46
+ 008C 1801              movw R2,R16
+ 008E 0150              subi R16,1
+ 0090 1040              sbci R17,0
+ 0092 2220              tst R2
+ 0094 C1F7              brne L14
+ 0096 3320              tst R3
+ 0098 B1F7              brne L14
+ 009A           X4:
+ 009A                   .dbline 52
+ 009A           ;                       
+ 009A           ;         state=2;      /*设置为状态2*/
+ 009A 82E0              ldi R24,2
+ 009C 80930000          sts _state,R24
+ 00A0                   .dbline -2
+ 00A0           L13:
+ 00A0                   .dbline 0 ; func end
+ 00A0 2990              ld R2,y+
+ 00A2 2FBE              OUT 63,R2
+ 00A4 8991              ld R24,y+
+ 00A6 1991              ld R17,y+
+ 00A8 0991              ld R16,y+
+ 00AA 3990              ld R3,y+
+ 00AC 2990              ld R2,y+
+ 00AE 1895              reti
+ 00B0                   .dbsym r i 16 i
+ 00B0                   .dbend
+ 00B0                   .dbfunc e blink _blink fV
+                        .even
+ 00B0           _blink::
+ 00B0                   .dbline -1
+ 00B0                   .dbline 56
+ 00B0           ; }
+ 00B0           ; void blink(void) 
+ 00B0           ; //一直闪烁，验证中断效果是否起作用
+ 00B0           ; {PORTA=0x01;
+ 00B0                   .dbline 56
+ 00B0 81E0              ldi R24,1
+ 00B2 8BBB              out 0x1b,R24
+ 00B4                   .dbline 57
+ 00B4           ;  delay(100000);
+ 00B4 00EA              ldi R16,34464
+ 00B6 16E8              ldi R17,134
+ 00B8 B6DF              xcall _delay
+ 00BA                   .dbline 58
+ 00BA           ;  PORTA=0x00;
+ 00BA 2224              clr R2
+ 00BC 2BBA              out 0x1b,R2
+ 00BE                   .dbline 59
+ 00BE           ;  delay(100000);
+ 00BE 00EA              ldi R16,34464
+ 00C0 16E8              ldi R17,134
+ 00C2                   .dbline -2
+ 00C2           L19:
+ 00C2                   .dbline 0 ; func end
+ 00C2 B1CF              xjmp _delay
+ 00C4                   .dbend
+ 00C4                   .dbfunc e main _main fV
+ 00C4           ;              j -> R20
+                        .even
+ 00C4           _main::
+ 00C4                   .dbline -1
+ 00C4                   .dbline 62
+ 00C4           ; }
+ 00C4           ; void main(void)
+ 00C4           ; { signed char j=0;
+ 00C4                   .dbline 62
+ 00C4 4427              clr R20
+ 00C6                   .dbline 63
+ 00C6           ; io_init();
+ 00C6 9CDF              xcall _io_init
+ 00C8                   .dbline 64
+ 00C8           ; int_init();
+ 00C8 A4DF              xcall _int_init
+ 00CA 29C0              xjmp L22
+ 00CC           L21:
+ 00CC                   .dbline 66
+ 00CC           ; while(1)
+ 00CC           ; { switch(state)
+ 00CC                   .dbline 66
+ 00CC 60910000          lds R22,_state
+ 00D0 7727              clr R23
+ 00D2 6130              cpi R22,1
+ 00D4 E0E0              ldi R30,0
+ 00D6 7E07              cpc R23,R30
+ 00D8 29F0              breq L27
+ 00DA           X5:
+ 00DA 6230              cpi R22,2
+ 00DC E0E0              ldi R30,0
+ 00DE 7E07              cpc R23,R30
+ 00E0 79F0              breq L30
+ 00E2           X6:
+ 00E2 1CC0              xjmp L25
+ 00E4           L27:
+ 00E4                   .dbline 68
+ 00E4           ; {
+ 00E4           ; case 1: PORTB=(1<<j);delay(10000);
+ 00E4 01E0              ldi R16,1
+ 00E6 142F              mov R17,R20
+ 00E8 0E940000          xcall lsl8
+ 00EC 08BB              out 0x18,R16
+ 00EE                   .dbline 68
+ 00EE 00E1              ldi R16,10000
+ 00F0 17E2              ldi R17,39
+ 00F2 99DF              xcall _delay
+ 00F4                   .dbline 69
+ 00F4           ; if(j<7) j++;else j=0;
+ 00F4 4730              cpi R20,7
+ 00F6 14F4              brge L28
+ 00F8           X7:
+ 00F8                   .dbline 69
+ 00F8 4395              inc R20
+ 00FA 10C0              xjmp L25
+ 00FC           L28:
+ 00FC                   .dbline 69
+ 00FC 4427              clr R20
+ 00FE                   .dbline 70
+ 00FE           ; break;
+ 00FE 0EC0              xjmp L25
+ 0100           L30:
+ 0100                   .dbline 71
+ 0100           ; case 2: PORTB=(1<<j);delay(10000);
+ 0100 01E0              ldi R16,1
+ 0102 142F              mov R17,R20
+ 0104 0E940000          xcall lsl8
+ 0108 08BB              out 0x18,R16
+ 010A                   .dbline 71
+ 010A 00E1              ldi R16,10000
+ 010C 17E2              ldi R17,39
+ 010E 8BDF              xcall _delay
+ 0110                   .dbline 72
+ 0110           ; if (j>0) j--;else j=7;
+ 0110 2224              clr R2
+ 0112 2416              cp R2,R20
+ 0114 14F4              brge L31
+ 0116           X8:
+ 0116                   .dbline 72
+ 0116 4A95              dec R20
+ 0118 01C0              xjmp L25
+ 011A           L31:
+ 011A                   .dbline 72
+ 011A 47E0              ldi R20,7
+ 011C                   .dbline 73
+ 011C           ;   break;
+ 011C                   .dbline 74
+ 011C           ; default: break;
+ 011C           L25:
+ 011C                   .dbline 76
+ 011C           ; }
+ 011C           ; blink(); //随便闪着玩，看有没有干扰
+ 011C C9DF              xcall _blink
+ 011E                   .dbline 77
+ 011E           ; }
+ 011E           L22:
+ 011E                   .dbline 65
+ 011E D6CF              xjmp L21
+ 0120           X9:
+ 0120                   .dbline -2
+ 0120           L20:
+ 0120                   .dbline 0 ; func end
+ 0120 0895              ret
+ 0122                   .dbsym r j 20 C
+ 0122                   .dbend
+ 0122           ; }
